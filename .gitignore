@@ -1,0 +1,6 @@
+# PDF files
+*.pdf
+
+# Vim Backup files
+*.swp
+*~
