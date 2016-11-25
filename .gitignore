@@ -4,3 +4,6 @@
 # Vim Backup files
 *.swp
 *~
+
+# Python cache folders
+__pycache__
