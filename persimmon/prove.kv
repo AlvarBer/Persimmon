@@ -1,0 +1,105 @@
+# imports heyy
+# Reference proveApp.py
+#: import main proveApp
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+
+#Changed widgets
+<OrangeButton@Button>:
+    background_color: 1, .5, 0, 1
+
+#Popup to select a file as input
+<LoadDialog>:
+    size_hint: .7, .7
+    title: "Choose the input file"
+    BoxLayout:
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                #on_release: root.cancel()
+            Button:
+                text: "Load"
+                #on_release: root.load(filechooser.path, filechooser.selection)
+
+
+# Popup for the linear regression
+<LR_Popup>
+    size_hint: .7, .7
+    auto_dismiss: True
+    title: "Linear regression properties"
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Empty part"
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: .5
+            OrangeButton:
+                text: "Save"
+
+
+
+<MainScreen>:
+    id: main_screen
+    layout_content: layout_content
+    algorithms_list: algorithms_list
+    scroll_view_list: scroll_view_list
+    BoxLayout:
+        id: bl
+        orientation: 'horizontal'
+        padding: 10
+        spacing: 10
+        ScrollView:
+            size_hint_x: .6
+            GridLayout:
+                id: layout_content
+                size_hint_y: None
+                cols: 1
+                row_default_height: '55dp'
+                row_force_default: False
+                spacing: 10
+                padding: 30,10,10,10
+                BoxLayout:
+                    spacing: 4
+                    orientation: 'vertical'
+                    TextInput:
+                    AnchorLayout:
+                        OrangeButton:
+                            anchor_y: 'center'
+                            size_hint_x: .5
+                            text: "Select input"
+                            on_press: root.open_LoadFilePopup()
+                OrangeButton:
+                    text: "Linear Regression"
+                    on_press: main_screen.add_linear_reg()
+                OrangeButton:
+                    text: "Logistic Regression"
+                    on_press: main_screen.add_logistic_regression()
+                OrangeButton:
+                    text: "Support Vector Machine"
+                    on_press: main_screen.add_SVM()
+                OrangeButton:
+                    text: "K-means"
+                    on_press: main_screen.add_K_means()
+        BoxLayout:
+            id: bl_2
+            orientation: 'horizontal'
+            padding: 10
+            spacing: 10
+            ScrollView:
+                id: scroll_view_list
+                GridLayout:
+                    id: algorithms_list
+                    size_hint_y: None
+                    cols: 1
+                    row_default_height: '80dp'
+                    row_force_default: True
+                    spacing: 10
+                    padding: 10,10,10,10
+
+
