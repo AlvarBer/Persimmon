@@ -9,8 +9,6 @@
 
 #Popup to select a file as input
 <LoadDialog>:
-    size_hint: .7, .7
-    title: "Choose the input file"
     BoxLayout:
         pos: root.pos
         orientation: "vertical"
@@ -21,10 +19,10 @@
             height: 30
             Button:
                 text: "Cancel"
-                #on_release: root.cancel()
+                on_release: root.cancel()
             Button:
                 text: "Load"
-                #on_release: root.load(filechooser.path, filechooser.selection)
+                on_release: root.load(filechooser.path, filechooser.selection)
 
 
 # Popup for the linear regression
@@ -49,6 +47,7 @@
     layout_content: layout_content
     algorithms_list: algorithms_list
     scroll_view_list: scroll_view_list
+    input_file: input_file
     BoxLayout:
         id: bl
         orientation: 'horizontal'
@@ -68,6 +67,7 @@
                     spacing: 4
                     orientation: 'vertical'
                     TextInput:
+                        id: input_file
                     AnchorLayout:
                         OrangeButton:
                             anchor_y: 'center'
