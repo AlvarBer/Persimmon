@@ -14,7 +14,7 @@ $(PDF): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) metadata.yaml
 		metadata.yaml $(MARKDOWN) -o $@
 
 graphs/%.pdf: graphs/%.tex
-	xelatex $< > /dev/null
+	xelatex $<
 
 # Splitted creation (Not currently working)
 CHAPTERS := $(MARKDOWN:.md=.tex)  # LaTeX Chapters
