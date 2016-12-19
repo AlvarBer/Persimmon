@@ -5,7 +5,8 @@ install: true
 script: true
 
 after_success:
-    make -C docs
+    - sudo apt-get install texlive-latex-extra
+    - cd docs && make && cd ..
 
 deploy:
     provider: releases
