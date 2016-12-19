@@ -4,7 +4,6 @@ author: "Álvaro Bermejo"
 title: "Persimmon: a visual interface for sklearn"
 papersize: "A4"
 fontsize: "12pt"
-sansfont: "Helvetica Neue LT Com"
 mainlang: "English"
 toc: yes
 ---
