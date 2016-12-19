@@ -16,6 +16,12 @@ $(PDF): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) metadata.yaml
 graphs/%.pdf: graphs/%.tex
 	xelatex $<
 
+travis: $(IMAGES)
+	pandoc --standalone --smart --latex-engine xelatex --template $(TEMPLATE) \
+		--chapters --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
+		metadata.yaml $(MARKDOWN) -o $(PDF)
+
+
 # Splitted creation (Not currently working)
 CHAPTERS := $(MARKDOWN:.md=.tex)  # LaTeX Chapters
 splitted: $(CHAPTERS) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE)

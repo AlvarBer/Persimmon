@@ -1,3 +1,6 @@
+dist: trusty
+sudo: required
+
 language: R
 
 install: true
@@ -6,7 +9,9 @@ script: true
 
 after_success:
     - sudo apt-get install texlive-latex-extra
-    - cd docs && make && cd ..
+    - cd docs
+    - sudo curl ftp://ftp.tug.org/texlive/Contents/live/texmf-dist/tex/latex/standalone/standalone.cls > standalone.cls 
+    - make travis && cd ..
 
 deploy:
     provider: releases
