@@ -1,44 +1,46 @@
-Introduction
-============
+State-of-the-art
+================
+In this chapter we will try to explain the main ideas and reasons behind our
+research project and the technologies behind it.  
+First of all we knew we wanted to do something related to data science so we 
+started looking around what we could do that is both different and improves on
+what already exists.  
+We found that there weren't many open source software with a high level of 
+complexity that at the same time were easy to use for beginners so anyone even 
+without having a deep knowledge in data science could use it.  
+Here is where we thought about contacting the "_e-learning UCM_" research group 
+at our university because we saw an opportunity to bring the power of the data 
+science to the educational world, in this case via the educative games. We 
+thought that was a perfect idea because we will try to help them with a tool 
+that makes easy to measure if the educational-games were getting to where they 
+are expected to, meaning if they are really helping to teach their users what 
+they are supposed to. At the same time we finally decided to make our project 
+open source since many educational games do not have a big budget and in this 
+way our program would be accessible to all of them and they can even tweak some 
+parts of our project if they really need to.  
+  
+Here is where we started thinking about which technology to use and the first 
+part was very clear, we both have already worked with Python for data science 
+in the past and we thought it has a quite good environment for it, but our main
+goal for the project was to give all the power of the data science to people 
+that may have rarely been working with data science so we needed to find a way 
+of representing it so it was easy to understand and use. So after looking for 
+several Python UI libraries we finally chose _kivy_ because we thought it could
+fit quite well with what we want to do.  
+The last remaining thing to do before starting with the project itself was to 
+think in which way we would like to represent the information because for our 
+purpose of doing a very accessible and easy to use understand and use program 
+that part was very important. The main idea we got to was an interface in which
+you have all the different data science algorithms and just by dragging and 
+dropping them you can build build more complicated algorithms by concatenating 
+them. At the same time you can configure each of the algorithms that you drag to
+have the desired parameters. In this part we got the idea by looking at the 
+Microsoft Azure platform that in a sense is some similar to what we want to do
+when talking about the interface. We thought that was a really good way of 
+handling the several machine learning algorithms and it makes it so easy to add
+new ones, or to move them from one place to another, but at the same time we saw
+an opportunity to improve the part that we really don't like about
+Microsoft Azure platform and this part is that the whole computation is done in
+the "cloud", meaning this at the Microsoft servers and we wanted to give the 
+whole power to the actual end user.
 
-Description
------------
-Persimmon is a visual programming interface for sklearn.
-
-This projects touches on a variety of CS topics, such as User Experience (Main 
-topic as the project is driven by the users feedback and engagement with the
-project), Software Engineering (We have to interact with already built software,
-using interfaces and organizing code through object-oriented techniques), 
-Compilers (Language parsing and transpilers) and a number of tangentially 
-related topics such as Machine Learning, I/O, preprocessing, etc.
-
-Motivation
-----------
-After learning about Machine Learning this past year I was able to win a 
-Kaggle like [^1] competition and got an internship working for a company on the
-algorithmic trading sector.
-
-There, amongst other duties, I aided with moving the codebase from MATLAB to 
-Python, and during that process I realised many of my co-workers struggled with
-the move, as they were not computer scientists, but came from a variety of
-backgrounds such as Maths, Physics, Electric Engineering, Statistics, etc...
-
-Yet they were the whole of the department, as this topic requires a high level 
-of theoretical maths knowledge, and so happens that these subjects tend to not
-have a lot of general programming skills, they mostly work with specialized 
-languages, tailored to these tasks such as MATLAB, R, Julia, etc, and moving to
-a general purpose language such as Python involves learning about a plethora of 
-additional topics.
-
-The situation is even more complicated for newcomers to Machine Learning from 
-these backgrounds, as they not only have the programming barrier but also have
-to overcome the difficulties of the algorithms themselves, something Computer 
-Scientists also struggle with (In many cases even more because their weaker 
-maths skills)
-
-So this project servers a double purpose, it helps with the programming barrier,
-and it aids with the Machine Learning process as it allows the learner to focus
-on the connections, intuitions and mathematical basis and not on the 
-implementation details and the quirks of the concrete language.
-
-[^1]: [Kaggle.com](https://www.kaggle.com/)

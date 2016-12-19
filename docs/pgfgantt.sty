@@ -1,0 +1,1462 @@
+%%
+%% This is file `pgfgantt.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% pgfgantt.dtx  (with options: `pgfgantt')
+%% 
+%% Copyright (C) 2013 by Wolfgang Skala
+%% 
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%% 
+\ProvidesPackage{pgfgantt}[2013/06/01 v4.0 Draw Gantt diagrams with TikZ]
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\RequirePackage{tikz}
+\usetikzlibrary{%
+  arrows, backgrounds, calc,%
+  patterns, positioning, shapes.geometric%
+}
+\RequirePackage{pgfcalendar}
+
+\def\ganttset#1{\pgfqkeys{/pgfgantt}{#1}}
+\def\@gtt@keydef#1#2{%
+  \pgfkeyssetvalue{/pgfgantt/#1}{#2}%
+}
+\def\ganttvalueof#1{%
+  \pgfkeysvalueof{/pgfgantt/#1}%
+}
+\def\@gtt@stylekeydef#1#2{%
+  \pgfkeys{/pgfgantt/#1/.style={#2}}%
+}
+\def\@gtt@PackageError#1{%
+  \PackageError{pgfgantt}{#1}{}%
+}
+\def\@gtt@PackageWarning#1{%
+  \PackageWarning{pgfgantt}{#1}%
+}
+
+\newcount\gtt@currentline
+\newcount\gtt@lasttitleline
+\newcount\gtt@currgrid
+\newcount\gtt@chartwidth
+\@gtt@stylekeydef{hgrid style}{dotted}
+\newif\ifgtt@hgrid
+\ganttset{%
+  hgrid/.code={%
+    \def\@tempa{#1}%
+    \def\@tempb{false}%
+    \ifx\@tempa\@tempb%
+      \gtt@hgridfalse%
+    \else%
+      \gtt@hgridtrue%
+      \def\@tempb{true}%
+      \ifx\@tempa\@tempb%
+        \def\gtt@hgridstyle{dotted}%
+      \else%
+        \def\gtt@hgridstyle{#1}%
+      \fi%
+    \fi%
+  },%
+  hgrid/.default=dotted
+}
+
+\def\gtt@hgrid@do#1,{%
+  \ifx\relax#1\else
+    \ifnum\gtt@currgrid<\gtt@currentline\else%
+      \gtt@hgrid@analyze#1\relax%
+      \expandafter\expandafter\expandafter\gtt@hgrid@do%
+    \expandafter\fi%
+  \fi%
+}
+
+\def\gtt@hgrid@analyze{%
+  \@ifstar{\gtt@hgrid@draw}{\gtt@hgrid@draw1}%
+}
+
+\def\gtt@hgrid@draw#1#2\relax{%
+  \foreach \i in {1,...,#1} {%
+    \pgfmathsetmacro\y@upper{%
+      \gtt@lasttitleline * \ganttvalueof{y unit title} +%
+      (\gtt@currgrid - \gtt@lasttitleline)%
+      * \ganttvalueof{y unit chart}%
+    }%
+    \draw [#2]
+      (0pt, \y@upper pt) --
+      (\gtt@chartwidth * \ganttvalueof{x unit}, \y@upper pt);%
+    \global\advance\gtt@currgrid by-1\relax%
+    \ifnum\gtt@currgrid<\gtt@currentline\breakforeach\fi%
+  }%
+}
+
+\newif\ifgtt@vgrid
+\ganttset{%
+  vgrid/.code={%
+    \def\@tempa{#1}%
+    \def\@tempb{false}%
+    \ifx\@tempa\@tempb%
+      \gtt@vgridfalse%
+    \else%
+      \gtt@vgridtrue%
+      \def\@tempb{true}%
+      \ifx\@tempa\@tempb%
+        \def\gtt@vgridstyle{dotted}%
+      \else%
+        \def\gtt@vgridstyle{#1}%
+      \fi%
+    \fi%
+  },%
+  vgrid/.default=dotted
+}
+
+\def\gtt@vgrid@do#1,{%
+  \ifx\relax#1\else%
+    \ifnum\gtt@currgrid>\gtt@chartwidth\else%
+      \gtt@vgrid@analyze#1\relax%
+      \expandafter\expandafter\expandafter\gtt@vgrid@do%
+    \expandafter\fi%
+  \fi%
+}
+
+\def\gtt@vgrid@analyze{%
+  \@ifstar{\gtt@vgrid@draw}{\gtt@vgrid@draw1}%
+}
+
+\def\gtt@vgrid@draw#1#2\relax{%
+  \foreach \i in {1,...,#1} {%
+    \draw [#2]
+      (\gtt@currgrid * \ganttvalueof{x unit}, \y@upper pt) --%
+      (\gtt@currgrid * \ganttvalueof{x unit}, \y@lower pt);%
+    \global\advance\gtt@currgrid by1\relax%
+    \ifnum\gtt@currgrid>\gtt@chartwidth\breakforeach\fi%
+  }%
+}
+
+\def\gtt@smugglecount#1\endgroup{%
+  \edef\@tempa{\the#1}%
+  \expandafter\endgroup\expandafter#1\expandafter=\@tempa%
+}
+
+\newcommand\gtt@juliantotimeslot[2]{%
+  \begingroup%
+  \@tempcnta=#1\relax%
+  \ifgtt@compresscalendar%
+    \pgfcalendarjuliantodate{\@tempcnta}{\@tempa}{\@tempb}{\@tempc}%
+    \@tempcnta=\@tempa\relax%
+    \advance\@tempcnta by-\gtt@startyear\relax%
+    \multiply\@tempcnta by12\relax%
+    \advance\@tempcnta by\@tempb\relax%
+    \advance\@tempcnta by-\gtt@startmonth\relax%
+    \advance\@tempcnta by1\relax%
+  \else%
+    \advance\@tempcnta by-\gtt@startjulian\relax%
+    \advance\@tempcnta by1\relax%
+  \fi%
+  #2=\@tempcnta\relax%
+  \gtt@smugglecount#2%
+  \endgroup%
+}
+
+\newcommand\newgantttimeslotformat[2]{%
+  \expandafter\def\csname gtt@tsstojulian@#1\endcsname##1##2{%
+    \begingroup#2\gtt@smugglecount##2\endgroup%
+  }%
+}
+
+\newgantttimeslotformat{simple}{%
+  #2=#1\relax%
+  \advance#2 by\gtt@tsf@startjulian\relax%
+  \advance#2 by-1\relax%
+}
+
+\newgantttimeslotformat{isodate}{%
+  \pgfcalendardatetojulian{#1}{#2}%
+}
+
+\newgantttimeslotformat{isodate-yearmonth}{%
+  \pgfcalendardatetojulian{#1-01}{#2}%
+}
+
+\newcommand\gtt@tsf@getdmy[1]{%
+  \edef\local@firstarg{#1}%
+  \def\local@decompose##1.##2.##3\relax{%
+    \def\local@day{##1}\def\local@month{##2}\def\local@year{##3}%
+  }%
+  \expandafter\local@decompose\local@firstarg..\relax%
+  \ifx\local@month\@empty%
+    \def\local@decompose##1/##2/##3\relax{%
+      \def\local@day{##1}\def\local@month{##2}\def\local@year{##3}%
+    }%
+    \expandafter\local@decompose\local@firstarg//\relax%
+    \ifx\local@month\@empty%
+      \def\local@decompose##1-##2-##3\relax{%
+        \def\local@day{##1}\def\local@month{##2}\def\local@year{##3}%
+      }%
+      \expandafter\local@decompose\local@firstarg--\relax%
+      \ifx\local@month\@empty%
+        \@gtt@PackageError{Illegal time slot specifier `#1'.}%
+      \else%
+        \def\local@decompose##1--{\def\local@year{##1}}%
+        \expandafter\local@decompose\local@year%
+      \fi%
+    \else%
+      \def\local@decompose##1//{\def\local@year{##1}}%
+      \expandafter\local@decompose\local@year%
+    \fi%
+  \else%
+    \def\local@decompose##1..{\def\local@year{##1}}%
+    \expandafter\local@decompose\local@year%
+  \fi%
+}
+
+\newgantttimeslotformat{little-endian}{%
+  \gtt@tsf@getdmy{#1}%
+  \ifnum\local@year<100\relax%
+    \edef\local@year{\gtt@tsf@basecentury\local@year}%
+  \fi%
+  \pgfcalendardatetojulian{\local@year-\local@month-\local@day}{#2}%
+}
+
+\newgantttimeslotformat{big-endian}{%
+  \gtt@tsf@getdmy{#1}%
+  \ifnum\local@day<100\relax%
+    \edef\local@day{\gtt@tsf@basecentury\local@day}%
+  \fi%
+  \pgfcalendardatetojulian{\local@day-\local@month-\local@year}{#2}%
+}
+
+\newgantttimeslotformat{middle-endian}{%
+  \gtt@tsf@getdmy{#1}%
+  \ifnum\local@year<100\relax%
+    \edef\local@year{\gtt@tsf@basecentury\local@year}%
+  \fi%
+  \pgfcalendardatetojulian{\local@year-\local@day-\local@month}{#2}%
+}
+
+\ganttset{%
+  time slot format/.code={%
+    \@ifundefined{gtt@tsstojulian@#1}{%
+      \@gtt@PackageError{%
+        Time slot format `#1' undefined.%
+      }%
+    }{}%
+    \expandafter\let\expandafter\gtt@tsstojulian%
+      \csname gtt@tsstojulian@#1\endcsname%
+  },%
+  time slot format=simple,%
+  time slot format/base century/.code={%
+    \begingroup%
+    \@tempcnta=#1\relax%
+    \divide\@tempcnta by100\relax%
+    \xdef\gtt@tsf@basecentury{\the\@tempcnta}%
+    \endgroup%
+  },%
+  time slot format/base century=2000,%
+  time slot format/start date/.code={%
+    \begingroup%
+    \pgfcalendardatetojulian{#1}{\@tempcnta}%
+    \xdef\gtt@tsf@startjulian{\the\@tempcnta}%
+    \endgroup%
+  },%
+  time slot format/start date=2000-01-01%
+}
+
+\@gtt@keydef{x unit}{.5cm}
+\@gtt@keydef{y unit title}{1cm}
+\@gtt@keydef{y unit chart}{1cm}
+\@gtt@stylekeydef{canvas}{shape=rectangle, draw, fill=white}
+\@gtt@keydef{today}{none}
+\@gtt@keydef{today offset}{1}
+\@gtt@stylekeydef{today rule}{dashed, line width=1pt}
+\@gtt@keydef{today label}{TODAY}
+\@gtt@keydef{today label font}{\normalfont}
+\@gtt@stylekeydef{today label node}{%
+  anchor=north, font=\ganttvalueof{today label font}%
+}
+\newif\ifgtt@newlineshortcut
+\ganttset{%
+  newline shortcut/.is if=gtt@newlineshortcut,%
+  newline shortcut=true%
+}
+
+\newif\ifgtt@tikzpicture
+\newif\ifgtt@intitle
+\newcount\gtt@lasttitleslot
+\newcount\gtt@elementid
+\newcount\gtt@today@slot
+\newcount\gtt@startjulian
+\newcount\gtt@endjulian
+\newenvironment{ganttchart}[3][]{%
+  \ganttset{#1}%
+  \gtt@tsstojulian{#2}{\gtt@startjulian}%
+  \global\gtt@startjulian=\gtt@startjulian\relax%
+  \gtt@tsstojulian{#3}{\gtt@endjulian}%
+  \global\gtt@endjulian=\gtt@endjulian\relax%
+  \pgfcalendarjuliantodate{\gtt@startjulian}%
+    {\gtt@startyear}{\gtt@startmonth}{\@tempa}%
+  \xdef\gtt@startyear{\gtt@startyear}%
+  \xdef\gtt@startmonth{\gtt@startmonth}%
+  \gtt@juliantotimeslot{\gtt@endjulian}{\gtt@chartwidth}
+  \global\gtt@chartwidth=\gtt@chartwidth\relax%
+  \def\@tempa{none}%
+  \edef\@tempb{\ganttvalueof{today}}%
+  \ifx\@tempa\@tempb\else%
+    \gtt@tsstojulian{\ganttvalueof{today}}{\gtt@today@slot}
+    \gtt@juliantotimeslot{\gtt@today@slot}{\gtt@today@slot}%
+  \fi%
+  \global\gtt@elementid=0\relax%
+  \global\gtt@currentline=0\relax%
+  \global\gtt@lasttitleline=0\relax%
+  \global\gtt@lasttitleslot=0\relax%
+  \@ifundefined{useasboundingbox}%
+    {\gtt@tikzpicturefalse\begin{tikzpicture}}%
+    {\gtt@tikzpicturetrue}%
+  \gtt@intitletrue%
+  \ifgtt@newlineshortcut%
+    \let\\\ganttnewline%
+  \fi%
+  \let\ganttalignnewline\tikz@align@newline%
+}{
+  \begin{scope}[on background layer]%
+    \ifgtt@includetitle%
+      \def\y@upper{0}%
+    \else%
+      \pgfmathsetmacro\y@upper{%
+        \gtt@lasttitleline * \ganttvalueof{y unit title}%
+      }%
+    \fi%
+    \pgfmathsetmacro\y@lower{%
+      \gtt@lasttitleline * \ganttvalueof{y unit title}%
+      + (\gtt@currentline - \gtt@lasttitleline - 1)%
+      * \ganttvalueof{y unit chart}%
+    }%
+    \pgfmathsetmacro\y@mid{%
+      (\y@upper + \y@lower) / 2%
+    }%
+    \pgfmathsetmacro\y@size{%
+      abs(\y@lower - \y@upper)%
+    }%
+    \pgfmathsetmacro\x@size{%
+      \gtt@chartwidth * \ganttvalueof{x unit}%
+    }%
+    \node [/pgfgantt/canvas, minimum width=\x@size pt,
+           minimum height=\y@size pt]
+      at (\x@size pt / 2, \y@mid pt) {};%
+    \pgfmathsetmacro\y@upper{%
+      \gtt@lasttitleline * \ganttvalueof{y unit title}%
+    }%
+    \ifgtt@vgrid
+      \gtt@currgrid=1\relax%
+      \global\advance\gtt@chartwidth by-1\relax%
+      \foreach \x in {1,...,\gtt@chartwidth} {%
+        \expandafter\gtt@vgrid@do\gtt@vgridstyle,\relax,%
+        \ifnum\gtt@currgrid>\gtt@chartwidth\relax\breakforeach\fi%
+      }%
+      \global\advance\gtt@chartwidth by1\relax%
+    \fi%
+    \ifgtt@hgrid%
+      \gtt@currgrid=\gtt@lasttitleline\relax%
+      \ifgtt@includetitle\else%
+        \advance\gtt@currgrid by-1\relax
+      \fi%
+      \edef\@tempa{\the\gtt@currgrid}%
+      \foreach \t in {\@tempa,...,\gtt@currentline} {%
+        \expandafter\gtt@hgrid@do\gtt@hgridstyle,\relax,%
+        \ifnum\gtt@currgrid<\gtt@currentline\relax\breakforeach\fi%
+      }%
+    \fi%
+    \def\@tempa{none}%
+    \edef\@tempb{\ganttvalueof{today}}%
+    \ifx\@tempa\@tempb\else%
+      \pgfmathsetmacro\x@mid{%
+        (\gtt@today@slot - 1 + \ganttvalueof{today offset})%
+        * \ganttvalueof{x unit}%
+      }%
+      \draw [/pgfgantt/today rule]
+        (\x@mid pt, \y@upper pt) -- (\x@mid pt, \y@lower pt)
+        node [/pgfgantt/today label node] {\ganttvalueof{today label}};%
+    \fi%
+  \end{scope}%
+  \ifgtt@tikzpicture\else\end{tikzpicture}\fi%
+}
+
+\newcommand\ganttnewline[1][]{%
+  \begingroup%
+  \def\local@drawarg{#1}%
+  \def\@tempa{grid}%
+  \ifx\local@drawarg\@empty\else%
+    \ifx\local@drawarg\@tempa%
+      \def\local@drawarg{/pgfgantt/hgrid style}%
+    \fi%
+    \pgfmathsetmacro\y@upper{%
+      \gtt@lasttitleline * \ganttvalueof{y unit title}%
+      + (\gtt@currentline - \gtt@lasttitleline - 1)%
+      * \ganttvalueof{y unit chart}%
+    }
+    \expandafter\draw\expandafter[\local@drawarg]
+      (0pt, \y@upper pt) --
+      (\gtt@chartwidth * \ganttvalueof{x unit}, \y@upper pt);%
+  \fi%
+  \global\advance\gtt@currentline by-1\relax%
+  \ifgtt@intitle\global\advance\gtt@lasttitleline by-1\relax\fi%
+  \global\gtt@lasttitleslot=0\relax%
+  \endgroup%
+}
+
+\@gtt@stylekeydef{title}{shape=rectangle, inner sep=0pt, draw, fill=white}
+\@gtt@keydef{title label font}{\small}
+\@gtt@stylekeydef{title label node}{%
+  anchor=center, font=\ganttvalueof{title label font}%
+}
+\ganttset{%
+  title list options/.code={%
+    \def\gtt@titlelistoptions{[#1]}%
+  },%
+  title list options={var=\x, evaluate=\x}%
+}
+\@gtt@keydef{title left shift}{0}
+\@gtt@keydef{title right shift}{0}
+\@gtt@keydef{title top shift}{0}
+\@gtt@keydef{title height}{.6}
+\newif\ifgtt@includetitle
+\ganttset{%
+  include title in canvas/.is if=gtt@includetitle,%
+  include title in canvas
+}
+\@gtt@keydef{calendar week text}{Week~\currentweek}
+\newif\ifgtt@compresscalendar
+\ganttset{%
+  compress calendar/.is if=gtt@compresscalendar,%
+  compress calendar=false%
+}
+
+\newcommand\gantttitle[3][]{%
+  \begingroup%
+  \ganttset{#1}%
+  \pgfmathsetmacro\x@left{%
+    (\gtt@lasttitleslot + \ganttvalueof{title left shift})%
+    * \ganttvalueof{x unit}%
+  }%
+  \pgfmathsetmacro\x@right{%
+    (\gtt@lasttitleslot + #3 + \ganttvalueof{title right shift})%
+    * \ganttvalueof{x unit}%
+  }%
+  \pgfmathsetmacro\x@mid{%
+    (\x@left + \x@right) / 2%
+  }%
+  \pgfmathsetmacro\x@size{%
+    \x@right - \x@left%
+  }%
+  \pgfmathsetmacro\y@upper{%
+    (\gtt@currentline - \ganttvalueof{title top shift})%
+    * \ganttvalueof{y unit title}%
+  }%
+  \pgfmathsetmacro\y@lower{%
+    (\gtt@currentline - \ganttvalueof{title top shift}%
+    - \ganttvalueof{title height}) * \ganttvalueof{y unit title}%
+  }%
+  \pgfmathsetmacro\y@mid{%
+    (\y@upper + \y@lower) / 2%
+  }%
+  \pgfmathsetmacro\y@size{%
+    \y@upper - \y@lower%
+  }%
+  \path (\x@mid pt, \y@mid pt)
+    node [/pgfgantt/title, minimum width=\x@size pt,
+          minimum height=\y@size pt] {}
+    node [/pgfgantt/title label node] {#2};%
+  \global\advance\gtt@lasttitleslot by#3\relax%
+  \endgroup%
+}
+
+\newcommand\gantttitlelist[3][]{%
+  \begingroup%
+  \ganttset{#1}%
+  \expandafter\foreach\gtt@titlelistoptions in {#2} {\gantttitle{\x}{#3}}%
+  \endgroup%
+}
+
+\newif\ifgtt@titlecalendarstar
+\newcommand\gantttitlecalendar{%
+  \@ifstar%
+    {\gtt@titlecalendarstartrue\@gantttitlecalendar}%
+    {\gtt@titlecalendarstarfalse\@gantttitlecalendar}%
+}
+
+\newcommand\@gantttitlecalendar[1][]{
+  \begingroup%
+  \ganttset{#1}%
+  \ifgtt@titlecalendarstar%
+    \expandafter\@@gantttitlecalendar%
+  \else%
+    \expandafter\@@@gantttitlecalendar\expandafter%
+      {\expandafter\gtt@startjulian\expandafter}\expandafter%
+      {\expandafter\gtt@endjulian\expandafter}%
+  \fi%
+}
+
+\newcommand\@@gantttitlecalendar[2]{
+  \gtt@tsstojulian{#1}{\@tempcnta}%
+  \gtt@tsstojulian{#2}{\@tempcntb}%
+  \@@@gantttitlecalendar{\@tempcnta}{\@tempcntb}%
+}
+
+\newcommand\@@@gantttitlecalendar[3]{%
+  \pgfcalendarjuliantodate{#1}{\@tempa}{\@tempb}{\@tempc}%
+  \edef\gtt@calendar@startdate{\@tempa-\@tempb-\@tempc}%
+  \pgfcalendarjuliantodate{#2}{\@tempa}{\@tempb}{\@tempc}%
+  \edef\gtt@calendar@enddate{\@tempa-\@tempb-\@tempc}%
+  \gtt@calendar@eolfalse%
+  \pgfqkeys{/pgfgantt/calendar}{#3}%
+  \endgroup%
+}
+\newif\ifgtt@calendar@eol
+\newcount\gtt@calendar@slots
+\newcount\gtt@calendar@weeknumber
+\newcount\gtt@calendar@startofweek
+\ganttset{%
+  calendar/year/.code={%
+    \ifgtt@calendar@eol\ganttnewline\fi%
+    \begingroup%
+    \gtt@calendar@slots=1\relax%
+    \ifgtt@compresscalendar%
+      \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+        \ifdate{equals=12-31}{%
+          \gantttitle{\pgfcalendarcurrentyear}{\the\gtt@calendar@slots}%
+          \gtt@calendar@slots=1\relax%
+        }{%
+          \ifdate{end of month=1}{%
+            \advance\gtt@calendar@slots by1\relax%
+          }{}%
+        }%
+        \ifdate{equals=\pgfcalendarendiso}{%
+          \ifdate{end of month=1}{%
+            \advance\gtt@calendar@slots by-1\relax%
+          }{}%
+          \ifdate{equals=12-31}{}{%
+            \gantttitle{\pgfcalendarcurrentyear}{\the\gtt@calendar@slots}%
+          }%
+        }{}%
+      }%
+    \else%
+      \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+        \ifdate{equals=12-31}{%
+          \gantttitle{\pgfcalendarcurrentyear}{\the\gtt@calendar@slots}%
+          \gtt@calendar@slots=1\relax%
+        }{%
+          \advance\gtt@calendar@slots by1\relax%
+        }%
+        \ifdate{equals=\pgfcalendarendiso}{%
+          \ifnum\gtt@calendar@slots=1\relax\else%
+            \advance\gtt@calendar@slots by-1\relax%
+            \gantttitle{\pgfcalendarcurrentyear}{\the\gtt@calendar@slots}%
+          \fi%
+        }{}%
+      }%
+    \fi%
+    \endgroup%
+    \gtt@calendar@eoltrue%
+  },%
+  calendar/month/.code={%
+    \ifgtt@calendar@eol\ganttnewline\fi%
+    \begingroup%
+    \gtt@calendar@slots=1\relax%
+    \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+      \ifdate{end of month=1}{%
+        \gantttitle{%
+          \csname pgfcalendarmonth#1\endcsname{\pgfcalendarcurrentmonth}%
+        }{%
+          \ifgtt@compresscalendar1\else\the\gtt@calendar@slots\fi%
+        }%
+        \gtt@calendar@slots=1\relax%
+      }{%
+        \advance\gtt@calendar@slots by1\relax%
+      }%
+      \ifdate{equals=\pgfcalendarendiso}{%
+        \ifnum\gtt@calendar@slots=1\relax\else%
+          \advance\gtt@calendar@slots by-1\relax%
+          \gantttitle{%
+            \csname pgfcalendarmonth#1\endcsname{\pgfcalendarcurrentmonth}%
+          }{%
+            \ifgtt@compresscalendar1\else\the\gtt@calendar@slots\fi%
+          }%
+        \fi%
+      }{}%
+    }%
+    \endgroup%
+    \gtt@calendar@eoltrue%
+  },%
+  calendar/week/.code={%
+    \ifgtt@calendar@eol\ganttnewline\fi%
+    \begingroup%
+    \gtt@calendar@slots=1\relax%
+    \gtt@calendar@weeknumber=#1\relax%
+    \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+      \ifdate{Sunday}{%
+        \gtt@calendar@startofweek=\pgfcalendarcurrentjulian\relax%
+        \advance\gtt@calendar@startofweek by1\relax%
+        \advance\gtt@calendar@startofweek by-\gtt@calendar@slots\relax%
+        \pgfcalendarjuliantodate{\gtt@calendar@startofweek}%
+          {\startyear}{\startmonth}{\startday}%
+        \def\currentweek{\the\gtt@calendar@weeknumber}%
+        \gantttitle{%
+          \ganttvalueof{calendar week text}%
+        }{%
+          \the\gtt@calendar@slots%
+        }%
+        \gtt@calendar@slots=1\relax%
+        \advance\gtt@calendar@weeknumber by1\relax%
+      }{%
+        \advance\gtt@calendar@slots by1%
+      }%
+      \ifdate{equals=\pgfcalendarendiso}{%
+        \ifnum\gtt@calendar@slots=1\relax\else%
+          \advance\gtt@calendar@slots by-1\relax%
+          \gtt@calendar@startofweek=\pgfcalendarcurrentjulian\relax%
+          \advance\gtt@calendar@startofweek by1\relax%
+          \advance\gtt@calendar@startofweek by-\gtt@calendar@slots\relax%
+          \pgfcalendarjuliantodate{\gtt@calendar@startofweek}%
+            {\startyear}{\startmonth}{\startday}%
+          \def\currentweek{\the\gtt@calendar@weeknumber}%
+          \gantttitle{%
+            \ganttvalueof{calendar week text}%
+          }{%
+            \the\gtt@calendar@slots%
+          }%
+        \fi%
+      }{}%
+    }%
+    \endgroup%
+    \gtt@calendar@eoltrue%
+  },%
+  calendar/week/.default=1,%
+  calendar/weekday/.code={%
+    \ifgtt@calendar@eol\ganttnewline\fi%
+    \begingroup%
+    \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+      \gantttitle{%
+        \csname pgfcalendarweekday#1\endcsname{\pgfcalendarcurrentweekday}%
+      }{1}%
+    }%
+    \endgroup%
+    \gtt@calendar@eoltrue%
+  },%
+  calendar/day/.code={%
+    \ifgtt@calendar@eol\ganttnewline\fi%
+    \begingroup%
+    \pgfcalendar{}{\gtt@calendar@startdate}{\gtt@calendar@enddate}{%
+      \gantttitle{\pgfcalendarcurrentday}{1}%
+    }%
+    \endgroup%
+    \gtt@calendar@eoltrue%
+  }%
+}
+
+\ganttset{%
+  progress/.code={%
+    \def\gtt@progress{#1}%
+  },%
+  progress=none,%
+  progress label text/.code={%
+    \def\gtt@progresslabeltext##1{#1}%
+  },%
+  progress label text={%
+    \pgfmathprintnumber[precision=0, verbatim]{#1}\% complete%
+  }%
+}
+\@gtt@keydef{name}{}
+\newif\ifgtt@ce@startatleftborder
+\ganttset{%
+  chart element start border/.is choice,%
+  chart element start border/left/.code=\gtt@ce@startatleftbordertrue,%,
+  chart element start border/right/.code=\gtt@ce@startatleftborderfalse,%
+  chart element start border=left%
+}
+\newif\ifgtt@inline
+\ganttset{%
+  inline/.is if=gtt@inline,%
+  inline=false%
+}
+
+\def\gtt@lastelement{}
+\def\gtt@currentelement{}
+\newif\ifgtt@draw@complete
+\newif\ifgtt@draw@incomplete
+\newif\ifgtt@draw@clip
+\newcount\gtt@left@slot
+\newcount\gtt@right@slot
+
+\newcommand\gtt@chartelement[5][]{%
+  \begingroup%
+  \ganttset{#1}%
+  \gtt@tsstojulian{#3}{\gtt@left@slot}%
+  \gtt@juliantotimeslot{\gtt@left@slot}{\gtt@left@slot}%
+  \gtt@tsstojulian{#4}{\gtt@right@slot}%
+  \gtt@juliantotimeslot{\gtt@right@slot}{\gtt@right@slot}%
+  \def\local@timeslotmodifier{-1}%
+  \ifgtt@ce@startatleftborder\else%
+    \ifnum\gtt@left@slot=\gtt@right@slot\relax\else%
+      \def\local@timeslotmodifier{0}%
+    \fi%
+  \fi%
+  \pgfmathsetmacro\x@left{%
+    (\gtt@left@slot + \local@timeslotmodifier%
+      + \ganttvalueof{#5 left shift})%
+    * \ganttvalueof{x unit}%
+  }%
+  \pgfmathsetmacro\x@right{%
+    (\gtt@right@slot + \ganttvalueof{#5 right shift})%
+    * \ganttvalueof{x unit}%
+  }%
+  \pgfmathsetmacro\x@mid{%
+    (\x@left + \x@right) / 2%
+  }%
+  \pgfmathsetmacro\x@size{%
+    \x@right - \x@left%
+  }%
+  \pgfmathsetmacro\y@upper{%
+    \gtt@lasttitleline * \ganttvalueof{y unit title}
+    + (\gtt@currentline - \gtt@lasttitleline
+    - \ganttvalueof{#5 top shift}) * \ganttvalueof{y unit chart}%
+  }%
+  \pgfmathsetmacro\y@lower{%
+    \y@upper - \ganttvalueof{#5 height} * \ganttvalueof{y unit chart}%
+  }%
+  \pgfmathsetmacro\y@mid{%
+    (\y@upper + \y@lower) / 2%
+  }%
+  \pgfmathsetmacro\y@size{%
+    \y@upper - \y@lower%
+  }%
+  \edef\gtt@name{\ganttvalueof{name}}%
+  \ifx\gtt@name\@empty\edef\gtt@name{elem\the\gtt@elementid}\fi%
+  \def\local@none{none}%
+  \ifx\gtt@progress\local@none%
+    \def\gtt@progress{999}%
+  \else%
+    \def\@tempa{today}%
+    \ifx\gtt@progress\@tempa%
+      \edef\@tempa{\ganttvalueof{today}}%
+      \ifx\@tempa\local@none%
+        \@gtt@PackageWarning{%
+          Value of today is `none'. Ignoring `progress=today'%
+        }%
+        \def\gtt@progress{999}%
+      \else\ifnum\gtt@today@slot>\gtt@right@slot\relax%
+        \def\gtt@progress{100}%
+      \else\ifnum\gtt@today@slot<\gtt@left@slot\relax%
+        \def\gtt@progress{0}%
+      \else%
+        \pgfmathsetmacro\gtt@progress{%
+          (\gtt@today@slot - \gtt@left@slot - \local@timeslotmodifier)%
+          / (\gtt@right@slot - \gtt@left@slot - \local@timeslotmodifier)%
+          * 100%
+        }%
+      \fi\fi\fi%
+    \fi%
+  \fi%
+  \gtt@draw@completetrue%
+  \gtt@draw@incompletetrue%
+  \gtt@draw@cliptrue%
+  \ifdim\gtt@progress pt<0.001pt\relax%
+    \gtt@draw@completefalse%
+    \gtt@draw@clipfalse%
+  \else\ifdim\gtt@progress pt>99.999pt\relax%
+    \gtt@draw@incompletefalse%
+    \gtt@draw@clipfalse%
+  \fi\fi%
+  \ifgtt@draw@clip%
+    \pgfmathsetmacro\x@clip@size{%
+      (\gtt@right@slot - \gtt@left@slot - \local@timeslotmodifier)%
+      * \gtt@progress / 100%
+    }
+    \pgfmathsetmacro\x@clip{%
+      (\gtt@left@slot + \local@timeslotmodifier + \x@clip@size%
+      + \ganttvalueof{today offset} - 1) * \ganttvalueof{x unit}%
+    }%
+  \fi%
+  \begin{pgfinterruptboundingbox}%
+    \begin{scope}%
+      \ifgtt@draw@clip%
+        \clip (\x@left pt - 10cm, \y@upper pt + 10cm) rectangle
+          (\x@clip pt, \y@lower pt - 10cm);%
+      \fi%
+      \ifgtt@draw@complete%
+        \node [/pgfgantt/#5, minimum width=\x@size pt,
+               minimum height=\y@size pt]
+          (\gtt@name) at (\x@mid pt, \y@mid pt) {};%
+      \fi%
+    \end{scope}%
+    \begin{scope}%
+      \ifgtt@draw@clip%
+        \clip (\x@clip pt, \y@upper pt + 10cm) rectangle
+          (\x@right pt + 10cm, \y@lower pt - 10cm);%
+      \fi%
+      \ifgtt@draw@incomplete%
+        \node [/pgfgantt/#5 incomplete, minimum width=\x@size pt,
+               minimum height=\y@size pt]
+          (\gtt@name) at (\x@mid pt, \y@mid pt) {};%
+      \fi%
+    \end{scope}%
+  \end{pgfinterruptboundingbox}%
+  \ifdim\gtt@progress pt=999pt\relax\else%
+    \expandafter\ifx\gtt@progresslabeltext\relax\relax\else%
+      \node at (\gtt@name.\ganttvalueof{#5 progress label anchor})
+        [/pgfgantt/#5 progress label node]
+        {\gtt@progresslabeltext{\gtt@progress}};%
+    \fi%
+  \fi%
+  \def\@tempa{#2}%
+  \ifx\@tempa\@empty\else%
+    \ifgtt@inline%
+      \node at (\gtt@name.\ganttvalueof{#5 inline label anchor})
+        [/pgfgantt/#5 inline label node]
+        {\csname gtt@#5labeltext\endcsname{#2}};%
+    \else%
+      \node at (0, \y@mid pt)
+        [/pgfgantt/#5 label node]
+        {\csname gtt@#5labeltext\endcsname{#2}};%
+    \fi%
+  \fi%
+  \xdef\gtt@lastelement{\gtt@currentelement}%
+  \xdef\gtt@currentelement{\gtt@name}%
+  \global\advance\gtt@elementid by1\relax%
+  \global\gtt@intitlefalse%
+  \endgroup%
+}
+
+\def\newganttchartelement{%
+  \@ifstar\@newganttchartelement@one\@newganttchartelement@two%
+}
+
+\newcommand\@newganttchartelement@one[1]{%
+  \expandafter\newcommand\csname gantt#1\endcsname[3][]{%
+    \gtt@chartelement[##1]{##2}{##3}{##3}{#1}%
+  }%
+  \expandafter\newcommand\csname ganttlinked#1\endcsname[3][]{%
+    \begingroup%
+    \ganttset{##1}%
+    \gtt@chartelement{##2}{##3}{##3}{#1}%
+    \ganttlink{\gtt@lastelement}{\gtt@currentelement}%
+    \endgroup%
+  }%
+  \@newganttchartelement@definekeys{#1}%
+}
+
+\newcommand\@newganttchartelement@two[1]{%
+  \expandafter\newcommand\csname gantt#1\endcsname[4][]{%
+    \gtt@chartelement[##1]{##2}{##3}{##4}{#1}%
+  }%
+  \expandafter\newcommand\csname ganttlinked#1\endcsname[4][]{%
+    \begingroup%
+    \ganttset{##1}%
+    \gtt@chartelement{##2}{##3}{##4}{#1}%
+    \ganttlink{\gtt@lastelement}{\gtt@currentelement}%
+    \endgroup%
+  }%
+  \@newganttchartelement@definekeys{#1}%
+}
+
+\newcommand\@newganttchartelement@definekeys[2]{%
+  \@gtt@stylekeydef{#1}{shape=rectangle, inner sep=0pt, draw, fill=white}%
+  \@gtt@stylekeydef{#1 incomplete}{/pgfgantt/#1, fill=black!25}%
+  \@gtt@keydef{#1 label font}{\normalsize}%
+  \@gtt@stylekeydef{#1 label node}{%
+    anchor=east, font=\ganttvalueof{#1 label font}%
+  }%
+  \@gtt@keydef{#1 inline label anchor}{center}%
+  \@gtt@stylekeydef{#1 inline label node}{%
+    anchor=center, font=\ganttvalueof{#1 label font}%
+  }%
+  \@gtt@keydef{#1 progress label anchor}{east}%
+  \@gtt@keydef{#1 progress label font}{\scriptsize}%
+  \@gtt@stylekeydef{#1 progress label node}{%
+    anchor=west, font=\ganttvalueof{#1 progress label font}%
+  }%
+  \@gtt@keydef{#1 left shift}{0}%
+  \@gtt@keydef{#1 right shift}{0}%
+  \@gtt@keydef{#1 top shift}{.3}%
+  \@gtt@keydef{#1 height}{.4}%
+  \ganttset{%
+    #1 label text/.code={%
+      \expandafter\def\csname gtt@#1labeltext\endcsname####1{##1}%
+    },%
+    #1 label text=\strut##1,%
+    #2%
+  }%
+}
+
+\newganttchartelement{bar}{%
+  bar/.style={shape=ganttbar, inner sep=0pt, draw, fill=white},%
+  bar incomplete/.style={/pgfgantt/bar, fill=black!25},%
+  bar label text=\strut#1,%
+  bar label font=\normalsize,%
+  bar label node/.style={%
+    anchor=east, font=\ganttvalueof{bar label font}%
+  },%
+  bar inline label anchor=center,%
+  bar inline label node/.style={%
+    anchor=center, font=\ganttvalueof{bar label font}%
+  },%
+  bar progress label anchor=east,%
+  bar progress label font=\scriptsize,%
+  bar progress label node/.style={%
+    anchor=west, font=\ganttvalueof{bar progress label font}%
+  },%
+  bar left shift=0,%
+  bar right shift=0,%
+  bar top shift=.3,%
+  bar height=.4%
+}
+
+\newganttchartelement{group}{%
+  group/.style={shape=ganttgroup, inner sep=0pt, fill=black},%
+  group incomplete/.style={/pgfgantt/group, fill=black!25},%
+  group label text=\strut#1,%
+  group label font=\bfseries,%
+  group label node/.style={%
+    anchor=east, font=\ganttvalueof{group label font}%
+  },%
+  group inline label anchor=center,%
+  group inline label node/.style={%
+    anchor=south, font=\ganttvalueof{group label font}%
+  },%
+  group progress label anchor=east,%
+  group progress label font=\scriptsize,%
+  group progress label node/.style={%
+    anchor=west, font=\ganttvalueof{group progress label font}%
+  },%
+  group left shift=-.1,%
+  group right shift=.1,%
+  group top shift=.4,%
+  group height=.2%
+}
+\@gtt@keydef{group right peak tip position}{.5}
+\@gtt@keydef{group right peak width}{.4}
+\@gtt@keydef{group right peak height}{.1}
+\@gtt@keydef{group left peak tip position}{.5}
+\@gtt@keydef{group left peak width}{.4}
+\@gtt@keydef{group left peak height}{.1}
+\ganttset{%
+  group peaks tip position/.code={%
+    \ganttset{%
+      group left peak tip position=#1,%
+      group right peak tip position=#1%
+    }%
+  },%
+  group peaks width/.code={%
+    \ganttset{%
+      group left peak width=#1,%
+      group right peak width=#1%
+    }%
+  },%
+  group peaks height/.code={%
+    \ganttset{%
+      group left peak height=#1,%
+      group right peak height=#1%
+    }%
+  }%
+}
+
+\newganttchartelement*{milestone}{%
+  milestone/.style={%
+    shape=ganttmilestone, inner sep=0pt, draw, fill=black%
+  },%
+  milestone incomplete/.style={/pgfgantt/milestone, fill=black!25},%
+  milestone label text=\strut#1,%
+  milestone label font=\itshape,%
+  milestone label node/.style={%
+    anchor=east, font=\ganttvalueof{milestone label font}%
+  },%
+  milestone inline label anchor=center,%
+  milestone inline label node/.style={%
+    anchor=south, font=\ganttvalueof{milestone label font}%
+  },%
+  milestone progress label anchor=center,%
+  milestone progress label font=\scriptsize,%
+  milestone progress label node/.style={%
+    anchor=west, font=\ganttvalueof{milestone progress label font}%
+  },%
+  milestone left shift=.6,%
+  milestone right shift=.4,%
+  milestone top shift=.3,%
+  milestone height=.4%
+}
+
+\@gtt@keydef{on top fraction}{.5}
+\@gtt@keydef{on bottom fraction}{.5}
+\@gtt@keydef{on left fraction}{.5}
+\@gtt@keydef{on right fraction}{.5}
+
+\pgfdeclareshape{ganttbar}{
+  \inheritsavedanchors[from=rectangle]
+  \inheritanchor[from=rectangle]{center}
+  \inheritanchor[from=rectangle]{mid}
+  \inheritanchor[from=rectangle]{base}
+  \inheritanchor[from=rectangle]{north}
+  \inheritanchor[from=rectangle]{south}
+  \inheritanchor[from=rectangle]{west}
+  \inheritanchor[from=rectangle]{mid west}
+  \inheritanchor[from=rectangle]{base west}
+  \inheritanchor[from=rectangle]{north west}
+  \inheritanchor[from=rectangle]{south west}
+  \inheritanchor[from=rectangle]{east}
+  \inheritanchor[from=rectangle]{mid east}
+  \inheritanchor[from=rectangle]{base east}
+  \inheritanchor[from=rectangle]{north east}
+  \inheritanchor[from=rectangle]{south east}
+  \inheritanchorborder[from=rectangle]
+  \anchor{on top}{
+    \southwest
+    \pgf@xa=\pgf@x
+    \northeast
+    \pgf@xb=\pgf@x
+    \advance\pgf@xb by-\pgf@xa
+    \pgf@xb=\ganttvalueof{on top fraction}\pgf@xb
+    \advance\pgf@xa by\pgf@xb
+    \pgf@x=\pgf@xa
+  }
+  \anchor{on bottom}{
+    \northeast
+    \pgf@xb=\pgf@x
+    \southwest
+    \pgf@xa=\pgf@x
+    \advance\pgf@xb by-\pgf@xa
+    \pgf@xb=\ganttvalueof{on bottom fraction}\pgf@xb
+    \advance\pgf@xa by\pgf@xb
+    \pgf@x=\pgf@xa
+  }
+  \anchor{on left}{
+    \northeast
+    \pgf@ya=\pgf@y
+    \southwest
+    \pgf@yb=\pgf@y
+    \advance\pgf@yb by-\pgf@ya
+    \pgf@yb=\ganttvalueof{on left fraction}\pgf@yb
+    \advance\pgf@ya by\pgf@yb
+    \pgf@y=\pgf@ya
+  }
+  \anchor{on right}{
+    \southwest
+    \pgf@yb=\pgf@y
+    \northeast
+    \pgf@ya=\pgf@y
+    \advance\pgf@yb by-\pgf@ya
+    \pgf@yb=\ganttvalueof{on right fraction}\pgf@yb
+    \advance\pgf@ya by\pgf@yb
+    \pgf@y=\pgf@ya
+  }
+  \inheritbackgroundpath[from=rectangle]
+}
+
+\pgfdeclareshape{ganttgroup}{
+  \inheritsavedanchors[from=rectangle]
+  \inheritanchor[from=rectangle]{center}
+  \inheritanchor[from=rectangle]{mid}
+  \inheritanchor[from=rectangle]{base}
+  \inheritanchor[from=rectangle]{north}
+  \inheritanchor[from=rectangle]{south}
+  \inheritanchor[from=rectangle]{west}
+  \inheritanchor[from=rectangle]{mid west}
+  \inheritanchor[from=rectangle]{base west}
+  \inheritanchor[from=rectangle]{north west}
+  \inheritanchor[from=rectangle]{south west}
+  \inheritanchor[from=rectangle]{east}
+  \inheritanchor[from=rectangle]{mid east}
+  \inheritanchor[from=rectangle]{base east}
+  \inheritanchor[from=rectangle]{north east}
+  \inheritanchor[from=rectangle]{south east}
+  \inheritanchorborder[from=rectangle]
+  \inheritanchor[from=ganttbar]{on top}
+  \inheritanchor[from=ganttbar]{on bottom}
+  \inheritanchor[from=ganttbar]{on left}
+  \inheritanchor[from=ganttbar]{on right}
+  \anchor{left peak}{
+    \pgf@process{
+      \pgfpointadd{
+        \southwest
+      }{
+        \pgfpoint%
+          {\pgfkeysvalueof{/pgf/outer xsep}}%
+          {\pgfkeysvalueof{/pgf/outer ysep}}
+      }
+    }
+    \pgfmathsetlength\pgf@x{
+      \pgf@x + \ganttvalueof{group left peak tip position}
+      * \ganttvalueof{group left peak width} * \ganttvalueof{x unit}
+    }
+    \pgfmathsetlength\pgf@y{
+      \pgf@y - \ganttvalueof{group left peak height}
+               * \ganttvalueof{y unit chart}
+    }
+  }
+  \anchor{right peak}{
+    \pgf@process{
+      \pgfpointadd{
+        \northeast
+      }{
+        \pgfpointscale{-1}{
+          \pgfpoint%
+            {\pgfkeysvalueof{/pgf/outer xsep}}%
+            {\pgfkeysvalueof{/pgf/outer ysep}}
+        }
+      }
+    }
+    \pgf@xa=\pgf@x
+    \pgf@process{
+      \pgfpointadd{
+        \southwest
+      }{
+        \pgfpoint%
+          {\pgfkeysvalueof{/pgf/outer xsep}}%
+          {\pgfkeysvalueof{/pgf/outer ysep}}
+      }
+    }
+    \pgfmathsetlength\pgf@x{
+      \pgf@xa - \ganttvalueof{group right peak tip position}
+      * \ganttvalueof{group right peak width} * \ganttvalueof{x unit}
+    }
+    \pgfmathsetlength\pgf@y{
+      \pgf@y - \ganttvalueof{group right peak height}
+               * \ganttvalueof{y unit chart}
+    }
+  }
+  \backgroundpath{
+    \pgf@process{
+      \pgfpointadd{
+        \northeast
+      }{
+        \pgfpointscale{-1}{
+          \pgfpoint%
+            {\pgfkeysvalueof{/pgf/outer xsep}}%
+            {\pgfkeysvalueof{/pgf/outer ysep}}
+        }
+      }
+    }
+    \pgf@xb=\pgf@x
+    \pgf@ya=\pgf@y
+    \pgf@process{
+      \pgfpointadd{
+        \southwest
+      }{
+        \pgfpoint%
+          {\pgfkeysvalueof{/pgf/outer xsep}}%
+          {\pgfkeysvalueof{/pgf/outer ysep}}
+      }
+    }
+    \pgf@xa=\pgf@x
+    \pgf@yb=\pgf@y
+    \pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yb}}
+    \pgfmathsetlength\pgf@xc{
+      \pgf@xb - \ganttvalueof{group right peak tip position}
+      * \ganttvalueof{group right peak width} * \ganttvalueof{x unit}
+    }
+    \pgfmathsetlength\pgf@yc{
+      \pgf@yb - \ganttvalueof{group right peak height}
+                * \ganttvalueof{y unit chart}
+    }
+    \pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+    \pgfmathsetlength\pgf@xc{
+      \pgf@xb - \ganttvalueof{group right peak width}
+                * \ganttvalueof{x unit}
+    }
+    \pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+    \pgfmathsetlength\pgf@xc{
+      \pgf@xa + \ganttvalueof{group left peak width}
+                * \ganttvalueof{x unit}
+    }
+    \pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+    \pgfmathsetlength\pgf@xc{
+      \pgf@xa + \ganttvalueof{group left peak tip position}
+      * \ganttvalueof{group left peak width} * \ganttvalueof{x unit}
+    }
+    \pgfmathsetlength\pgf@yc{
+      \pgf@yb - \ganttvalueof{group left peak height}
+                * \ganttvalueof{y unit chart}
+    }
+    \pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+    \pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+    \pgfpathclose
+  }
+}
+
+\pgfdeclareshape{ganttmilestone}{
+  \inheritsavedanchors[from=diamond]
+  \inheritanchor[from=diamond]{text}
+  \inheritanchor[from=diamond]{center}
+  \inheritanchor[from=diamond]{mid}
+  \inheritanchor[from=diamond]{base}
+  \inheritanchor[from=diamond]{north}
+  \inheritanchor[from=diamond]{south}
+  \inheritanchor[from=diamond]{west}
+  \inheritanchor[from=diamond]{north west}
+  \inheritanchor[from=diamond]{south west}
+  \inheritanchor[from=diamond]{east}
+  \inheritanchor[from=diamond]{north east}
+  \inheritanchor[from=diamond]{south east}
+  \inheritanchorborder[from=diamond]
+  \inheritbackgroundpath[from=diamond]
+  \anchor{on top}{
+    \pgf@process{\outernortheast}
+    \pgf@xa=2\pgf@x
+    \pgf@x=-\pgf@x
+    \advance\pgf@x by\ganttvalueof{on top fraction}\pgf@xa
+    \pgf@ya=2\pgf@y
+    \pgf@y=0pt
+    \pgfmathparse{
+      \ganttvalueof{on top fraction} < 0.5
+      ? \ganttvalueof{on top fraction}
+      : 1 - \ganttvalueof{on top fraction}
+    }
+    \advance\pgf@y by\pgfmathresult\pgf@ya
+  }
+  \anchor{on bottom}{
+    \pgf@process{\outernortheast}
+    \pgf@xa=2\pgf@x
+    \pgf@x=-\pgf@x
+    \advance\pgf@x by\ganttvalueof{on bottom fraction}\pgf@xa
+    \pgf@ya=-2\pgf@y
+    \pgf@y=0pt
+    \pgfmathparse{
+      \ganttvalueof{on bottom fraction} < 0.5
+      ? \ganttvalueof{on bottom fraction}
+      : 1 - \ganttvalueof{on bottom fraction}
+    }
+    \advance\pgf@y by\pgfmathresult\pgf@ya
+  }
+  \anchor{on right}{
+    \pgf@process{\outernortheast}
+    \pgf@ya=-2\pgf@y
+    \advance\pgf@y by\ganttvalueof{on right fraction}\pgf@ya
+    \pgf@xa=2\pgf@x
+    \pgf@x=0pt
+    \pgfmathparse{
+      \ganttvalueof{on right fraction} < 0.5
+      ? \ganttvalueof{on right fraction}
+      : 1 - \ganttvalueof{on right fraction}
+    }
+    \advance\pgf@x by\pgfmathresult\pgf@xa
+  }
+  \anchor{on left}{
+    \pgf@process{\outernortheast}
+    \pgf@ya=-2\pgf@y
+    \advance\pgf@y by\ganttvalueof{on left fraction}\pgf@ya
+    \pgf@xa=-2\pgf@x
+    \pgf@x=0pt
+    \pgfmathparse{
+      \ganttvalueof{on left fraction} < 0.5
+      ? \ganttvalueof{on left fraction}
+      : 1 - \ganttvalueof{on left fraction}
+    }
+    \advance\pgf@x by\pgfmathresult\pgf@xa
+  }
+}
+
+\@gtt@stylekeydef{link}{-latex, rounded corners=1pt}
+\@gtt@keydef{link type}{auto}
+\@gtt@keydef{link label}{}
+\@gtt@keydef{link label font}{\scriptsize\itshape}
+\@gtt@stylekeydef{link label node}{%
+  anchor=west, font=\ganttvalueof{link label font}%
+}
+\newcommand\newganttlinktype[2]{%
+  \expandafter\def\csname @gtt@linktype@#1\endcsname{#2}%
+}
+
+\newcommand\setganttlinklabel[2]{%
+  \expandafter\def\csname @gtt@linktype@#1@label\endcsname{#2}%
+}
+
+\newcommand\newganttlinktypealias[2]{%
+  \expandafter\def\csname @gtt@linktype@#1\endcsname{%
+    \csname @gtt@linktype@#2\endcsname%
+  }%
+  \expandafter\def\csname @gtt@linktype@#1@label\endcsname{%
+    \csname @gtt@linktype@#2@label\endcsname%
+  }%
+}
+
+\@gtt@keydef{link mid}{.5}
+\@gtt@keydef{link bulge}{.4}
+\@gtt@keydef{link tolerance}{.6}
+\newganttlinktype{r}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+\newganttlinktypealias{default}{r}
+
+\newganttlinktype{rdr}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    ($(\xLeft, \yUpper)!\ganttvalueof{link mid}!
+      (\xRight, \yUpper)$) --
+    ($(\xLeft, \yLower)!\ganttvalueof{link mid}!
+      (\xRight, \yLower)$) --
+    (\xRight, \yLower);%
+}
+
+\newganttlinktype{rdldr}{%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xLeft + \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yUpper) --
+    ($(\xLeft + \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xLeft + \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yLower)$) --
+    ($(\xRight - \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yUpper)!%
+      \ganttvalueof{link mid}!%
+      (\xRight - \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yLower)$) --
+    (\xRight - \ganttvalueof{link bulge} * \ganttvalueof{x unit},
+      \yLower) --
+    (\xRight, \yLower);%
+}
+
+\newganttlinktype{auto}{%
+  \pgfmathparse{abs(\yUpper - \yLower) <= 1}%
+  \ifcase\pgfmathresult%
+    \pgfmathparse{
+      (\xRight - \xLeft)
+      >= \ganttvalueof{link tolerance} * \ganttvalueof{x unit}
+    }%
+    \ifcase\pgfmathresult%
+      \gtt@drawlink{rdldr}%
+    \else%
+      \gtt@drawlink{rdr}%
+    \fi%
+  \else%
+    \gtt@drawlink{r}%
+  \fi%
+}
+\newganttlinktype{dr}{%
+  \ganttsetstartanchor{south}%
+  \ganttsetendanchor{west}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xLeft, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel} --
+    (\xRight, \yLower);%
+}
+
+\newganttlinktype{s-s}{%
+  \ganttsetstartanchor{south west}%
+  \ganttsetendanchor{north west}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+\setganttlinklabel{s-s}{start-to-start}
+
+\newganttlinktype{s-f}{%
+  \ganttsetstartanchor{on bottom=0}%
+  \ganttsetendanchor{on top=1}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+\setganttlinklabel{s-f}{start-to-finish}
+
+\newganttlinktype{f-s}{%
+  \ganttsetstartanchor{south east}%
+  \ganttsetendanchor{north west}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+\setganttlinklabel{f-s}{finish-to-start}
+
+\newganttlinktype{f-f}{%
+  \ganttsetstartanchor{south east}%
+  \ganttsetendanchor{north east}%
+  \draw [/pgfgantt/link]
+    (\xLeft, \yUpper) --
+    (\xRight, \yLower)
+    node [pos=.5, /pgfgantt/link label node] {\ganttlinklabel};
+}
+\setganttlinklabel{f-f}{finish-to-finish}
+
+\newcommand\gtt@drawlink[1]{%
+  \@ifundefined{@gtt@linktype@#1}{%
+    \@gtt@PackageWarning{Link type `#1' unknown, using `default'.}%
+    \def\@gtt@currlinktype{default}%
+  }{%
+    \def\@gtt@currlinktype{#1}%
+  }%
+  \edef\@gtt@currlabel{\ganttvalueof{link label}}%
+  \ifx\@gtt@currlabel\@empty%
+    \def\ganttlinklabel{%
+      \csname @gtt@linktype@\@gtt@currlinktype @label\endcsname%
+    }%
+  \else%
+    \edef\ganttlinklabel{%
+      \ganttvalueof{link label}%
+    }%
+  \fi%
+  \csname @gtt@linktype@\@gtt@currlinktype\endcsname%
+}
+
+\ganttset{%
+  link anchor/.unknown/.code={%
+    \edef\@gtt@link@anchor{\pgfkeyscurrentname}%
+  },%
+}
+\def\@gtt@linkanchordef#1{%
+  \ganttset{%
+    link anchor/#1/.code={%
+      \edef\@gtt@link@anchor{#1}%
+      \ganttset{#1 fraction=##1}%
+    },%
+    link anchor/#1/.default=.5%
+  }%
+}
+\@gtt@linkanchordef{on top}
+\@gtt@linkanchordef{on bottom}
+\@gtt@linkanchordef{on left}
+\@gtt@linkanchordef{on right}
+
+\newcommand\@gtt@setstartanchor[1]{%
+  \pgfqkeys{/pgfgantt/link anchor}{#1}%
+  \pgfpointanchor{\@gtt@link@startelement}{\@gtt@link@anchor}%
+  \edef\xLeft{\the\pgf@x}%
+  \edef\yUpper{\the\pgf@y}%
+}
+
+\newcommand\@gtt@setendanchor[1]{%
+  \pgfqkeys{/pgfgantt/link anchor}{#1}%
+  \pgfpointanchor{\@gtt@link@endelement}{\@gtt@link@anchor}%
+  \edef\xRight{\the\pgf@x}%
+  \edef\yLower{\the\pgf@y}%
+}
+
+\newcommand\ganttlink[3][]{%
+  \begingroup%
+  \ganttset{#1}%
+  \def\@gtt@link@startelement{#2}%
+  \def\@gtt@link@endelement{#3}%
+  \let\ganttsetstartanchor\@gtt@setstartanchor%
+  \let\ganttsetendanchor\@gtt@setendanchor%
+  \ganttsetstartanchor{east}%
+  \ganttsetendanchor{west}%
+  \gtt@drawlink{\ganttvalueof{link type}}%
+  \endgroup%
+}
+
+\endinput
+%%
+%% End of file `pgfgantt.sty'.

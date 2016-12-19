@@ -1,0 +1,29 @@
+\documentclass{standalone}
+
+\usepackage{pgfgantt}
+
+\begin{document}
+	\begin{tikzpicture}
+		\begin{ganttchart}[
+			hgrid,
+			vgrid,
+			time slot format=isodate-yearmonth,
+			x unit=2cm,
+			compress calendar,
+			inline,
+			]{2016-10}{2017-04}
+			\gantttitlecalendar{year, month=name} \\
+			\ganttbar{Distil Idea}{2016-10}{2016-10} \\
+			\ganttbar{Planning}{2016-11}{2016-12} \\
+			\ganttgroup{Implementation}{2016-12}{2017-03} \\
+			\ganttbar{Iteration 1}{2016-12}{2017-01} \\
+			\ganttlinkedmilestone{Capped}{2017-01} \\
+			\ganttlinkedbar{Iteration 2}{2017-02}{2017-02} \\
+			\ganttlinkedmilestone{Parity}{2017-02} \\
+			\ganttlinkedbar{Iteration 3}{2017-03}{2017-03} \\
+			\ganttlinkedmilestone{Compilation}{2017-03} \\
+			\ganttbar{Report Building}{2016-10}{2017-03}
+			\ganttbar{Refinement}{2017-04}{2017-04} \\
+		\end{ganttchart}
+	\end{tikzpicture}
+\end{document}

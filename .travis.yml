@@ -1,0 +1,23 @@
+language: R
+
+install: true
+
+script: true
+
+after_success:
+    cd docs/
+    make
+    cd ..
+
+deploy:
+    provider: releases
+    api_key: "$GH_TOKEN"
+    file: docs/persimmon.pdf
+    skip_cleanup: true
+    overwrite: true
+
+# Only run CI on master
+branches:
+    only:
+        - master
+
