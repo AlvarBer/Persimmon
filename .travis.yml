@@ -5,9 +5,7 @@ install: true
 script: true
 
 after_success:
-    cd docs/
-    make
-    cd ..
+    make -C docs
 
 deploy:
     provider: releases
