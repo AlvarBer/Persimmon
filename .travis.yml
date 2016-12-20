@@ -7,6 +7,7 @@ install: true
 
 script: true
 
+
 after_success:
     - sudo apt-get install texlive-latex-extra
     - cd docs
@@ -18,6 +19,13 @@ after_success:
     - cd .. && mv standalone/* .
     - make travis && cd ..
 
+# Run tests on master & dev
+branches:
+    only:
+        - master
+        - dev
+
+# Only deploy on master
 deploy:
     provider: releases
     api_key: "$GH_TOKEN"
@@ -28,9 +36,6 @@ deploy:
         branch:
             - master
 
-# Only run CI on master
-branches:
-    only:
-        - master
-        - dev
-
+# Stop bothering me
+notifications:
+    email: false
