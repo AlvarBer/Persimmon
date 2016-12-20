@@ -1,6 +1,9 @@
 # PDF files
 *.pdf
 
+# Word files
+*.docx
+
 # TeX files
 *.tex
 
