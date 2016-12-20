@@ -1,6 +1,9 @@
 # PDF files
 *.pdf
 
+# TeX files
+*.tex
+
 # Vim Backup files
 *.swp
 *~
