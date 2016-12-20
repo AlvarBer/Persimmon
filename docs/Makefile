@@ -20,7 +20,7 @@ pdf: $(MARKDOWN) $(APPENDICES) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) $(ME
 travis: $(MARKDOWN) $(APENDICES) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) $(METADATA)
 	pandoc --standalone --smart --latex-engine xelatex --template $(TEMPLATE) \
 		--chapters --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
-		--include-in-header $(LATEXHEADERS) $(METADATA) $(MARKDOWN) $(APPENDICES) -o $(PDF)
+		 $(METADATA) $(MARKDOWN) $(APPENDICES) -o $(PDF)
 
 # For standalone images 
 graphs/%.pdf: graphs/%.tex

@@ -1,7 +1,8 @@
 Objectives
 ==========
-The best way we can describe the project is by dividing the objectives.
-and the best way to understand the progression of those and their relation
+
+The best way to describe the project is by dividing the objectives.
+And the best way to understand the progression of those and their relation
 is with a diagram.
 
 
@@ -16,7 +17,7 @@ buttons.
 interaction. we don't really care much about having the same number of 
 underlying algorithms because that's not the focus of the project.
 
-And the final objective is **compilation**, the ability to get the python 
+And the final objective is **Compilation**, the ability to get the python 
 source code from the visual representation. also improving the interface to
 have a better flow, such as in unreal blueprints, which provide a very 
 intuitive interface [@shah2014mastering].
