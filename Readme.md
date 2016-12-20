@@ -1,4 +1,4 @@
-Project Definition
+Project Definition ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master)
 ==================
 
 Problem

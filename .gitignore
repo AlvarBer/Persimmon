@@ -4,6 +4,9 @@
 # TeX files
 *.tex
 
+# TeX aux files
+*.aux
+
 # Vim Backup files
 *.swp
 *~
