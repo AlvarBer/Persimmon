@@ -16,14 +16,15 @@ pdf: $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) $(METADATA)
 		--top-level-division chapter --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		--include-in-header $(LATEXHEADERS) $(METADATA) $(MARKDOWN) -o $(PDF)
 
-travis: $(IMAGES)
+travis: $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) $(METADATA)
 	pandoc --standalone --smart --latex-engine xelatex --template $(TEMPLATE) \
 		--chapters --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		--include-in-header $(LATEXHEADERS) $(METADATA) $(MARKDOWN) -o $(PDF)
 
-# For standalone images (Not used)
+# For standalone images 
 graphs/%.pdf: graphs/%.tex
-	xelatex $<
+	xelatex $< > /dev/null # TODO: actually output in graphs directory
+	@rm $*.aux $*.log
 
 ## Splitted creation (Not currently working)
 #CHAPTERS := $(MARKDOWN:.md=.tex)  # LaTeX Chapters
