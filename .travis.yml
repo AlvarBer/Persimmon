@@ -10,6 +10,12 @@ script: true
 after_success:
     - sudo apt-get install texlive-latex-extra
     - cd docs
+    - wget http://mirrors.ctan.org/macros/latex/contrib/standalone.zip
+    - unzip standalone.zip
+    - cd standalone
+    - wget http://texdoc.net/texmf-dist/tex/generic/ydoc/ydocstrip.tex
+    - xelatex standalone.ins
+    - cd .. && mv standalone/* .
     - make travis && cd ..
 
 deploy:
@@ -23,4 +29,5 @@ deploy:
 branches:
     only:
         - master
+        - dev
 
