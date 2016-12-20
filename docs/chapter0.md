@@ -5,7 +5,7 @@ Description
 -----------
 Persimmon is a visual programming interface for sklearn.
 
-This projects touches on a variety of CS topics, such as User Experience (Main 
+This projects involves a variety of CS topics, such as User Experience (Main 
 topic as the project is driven by the users feedback and engagement with the
 project), Software Engineering (We have to interact with already built software,
 using interfaces and organizing code through object-oriented techniques), 
@@ -40,5 +40,7 @@ So this project servers a double purpose, it helps with the programming barrier,
 and it aids with the Machine Learning process as it allows the learner to focus
 on the connections, intuitions and mathematical basis and not on the 
 implementation details and the quirks of the concrete language.
+
+This hypothesis is supported by [@fry2007visualizing] and [@principles].
 
 [^1]: [Kaggle.com](https://www.kaggle.com/)

@@ -1,5 +1,6 @@
 State-of-the-art
 ================
+
 In this chapter we will try to explain the main ideas and reasons behind our
 research project and the technologies behind it.  
 First of all we knew we wanted to do something related to data science so we 

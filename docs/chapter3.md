@@ -22,7 +22,7 @@ Prevention & Mitigation
 -----------------------
 
 | Risk Factor  |     Low Impact     |     Medium Impact    |    High Impact   |
-|--------------|--------------------|----------------------|------------------|
+|:------------ |:------------------:|:--------------------:|:----------------:|
 | Requirements | Not defined enough | Change at late stage | Unreachable goal |
 |  Technology  | Performance issues |   Interoperability   |   Major errors   |
 
