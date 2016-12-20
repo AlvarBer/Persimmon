@@ -3,7 +3,9 @@ CSL := emerald-harvard.csl  # CSL file used for citations
 TEMPLATE := template.tex  # LaTeX template for producing PDF
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 MARKDOWN := chapter0.md chapter1.md chapter2.md chapter3.md  # Markdown files
-IMAGES := $(wildcard graphs/*.png)  # Standalone pictures to be inserted
+GRAPHS := $(wildcard graphs/*.tex)
+IMAGES := $(GRAPHS:.tex=.pdf)
+IMAGES += $(wildcard graphs/*.png)  # Standalone pictures to be inserted
 LATEXHEADERS := latexheaders.tex  # Additional LaTeX headers
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 
@@ -14,11 +16,14 @@ pdf: $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL) $(TEMPLATE) $(IMAGES) $(METADATA)
 		--top-level-division chapter --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		--include-in-header $(LATEXHEADERS) $(METADATA) $(MARKDOWN) -o $(PDF)
 
-travis:
+travis: $(IMAGES)
 	pandoc --standalone --smart --latex-engine xelatex --template $(TEMPLATE) \
 		--chapters --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		--include-in-header $(LATEXHEADERS) $(METADATA) $(MARKDOWN) -o $(PDF)
 
+# For standalone images (Not used)
+graphs/%.pdf: graphs/%.tex
+	xelatex $<
 
 ## Splitted creation (Not currently working)
 #CHAPTERS := $(MARKDOWN:.md=.tex)  # LaTeX Chapters

@@ -24,6 +24,9 @@ deploy:
     file: docs/persimmon.pdf
     skip_cleanup: true
     overwrite: true
+    on:
+        branch:
+            - master
 
 # Only run CI on master
 branches:
