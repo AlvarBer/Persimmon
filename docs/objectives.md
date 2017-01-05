@@ -6,7 +6,7 @@ And the best way to understand the progression of those and their relation
 is with a diagram.
 
 
-![Objectives Tree](objectives.pdf)
+![Objectives Tree](graphs/objectives.pdf)
 
 **Capped** is more than a minimum viable product, a extensive proof-of-concept, 
 with a few limited algorithms and the ability of inputing `.csv` files. with a
@@ -22,6 +22,10 @@ source code from the visual representation. also improving the interface to
 have a better flow, such as in unreal blueprints, which provide a very 
 intuitive interface [@shah2014mastering].
 
+This milestone would bring Persimmon utility outside just the realm of 
+learning, as it would be a convenince tool for the exploratory work of any 
+ML solution (Business case, a Kaggle[^kaggle] competition, etc...
+
 Out of scope, but further applications of the system are **web/junyper**
 integration that means the system would be accesible from a website interface,
 and script **synthesization**, which is the opposite of compilation, meaning
@@ -29,9 +33,10 @@ the ability to visualize on persimmon a python source file.
 
 Now that we understand the objectives we can draw a much detailed gantt diagram.
 
-![Gantt Diagram](gantt.pdf)
+![Gantt Diagram](graphs/gantt.pdf)
 
 
 We ommited previous months that included idea refinement but are not 
 interesting for us.
 
+[^kaggle]: [Kaggle.com](https://www.kaggle.com/)

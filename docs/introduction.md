@@ -17,7 +17,7 @@ Machine Learning, I/O, preprocessing of data, etc.
 Motivation
 ----------
 After learning about Machine Learning on university last year I was able to get 
-an internship working for a company on the algorithmic trading sector.
+an internship working for a company on the algorithmic trading sector..
 
 There, amongst other duties, I aided with moving the codebase from MATLAB to 
 Python, and during that process I realised many of my co-workers struggled with
@@ -46,4 +46,3 @@ implementation details and the quirks of the concrete language.
 This hypothesis that visual learning can improve understanding is supported by 
 numerous sources such as [@fry2007visualizing] and [@principles].
 
-[^1]: [Kaggle.com](https://www.kaggle.com/)
