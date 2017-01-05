@@ -1,10 +1,18 @@
 
 ---
 author: Álvaro Bermejo
+date: 2017-01-01
 title: "Persimmon: a visual interface for sklearn"
+subtitle: A scikit-learn visual prgramming interface
+version: 0.2
+sansfont: Helvetica Neue LT Com
+colorlinks: True
+documentclass: scrreprt
+institute: Universidad Complutense and University of Hertforshire
 papersize: A4
 fontsize: 12pt
 mainlang: English
-toc: yes
+toc: True
+top-level-division: chapter
 ---
 

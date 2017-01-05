@@ -17,25 +17,26 @@ all: $(PDF)
 
 $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"01-01-2017" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" \
-		--metadata subtitle:"A sklearn visual programming interface" --toc \
+		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata title:"Persimmon" --metadata fontsize:"12pt" --metadata toc\
+		--metadata subtitle:"A sklearn visual programming interface" \
 		--metadata version:"0.2" --metadata mainlang:"English" \
 		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata colorlinks:"yes" --metadata documentclass:"scrreprt" \
-		--metadata institure:"University of Hertfordshire/Universidad Complutense" \
-		--top-level-division chapter $(BODY) $(APPENDIX) -o $@
+		--metadata institute:"University of Hertfordshire and Universidad Complutense" \
+		--metadata top-level-division:"chapter" $(BODY) $(APPENDIX) -o $@
+
 
 travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"01-01-2017" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" \
-		--metadata subtitle:"A sklearn visual programming interface" --toc \
+		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata title:"Persimmon" --metadata fontsize:"12pt" --metadata toc \
+		--metadata subtitle:"A sklearn visual programming interface" \
 		--metadata version:"0.2" --metadata mainlang:"English" \
-		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata papersize:"A4" \
 		--metadata colorlinks:"yes" --metadata documentclass:"scrreprt" \
-		--metadata institure:"University of Hertfordshire/Universidad Complutense" \
-		--chapters $(BODY) $(APPENDIX) -o $(PDF)
+		--metadata institute:"University of Hertfordshire and Universidad Complutense" \
+		--metadata top-level-division:"chapter" $(BODY) $(APPENDIX) -o $(PDF)
 
 # For standalone images 
 graphs/%.pdf: graphs/%.tex
@@ -43,9 +44,9 @@ graphs/%.pdf: graphs/%.tex
 	mv $*.pdf graphs/
 
 
-$(BODY): $(MARKDOWN) $(IMAGES_PDF)
+$(BODY): $(MARKDOWN)
 	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
-		$(MARKDOWN) -o $@
+		metadata.yaml $(MARKDOWN) -o $@
 
 $(APPENDIX): $(APPENDICES)
 	pandoc --no-tex-ligatures $(APPENDICES) -o $@
