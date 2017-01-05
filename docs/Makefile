@@ -15,35 +15,45 @@ IMAGES += $(GRAPHS:.tex=.pdf)  # Generated PDF Images
 
 all: $(PDF)
 
+# Main PDF, travis ci and book to print version
 $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" --metadata toc\
+		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
 		--metadata subtitle:"A sklearn visual programming interface" \
 		--metadata version:"0.2" --metadata mainlang:"English" \
 		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata colorlinks:"yes" --metadata documentclass:"scrreprt" \
-		--metadata institute:"University of Hertfordshire and Universidad Complutense" \
-		--metadata top-level-division:"chapter" $(BODY) $(APPENDIX) -o $@
-
+		--metadata colorlinks --metadata documentclass:"scrreprt" \
+		--metadata institute:"Universidad Complutense" \
+		--top-level-division chapter $(BODY) $(APPENDIX) -o $@
 
 travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" --metadata toc \
+		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
 		--metadata subtitle:"A sklearn visual programming interface" \
 		--metadata version:"0.2" --metadata mainlang:"English" \
-		--metadata papersize:"A4" \
-		--metadata colorlinks:"yes" --metadata documentclass:"scrreprt" \
-		--metadata institute:"University of Hertfordshire and Universidad Complutense" \
-		--metadata top-level-division:"chapter" $(BODY) $(APPENDIX) -o $(PDF)
+		--metadata papersize:"A4" --metadata documentclass:"scrreprt" \
+		--metadata colorlinks --metadata institute:"Universidad Complutense" \
+		--chapters $(BODY) $(APPENDIX) -o $(PDF)
+
+book: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
+		--metadata subtitle:"A sklearn visual programming interface" \
+		--metadata version:"0.2" --metadata mainlang:"English" \
+		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata documentclass:"scrbook" --metadata institute:"Universidad Complutense" \
+		--top-level-division chapter $(BODY) $(APPENDIX) -o bool_$(PDF)
+
 
 # For standalone images 
 graphs/%.pdf: graphs/%.tex
 	xelatex $< > /dev/null # TODO: actually output in graphs directory
 	mv $*.pdf graphs/
 
-
+# Body and Appendices Middle Steps creation
 $(BODY): $(MARKDOWN)
 	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		metadata.yaml $(MARKDOWN) -o $@
