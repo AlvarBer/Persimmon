@@ -16,44 +16,51 @@ IMAGES += $(GRAPHS:.tex=.pdf)  # Generated PDF Images
 all: $(PDF)
 
 # Main PDF, travis ci and book to print version
-$(PDF): $(BODY) $(TEMPLATE) $(IMAGES) # TODO: Add abstract
+$(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES) # TODO: Add abstract
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" \
 		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
+		--metadata title:Persimmon --metadata fontsize:12pt --toc \
 		--metadata subtitle:"A scikitlearn visual programming interface" \
-		--metadata mainlang:"English" --metada keywords:"Machine Learning","Visual Programming" \
-		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata colorlinks --metadata documentclass:"scrreprt" \
-		--top-level-division chapter $(BODY) -o $@
+		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
+		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata colorlinks --metadata documentclass:scrreprt \
+		--top-level-division chapter $(BODY) $(APPENDIX) -o $@
 
-# Main PDF, travis ci and book to print version
 travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" \
+		--metadata author:"Álvaro Bermejo" --metadata papersize:A4 \
 		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata mainlang:"English" --metada keywords:"Machine Learning","Visual Programming" \
-		--metadata papersize:"A4" \
-		--metadata colorlinks --metadata documentclass:"scrreprt" \
+		--metadata title:Persimmon --metadata fontsize:12pt --toc \
+		--metadata subtitle:"A scikitlearn visual programming interface" \
+		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
+		--metadata colorlinks --metadata documentclass:scrreprt \
 		--chapters $(BODY) $(APPENDIX) -o $(PDF)
-
 
 complutense: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
-		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
+		--metadata title:Persimmon --metadata fontsize:12pt --toc \
 		--metadata subtitle:"A scikitlearn visual programming interface" \
-		--metadata mainlang:"English" \
-		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata documentclass:"scrreprt" --metadata institute:"Universidad Complutense" \
-		--top-level-division chapter $(BODY) $(APPENDIX) -o bool_$(PDF)
+		--metadata mainlang:English --metadata colorlinks --metadata titlepic:graphs/fdi.png \
+		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata documentclass:scrreprt --metadata institute:"Universidad Complutense" \
+		--top-level-division chapter $(BODY) $(APPENDIX) -o $(PDF)
 
+twocol: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)  # Adjust Spacing with geometry
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--metadata author:"Álvaro Bermejo" --metadata colorlinks \
+		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
+		--metadata title:Persimmon --metadata fontsize:12p --toc \
+		--metadata subtitle:"A sklearn visual programming interface" \
+		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
+		--metadata papersize:A4 --metadata classoption:twocolumn \
+		--metadata sansfont:"Helvetica Neue LT Com" --metadata documentclass:scrreprt \
+		--top-level-division chapter $(BODY) $(APPENDIX) -o $(PDF)
 
 # For standalone images 
 graphs/%.pdf: graphs/%.tex
-	xelatex $< #> /dev/null # TODO: actually output in graphs directory
+	xelatex $< > /dev/null # TODO: actually output in graphs directory
 	mv $*.pdf graphs/
 
 # Body and Appendices Middle Steps creation

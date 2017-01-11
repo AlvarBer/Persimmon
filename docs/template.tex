@@ -38,8 +38,6 @@ $endif$
 	$endif$
 	$if(sansfont)$
 		\setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
-	$else$
-		\usepackage{helvet}
 	$endif$
 	$if(monofont)$
 		\setmonofont[Mapping=tex-ansi$if(monofontoptions)$,$for(monofontoptions)$$monofontoptions$$sep$,$endfor$$endif$]{$monofont$}
@@ -193,18 +191,25 @@ $for(header-includes)$
 $endfor$
 
 $if(title)$
-	\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+	$if(titlepic)$
+		\usepackage{titlepic}
+		\titlepic{\includegraphics[width=\textwidth]{$titlepic$}}
+	$endif$
+	\title{$title$$if(thanks)$\thanks{$thanks$}$endif$$if(subtitle)$%
+		\subtitle{$subtitle$}$endif$$if(institute)$\institute{$institute$}%
+		$endif$}
+	%\makeatletter
+	%\def\maketitle{
+	%	\newpage
+	%	\null
+	%	\vskip 2em%
+	%		{\sffamily\Huge\bfseries \@title}\par%
+	%		{\@author}\par}%
+	%\makeatother
 	% Let's make titles better
 	%\newfontfamily{\titlefont}
 	%	[UprightFont = {* 43 Light Extended},
 	%	 BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
-
-	\usepackage{titling}
-	\renewcommand{\maketitlehooka}{\sffamily}
-$endif$
-$if(subtitle)$
-	\providecommand{\subtitle}[1]{}
-	\subtitle{$subtitle$}
 $endif$
 $if(author)$
 	\author{$for(author)$$author$$sep$ \and $endfor$}
@@ -218,11 +223,11 @@ $endif$
 % Make sections great again
 \usepackage{titlesec}
 
-\titleformat*{\section}{\LARGE\bfseries\sffamily}
-\titleformat*{\subsection}{\Large\bfseries\sffamily}
-\titleformat*{\subsubsection}{\large\bfseries\sffamily}
-\titleformat*{\paragraph}{\large\bfseries\sffamily}
-\titleformat*{\subparagraph}{\large\bfseries\sffamily}
+\titleformat*{\section}{\sffamily\LARGE\bfseries}
+\titleformat*{\subsection}{\sffamily\Large\bfseries}
+\titleformat*{\subsubsection}{\sffamily\large\bfseries}
+\titleformat*{\paragraph}{\sffamily\large\bfseries}
+\titleformat*{\subparagraph}{\sffamily\large\bfseries}
 
 
 \begin{document}
@@ -234,8 +239,10 @@ $endif$
 			$abstract$
 		\end{abstract}
 	$endif$
-	
-	{\bfseries Keywords:}$for(keywords)$ $keywords$ $sep$,$endfor$.
+
+	$if(keywords)$
+		{\bfseries Keywords:}$for(keywords)$ $keywords$ $sep$,$endfor$.
+	$endif$
 
 	$for(include-before)$
 		$include-before$
