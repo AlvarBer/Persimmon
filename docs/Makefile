@@ -40,20 +40,20 @@ travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--chapters $(BODY) $(APPENDIX) -o $(PDF)
 
 
-book_complu: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+complutense: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
 		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
 		--metadata subtitle:"A scikitlearn visual programming interface" \
 		--metadata mainlang:"English" \
 		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata documentclass:"scrbook" --metadata institute:"Universidad Complutense" \
+		--metadata documentclass:"scrreprt" --metadata institute:"Universidad Complutense" \
 		--top-level-division chapter $(BODY) $(APPENDIX) -o bool_$(PDF)
 
 
 # For standalone images 
 graphs/%.pdf: graphs/%.tex
-	xelatex $< > /dev/null # TODO: actually output in graphs directory
+	xelatex $< #> /dev/null # TODO: actually output in graphs directory
 	mv $*.pdf graphs/
 
 # Body and Appendices Middle Steps creation

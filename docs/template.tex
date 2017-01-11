@@ -38,6 +38,8 @@ $endif$
 	$endif$
 	$if(sansfont)$
 		\setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
+	$else$
+		\usepackage{helvet}
 	$endif$
 	$if(monofont)$
 		\setmonofont[Mapping=tex-ansi$if(monofontoptions)$,$for(monofontoptions)$$monofontoptions$$sep$,$endfor$$endif$]{$monofont$}
@@ -193,9 +195,9 @@ $endfor$
 $if(title)$
 	\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 	% Let's make titles better
-	\newfontfamily{\titlefont}
-		[UprightFont = {* 43 Light Extended},
-		 BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
+	%\newfontfamily{\titlefont}
+	%	[UprightFont = {* 43 Light Extended},
+	%	 BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
 
 	\usepackage{titling}
 	\renewcommand{\maketitlehooka}{\sffamily}
