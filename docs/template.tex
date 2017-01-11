@@ -192,6 +192,13 @@ $endfor$
 
 $if(title)$
 	\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+	% Let's make titles better
+	%\newfontfamily{\titlefont}
+	%	[UprightFont = {* 43 Light Extended},
+	%	 BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
+
+	\usepackage{titling}
+	\renewcommand{\maketitlehooka}{\sffamily}
 $endif$
 $if(subtitle)$
 	\providecommand{\subtitle}[1]{}
@@ -222,14 +229,16 @@ $endif$
 	$endif$
 	$if(abstract)$
 		\begin{abstract}
-	$abstract$
+			$abstract$
 		\end{abstract}
 	$endif$
+	
+	{\bfseries Keywords:}$for(keywords)$ $keywords$ $sep$,$endfor$.
 
 	$for(include-before)$
-	$include-before$
-
+		$include-before$
 	$endfor$
+
 	$if(toc)${
 		$if(colorlinks)$
 			\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}

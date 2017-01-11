@@ -22,7 +22,7 @@ Prevention & Mitigation
 -----------------------
 
 | Risk Factor  |     Low Impact     |     Medium Impact    |    High Impact   |
-|--------------|--------------------|----------------------|------------------|
+|:------------ |:------------------:|:--------------------:|:----------------:|
 | Requirements | Not defined enough | Change at late stage | Unreachable goal |
 |  Technology  | Performance issues |   Interoperability   |   Major errors   |
 
@@ -52,6 +52,3 @@ analysis of the capabilities of the platform must be done before starting the
 project, identifying possible faults and providing possible solutions and or 
 alternatives.
 
-
-Bibliography
-============

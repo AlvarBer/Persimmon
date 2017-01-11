@@ -67,5 +67,3 @@ class proveApp(App):
     def build(self):
         return MainScreen()
 
-prove = proveApp()
-prove.run()
