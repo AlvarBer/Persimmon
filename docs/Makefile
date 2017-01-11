@@ -16,33 +16,36 @@ IMAGES += $(GRAPHS:.tex=.pdf)  # Generated PDF Images
 all: $(PDF)
 
 # Main PDF, travis ci and book to print version
-$(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+$(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES) # TODO: Add abstract
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata author:"Álvaro Bermejo" \
+		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git descrive --abbrev=0 --tags))" \
 		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata version:"0.2" --metadata mainlang:"English" \
+		--metadata subtitle:"A scikitlearn visual programming interface" \
+		--metadata mainlang:"English" --metada keywords:"Machine Learning", "Visual Programming" \
 		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata colorlinks --metadata documentclass:"scrreprt" \
-		--metadata institute:"Universidad Complutense" \
 		--top-level-division chapter $(BODY) $(APPENDIX) -o $@
 
+# Main PDF, travis ci and book to print version
 travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata author:"Álvaro Bermejo" \
+		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git descrive --abbrev=0 --tags))" \
 		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
 		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata version:"0.2" --metadata mainlang:"English" \
-		--metadata papersize:"A4" --metadata documentclass:"scrreprt" \
-		--metadata colorlinks --metadata institute:"Universidad Complutense" \
+		--metadata mainlang:"English" --metada keywords:"Machine Learning", "Visual Programming" \
+		--metadata papersize:"A4" \
+		--metadata colorlinks --metadata documentclass:"scrreprt" \
 		--chapters $(BODY) $(APPENDIX) -o $(PDF)
 
-book: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+
+book_complu: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"2017-01-01" \
+		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
 		--metadata title:"Persimmon" --metadata fontsize:"12pt" --toc \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata version:"0.2" --metadata mainlang:"English" \
+		--metadata subtitle:"A scikitlearn visual programming interface" \
+		--metadata mainlang:"English" \
 		--metadata papersize:"A4" --metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata documentclass:"scrbook" --metadata institute:"Universidad Complutense" \
 		--top-level-division chapter $(BODY) $(APPENDIX) -o bool_$(PDF)
