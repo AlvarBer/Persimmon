@@ -52,7 +52,3 @@ analysis of the capabilities of the platform must be done before starting the
 project, identifying possible faults and providing possible solutions and or 
 alternatives.
 
-
-Bibliography
-============
-
