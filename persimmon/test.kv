@@ -1,0 +1,77 @@
+PrototypeScreen:
+
+<PrototypeScreen>:
+	orientation: 'horizontal'
+	spacing: '15dp'
+	padding: '15dp'
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: '15dp'
+		padding: '15dp'
+		BoxLayout:
+			orientation: 'vertical'
+			spacing: '5dp'
+			TextInput:
+				id: selected_file
+				size_hint_y: 20
+				multiline: False
+			Button
+				text: 'Load File'
+				on_release: root.load_popup()
+				size_hint_y: 80
+		Button:
+			text: 'SVM'
+		Button:
+			text: 'Logistic Regression'
+		Button:
+			text: 'Neural Network'
+	BoxLayout:
+		orientation: 'vertical'
+		padding: '15dp'
+		spacing: '15dp'
+		Button:
+			text: '7:3 split'
+		Button:
+			text: '3-folds'
+		Button:
+			text: '10-folds (Stratified)'
+	BoxLayout:
+		orientation: 'vertical'
+		Button:
+			text: 'Validate'
+		Label:
+		Button:
+			text: 'Predict'
+
+<LoadDialog>:
+	load_button: load_button
+	selected_file: selected_file
+	BoxLayout:
+		pos: root.pos
+		orientation: 'vertical'
+		FileChooserIconView:
+			id: filechooser
+			filters: ['*.csv']
+			path: '~'
+			on_selection: root.file_selected(self.selection)
+			#root.load_button.disabled = False
+		TextInput:
+			id: selected_file
+			size_hint_y: None
+			height: '30dp'
+			multiline: False
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: '30dp'
+			Button:
+				text: 'Cancel'
+				on_release: root.cancel_func()
+			Button:
+				id: load_button
+				disabled: True
+				text: 'Load'
+				on_release: root.load_func(filechooser.path, filechooser.selection)
+
+<LogRegPopup>:
+	title: 'Logistic Regression Parameters'

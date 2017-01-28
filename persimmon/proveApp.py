@@ -67,3 +67,5 @@ class proveApp(App):
     def build(self):
         return MainScreen()
 
+if __name__ == '__main__':
+    proveApp().run()
