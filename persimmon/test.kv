@@ -1,47 +1,72 @@
+#:import SVC sklearn.svm.SVC
+#:import KFold sklearn.model_selection.KFold
+#:import StratifiedKFold sklearn.model_selection.StratifiedKFold
+#:import RandomForestClassifier sklearn.ensemble.RandomForestClassifier
+#:import KNeighborsClassifier sklearn.neighbors.KNeighborsClassifier
+
+
 PrototypeScreen:
 
 <PrototypeScreen>:
+	selected_train_file: selected_train_file
 	orientation: 'horizontal'
 	spacing: '15dp'
 	padding: '15dp'
 	BoxLayout:
 		orientation: 'vertical'
-		spacing: '15dp'
 		padding: '15dp'
+		spacing: '15dp'
 		BoxLayout:
 			orientation: 'vertical'
 			spacing: '5dp'
 			TextInput:
-				id: selected_file
-				size_hint_y: 20
+				id: selected_train_file
+				size_hint_y: None
+				height: '30dp'
 				multiline: False
 			Button
 				text: 'Load File'
 				on_release: root.load_popup()
-				size_hint_y: 80
-		Button:
+		ToggleButton:
 			text: 'SVM'
-		Button:
-			text: 'Logistic Regression'
-		Button:
-			text: 'Neural Network'
+			group: 'estimators'
+			on_release: app.estimator = SVC()
+		ToggleButton:
+			text: 'K Nearest Neighbors'
+			group: 'estimators'
+			on_release: app.estimator = KNeighborsClassifier()
+		ToggleButton:
+			text: 'Random Forest'
+			group: 'estimators'
+			on_release: app.estimator = RandomForestClassifier()
 	BoxLayout:
 		orientation: 'vertical'
-		padding: '15dp'
 		spacing: '15dp'
-		Button:
-			text: '7:3 split'
-		Button:
+		ToggleButton:
+			text: '50/50 split'
+			group: 'cv'
+			on_release: app.cv = KFold(n_splits=2)
+		ToggleButton:
 			text: '3-folds'
-		Button:
+			group: 'cv'
+			on_release: app.cv = None
+		ToggleButton:
 			text: '10-folds (Stratified)'
+			group: 'cv'
+			on_release: app.cv = StratifiedKFold(n_splits=10)
 	BoxLayout:
 		orientation: 'vertical'
 		Button:
 			text: 'Validate'
+			size_hint_y: 20
+			on_release: root.validate()
 		Label:
+			size_hint_y: 60
+			text: root.result
 		Button:
 			text: 'Predict'
+			size_hint_y: 20
+			on_release: app.predict()
 
 <LoadDialog>:
 	load_button: load_button
@@ -54,7 +79,7 @@ PrototypeScreen:
 			filters: ['*.csv']
 			path: '~'
 			on_selection: root.file_selected(self.selection)
-			#root.load_button.disabled = False
+			on_submit: root.load_func(self.path, self.selection)
 		TextInput:
 			id: selected_file
 			size_hint_y: None
@@ -73,5 +98,3 @@ PrototypeScreen:
 				text: 'Load'
 				on_release: root.load_func(filechooser.path, filechooser.selection)
 
-<LogRegPopup>:
-	title: 'Logistic Regression Parameters'
