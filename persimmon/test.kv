@@ -8,7 +8,7 @@
 PrototypeScreen:
 
 <PrototypeScreen>:
-	selected_train_file: selected_train_file
+	text_input_train_file: text_input_train_file.text
 	orientation: 'horizontal'
 	spacing: '15dp'
 	padding: '15dp'
@@ -20,13 +20,14 @@ PrototypeScreen:
 			orientation: 'vertical'
 			spacing: '5dp'
 			TextInput:
-				id: selected_train_file
+				id: text_input_train_file
 				size_hint_y: None
 				height: '30dp'
 				multiline: False
+				on_focus: root.load_popup(self)
 			Button
 				text: 'Load File'
-				on_release: root.load_popup()
+				on_release: root.load_popup(text_input_train_file)
 		ToggleButton:
 			text: 'SVM'
 			group: 'estimators'
@@ -63,14 +64,19 @@ PrototypeScreen:
 		Label:
 			size_hint_y: 60
 			text: root.result
-		Button:
-			text: 'Predict'
+		BoxLayout:
+			orientation: 'vertical'
 			size_hint_y: 20
-			on_release: app.predict()
+			spacing: '5dp'
+			TextInput:
+				on_focus: root.load_popup(self)
+			Button:
+				text: 'Predict'
+				on_release: app.predict()
 
-<LoadDialog>:
+<LoadDialog>: # A file chooser dialog (Popup)
 	load_button: load_button
-	selected_file: selected_file
+	selected_file: filechooser.selection and filechooser.selection[0] or ''
 	BoxLayout:
 		pos: root.pos
 		orientation: 'vertical'
@@ -78,10 +84,11 @@ PrototypeScreen:
 			id: filechooser
 			filters: ['*.csv']
 			path: '~'
-			on_selection: root.file_selected(self.selection)
-			on_submit: root.load_func(self.path, self.selection)
+			on_selection: root.toggle_load_button(self.selection)
+			on_submit: root.dismiss()
 		TextInput:
-			id: selected_file
+			id: current_file
+			text: root.selected_file
 			size_hint_y: None
 			height: '30dp'
 			multiline: False
@@ -91,10 +98,10 @@ PrototypeScreen:
 			height: '30dp'
 			Button:
 				text: 'Cancel'
-				on_release: root.cancel_func()
+				on_release: root.dismiss()
 			Button:
 				id: load_button
 				disabled: True
 				text: 'Load'
-				on_release: root.load_func(filechooser.path, filechooser.selection)
+				on_release: root.dismiss()
 
