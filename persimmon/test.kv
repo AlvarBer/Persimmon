@@ -8,7 +8,6 @@
 PrototypeScreen:
 
 <PrototypeScreen>:
-	text_input_train_file: text_input_train_file.text
 	orientation: 'horizontal'
 	spacing: '15dp'
 	padding: '15dp'
@@ -20,14 +19,15 @@ PrototypeScreen:
 			orientation: 'vertical'
 			spacing: '5dp'
 			TextInput:
-				id: text_input_train_file
+				id: train_file_text_input
+				text: root.text_input_train_file
 				size_hint_y: None
 				height: '30dp'
 				multiline: False
 				on_focus: root.load_popup(self)
 			Button
 				text: 'Load File'
-				on_release: root.load_popup(text_input_train_file)
+				on_release: root.load_popup(train_file_text_input)
 		ToggleButton:
 			text: 'SVM'
 			group: 'estimators'
@@ -74,11 +74,12 @@ PrototypeScreen:
 				text: 'Predict'
 				on_release: app.predict()
 
-<LoadDialog>: # A file chooser dialog (Popup)
-	load_button: load_button
+<FileDialog>: # A file chooser dialog (Popup)
+	# This is the file selected by the user, this is what we care about
 	selected_file: filechooser.selection and filechooser.selection[0] or ''
+	load_button: load_button
 	BoxLayout:
-		pos: root.pos
+		#pos: root.pos
 		orientation: 'vertical'
 		FileChooserIconView:
 			id: filechooser
@@ -87,7 +88,6 @@ PrototypeScreen:
 			on_selection: root.toggle_load_button(self.selection)
 			on_submit: root.dismiss()
 		TextInput:
-			id: current_file
 			text: root.selected_file
 			size_hint_y: None
 			height: '30dp'
@@ -101,6 +101,8 @@ PrototypeScreen:
 				on_release: root.dismiss()
 			Button:
 				id: load_button
+				# Load button is disabled by default, we enable when a suitable
+				# file is selected
 				disabled: True
 				text: 'Load'
 				on_release: root.dismiss()
