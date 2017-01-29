@@ -66,7 +66,6 @@ class PrototypeScreen(BoxLayout):
         self.result = App.get_running_app().validate()
 
     def predict(self):
-        print('predicting')
         self.result = App.get_running_app().predict()
 
 

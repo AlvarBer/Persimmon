@@ -13,7 +13,6 @@ PrototypeScreen:
 	padding: '15dp'
 	BoxLayout:
 		orientation: 'vertical'
-		padding: '15dp'
 		spacing: '15dp'
 		BoxLayout:
 			orientation: 'vertical'
@@ -27,7 +26,10 @@ PrototypeScreen:
 				on_focus: root.load_popup('train_file')
 			Button
 				text: 'Load File'
+				size_hint_y: None
+				height: '30dp'
 				on_release: root.load_popup('train_file')
+			Widget:
 		ToggleButton:
 			text: 'SVM'
 			group: 'estimators'
@@ -57,26 +59,35 @@ PrototypeScreen:
 			on_release: app.cv = StratifiedKFold(n_splits=10)
 	BoxLayout:
 		orientation: 'vertical'
+		spacing: '15dp'
 		Button:
 			text: 'Validate'
 			size_hint_y: 20
 			on_release: root.validate()
-		Label:
-			size_hint_y: 60
+		TextInput:
 			text: root.result
+			size_hint_y: 60
+			readonly: True
 		BoxLayout:
 			orientation: 'vertical'
 			size_hint_y: 20
 			spacing: '5dp'
+			Widget:
 			Button:
 				text: 'Predict'
+				size_hint_y: None
+				height: '30dp'
 				on_release: root.predict()
 			TextInput:
 				text: root.predict_file
+				size_hint_y: None
+				height: '30dp'
 				multiline: False
 				on_focus: root.load_popup('predict_file')
 			Button:
 				text: 'Load Predict File'
+				size_hint_y: None
+				height: '30dp'
 				on_release: root.load_popup('predict_file')
 
 <FileDialog>: # A file chooser dialog (Popup)
