@@ -37,7 +37,8 @@ class PrototypeScreen(BoxLayout):
     text_input_train_file = StringProperty()
 
     def load_popup(self, tinput):
-        content = FileDialog(size_hint=(0.8, 0.8))
+        content = FileDialog(dir='~', filters=['*.csv'],
+                             size_hint=(0.8, 0.8))
         content.bind(selected_file=partial(self.change_file, text_input=tinput))
         content.open()
 
@@ -52,8 +53,19 @@ class PrototypeScreen(BoxLayout):
 
 
 class FileDialog(Popup):
+    """File Dialogs is a popup that gets a file"""
+    file_chooser = ObjectProperty()
     load_button = ObjectProperty()
     selected_file = StringProperty()
+
+    def __init__(self, dir='~', filters=None,*args, **kwargs):
+        super(FileDialog, self).__init__()
+        self.file_chooser.path = dir
+        if filters:
+            self.file_chooser.filters=filters
+        else:
+            self.file_chooser.filters=[]
+
 
     def toggle_load_button(self, selection):
         if selection:

@@ -76,15 +76,16 @@ PrototypeScreen:
 
 <FileDialog>: # A file chooser dialog (Popup)
 	# This is the file selected by the user, this is what we care about
-	selected_file: filechooser.selection and filechooser.selection[0] or ''
+	selected_file: file_chooser.selection and file_chooser.selection[0] or ''
 	load_button: load_button
+	file_chooser: file_chooser
 	BoxLayout:
 		#pos: root.pos
 		orientation: 'vertical'
 		FileChooserIconView:
-			id: filechooser
-			filters: ['*.csv']
-			path: '~'
+			id: file_chooser
+			#filters: ['*.csv']
+			#path: '~'
 			on_selection: root.toggle_load_button(self.selection)
 			on_submit: root.dismiss()
 		TextInput:
