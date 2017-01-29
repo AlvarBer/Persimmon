@@ -3,6 +3,7 @@
 #:import StratifiedKFold sklearn.model_selection.StratifiedKFold
 #:import RandomForestClassifier sklearn.ensemble.RandomForestClassifier
 #:import KNeighborsClassifier sklearn.neighbors.KNeighborsClassifier
+#:import LeaveOneOut sklearn.model_selection.LeaveOneOut
 
 
 PrototypeScreen:
@@ -23,7 +24,7 @@ PrototypeScreen:
 				height: '30dp'
 				multiline: False
 				# This is very very bad
-				on_focus: root.load_popup('train_file')
+				#on_focus: root.load_popup('train_file')
 			Button
 				text: 'Load File'
 				size_hint_y: None
@@ -33,6 +34,7 @@ PrototypeScreen:
 		ToggleButton:
 			text: 'SVM'
 			group: 'estimators'
+			state: 'down'
 			on_release: app.estimator = SVC()
 		ToggleButton:
 			text: 'K Nearest Neighbors'
@@ -45,6 +47,11 @@ PrototypeScreen:
 	BoxLayout:
 		orientation: 'vertical'
 		spacing: '15dp'
+		ToggleButton:
+			text: 'Leave one out'
+			group: 'cv'
+			state: 'down'
+			on_release: app.cv = LeaveOneOut()
 		ToggleButton:
 			text: '50/50 split'
 			group: 'cv'
@@ -62,15 +69,15 @@ PrototypeScreen:
 		spacing: '15dp'
 		Button:
 			text: 'Validate'
-			size_hint_y: 20
+			size_hint_y: 25
 			on_release: root.validate()
 		TextInput:
 			text: root.result
-			size_hint_y: 60
+			size_hint_y: 50
 			readonly: True
 		BoxLayout:
 			orientation: 'vertical'
-			size_hint_y: 20
+			size_hint_y: 25
 			spacing: '5dp'
 			Widget:
 			Button:
@@ -83,7 +90,7 @@ PrototypeScreen:
 				size_hint_y: None
 				height: '30dp'
 				multiline: False
-				on_focus: root.load_popup('predict_file')
+				#on_focus: root.load_popup('predict_file')
 			Button:
 				text: 'Load Predict File'
 				size_hint_y: None

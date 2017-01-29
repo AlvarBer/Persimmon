@@ -12,6 +12,10 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty, StringProperty
 
+from sklearn.svm import SVC
+from sklearn.model_selection import LeaveOneOut
+
+
 class TestApp(App):
     def __init__(self, *args, **kwargs):
         super(TestApp, self).__init__(*args, **kwargs)
@@ -44,8 +48,13 @@ class PrototypeScreen(BoxLayout):
     train_file = StringProperty()
     predict_file = StringProperty()
 
+    def __init__(self, *args, **kwargs):
+        super(PrototypeScreen, self).__init__(*args, **kwargs)
+        self.current_app = App.get_running_app()
+        self.current_app.estimator = SVC()
+        self.current_app.cv = LeaveOneOut()
+
     def load_popup(self, string_property):
-        print(string_property)
         popup = FileDialog(dir='~', filters=['*.csv'], size_hint=(0.8, 0.8))
         popup.bind(selected_file=partial(self.bind_strings,
                                          string_property=string_property))
@@ -57,10 +66,10 @@ class PrototypeScreen(BoxLayout):
         self.property(string_property).set(self, value)
 
     def on_train_file(self, instance, value):
-        App.get_running_app().train_file = value
+        self.current_app.train_file = value
 
     def on_predict_file(self, instance, value):
-        App.get_running_app().predict_file = value
+        self.current_app.predict_file = value
 
     def validate(self):
         self.result = App.get_running_app().validate()
