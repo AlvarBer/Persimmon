@@ -19,15 +19,15 @@ PrototypeScreen:
 			orientation: 'vertical'
 			spacing: '5dp'
 			TextInput:
-				id: train_file_text_input
-				text: root.text_input_train_file
+				text: root.train_file
 				size_hint_y: None
 				height: '30dp'
 				multiline: False
-				on_focus: root.load_popup(self)
+				# This is very very bad
+				on_focus: root.load_popup('train_file')
 			Button
 				text: 'Load File'
-				on_release: root.load_popup(train_file_text_input)
+				on_release: root.load_popup('train_file')
 		ToggleButton:
 			text: 'SVM'
 			group: 'estimators'
@@ -68,11 +68,16 @@ PrototypeScreen:
 			orientation: 'vertical'
 			size_hint_y: 20
 			spacing: '5dp'
-			TextInput:
-				on_focus: root.load_popup(self)
 			Button:
 				text: 'Predict'
-				on_release: app.predict()
+				on_release: root.predict()
+			TextInput:
+				text: root.predict_file
+				multiline: False
+				on_focus: root.load_popup('predict_file')
+			Button:
+				text: 'Load Predict File'
+				on_release: root.load_popup('predict_file')
 
 <FileDialog>: # A file chooser dialog (Popup)
 	# This is the file selected by the user, this is what we care about
@@ -84,8 +89,6 @@ PrototypeScreen:
 		orientation: 'vertical'
 		FileChooserIconView:
 			id: file_chooser
-			#filters: ['*.csv']
-			#path: '~'
 			on_selection: root.toggle_load_button(self.selection)
 			on_submit: root.dismiss()
 		TextInput:

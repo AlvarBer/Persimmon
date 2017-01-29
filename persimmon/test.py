@@ -18,38 +18,56 @@ class TestApp(App):
         self.train_file = None
         self.estimator = None
         self.cv = None
-        self.predict_data = None
+        self.predict_file = None
 
     def validate(self):
         result = backend.perform(pd.read_csv(self.train_file, header=0),
-                                 self.estimator, self.cv, predict_data=None)
+                                 self.estimator, self.cv)
         return '{:.3f}% (+/-{:.3f}%)'.format(result.mean() * 100,
                                              result.std() * 100)
 
     def predict(self):
-        backend.perform(pd.read_csv(self.train_file, header=0), self.estimator,
-                        self.cv, predict_data=self.predict_data)
+        train_data = pd.read_csv(self.train_file, header=0)
+        predict_data = pd.read_csv(self.predict_file, header=0)
+        if predict_data.shape[1] == train_data.shape[1]:
+            print('Removing last column')
+            predict_data = predict_data.iloc[:, :-1]
+
+        result = backend.perform(train_data, self.estimator, None,
+                                 predict_data)
+        return str(result)
 
 
 class PrototypeScreen(BoxLayout):
     """PrototypeScreen is a pumped box layout used for the first iteration."""
     result = StringProperty()
-    text_input_train_file = StringProperty()
+    train_file = StringProperty()
+    predict_file = StringProperty()
 
-    def load_popup(self, tinput):
-        content = FileDialog(dir='~', filters=['*.csv'],
-                             size_hint=(0.8, 0.8))
-        content.bind(selected_file=partial(self.change_file, text_input=tinput))
-        content.open()
+    def load_popup(self, string_property):
+        print(string_property)
+        popup = FileDialog(dir='~', filters=['*.csv'], size_hint=(0.8, 0.8))
+        popup.bind(selected_file=partial(self.bind_strings,
+                                         string_property=string_property))
+        popup.open()
 
-    def change_file(self, instance, value, text_input):
-        self.text_input_train_file = value
+    def bind_strings(self, instance, value, string_property):
+        """We are reeeally not supposed to do this, basically there is no easy
+        way to get the property itself from the kv lang"""
+        self.property(string_property).set(self, value)
 
-    def on_text_input_train_file(self, instance, value):
+    def on_train_file(self, instance, value):
         App.get_running_app().train_file = value
+
+    def on_predict_file(self, instance, value):
+        App.get_running_app().predict_file = value
 
     def validate(self):
         self.result = App.get_running_app().validate()
+
+    def predict(self):
+        print('predicting')
+        self.result = App.get_running_app().predict()
 
 
 class FileDialog(Popup):
@@ -72,7 +90,6 @@ class FileDialog(Popup):
             self.load_button.disabled = False
         else:
             self.load_button.disabled = True
-
 
 if __name__ == '__main__':
     TestApp().run()
