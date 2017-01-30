@@ -42,9 +42,10 @@ complutense: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
 		--metadata title:Persimmon --metadata fontsize:12pt --toc \
 		--metadata subtitle:"A scikitlearn visual programming interface" \
-		--metadata mainlang:English --metadata colorlinks --metadata titlepic:graphs/fdi.png \
+		--metadata mainlang:English --metadata colorlinks --metadata titlepic:images/fdi.png \
 		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata documentclass:scrreprt --metadata institute:"Universidad Complutense" \
+		--metada keywords:"Machine Learning","Visual Programming","Serious Games" \
 		--top-level-division chapter $(BODY) $(APPENDIX) -o $(PDF)
 
 twocol: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)  # Adjust Spacing with geometry
@@ -74,3 +75,5 @@ $(APPENDIX): $(APPENDICES)
 clean:
 	rm -f $(BODY) $(APPENDIX) images/*.pdf *.pdf *.log *.aux
 
+test:
+	@echo $(IMAGES)
