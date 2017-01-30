@@ -4,9 +4,6 @@
 # Word files
 *.docx
 
-# TeX files
-*.tex
-
 # TeX aux files
 *.aux
 

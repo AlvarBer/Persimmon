@@ -1,23 +1,19 @@
-dist: trusty
-sudo: required
+dist: trusty  # 2014 Ubuntu, whoooo!
+sudo: required  # Necesary for installing LaTeX packages
 
-language: R
+language: python
+python: "3.5"
 
-install: true
+install: sudo apt-get update -qq  # No dependencies?
 
-script: true
+script: true  # No Testing
 
 
-after_success:
-    - sudo apt-get install texlive-latex-extra
-    - cd docs
-    - wget http://mirrors.ctan.org/macros/latex/contrib/standalone.zip
-    - unzip standalone.zip
-    - cd standalone
-    - wget http://texdoc.net/texmf-dist/tex/generic/ydoc/ydocstrip.tex
-    - xelatex standalone.ins
-    - cd .. && mv standalone/* .
-    - make travis && cd ..
+after_success:  # Build binaries and documentation
+    - cd docs  # Time to do documentation
+    - sudo apt-get install -y --no-install-recommends pandoc pandoc-citeproc texlive-base texlive-latex-base texlive-generic-recommended texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils texlive-latex-recommended texlive-latex-extra texlive-xetex lmodern pgf
+    - make travis
+    - cd ..
 
 # Run tests on master & dev
 branches:
@@ -32,10 +28,11 @@ deploy:
     file: docs/persimmon.pdf
     skip_cleanup: true
     overwrite: true
+    prerelease: true
     on:
         branch:
             - master
 
-# Stop bothering me
 notifications:
-    email: false
+    email: false  # Stop bothering me
+
