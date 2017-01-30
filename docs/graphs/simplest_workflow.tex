@@ -1,0 +1,16 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\begin{document}
+  \begin{tikzpicture}
+    \draw (-0.5, -2.3) rectangle (0.5, -1) node[midway, gray] {.csv};
+    \draw [->, gray, thick] (0, -0.9) -- (0, -0.4);
+    \draw (0, 0) ellipse (28pt and 10pt) node {Estimator};
+    \draw [->, gray, thick] (1.1, 0) -- (1.9, 0);
+    \draw (3, 0) ellipse (28pt and 10pt) node {Validation};
+    %\draw [->, gray, thick] (4.1, 0) -- (4.9, 0);
+    %\draw (6, 0) ellipse (28pt and 10pt) node {Prediction};
+  \end{tikzpicture}
+\end{document}
+

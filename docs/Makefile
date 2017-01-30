@@ -76,4 +76,5 @@ clean:
 	rm -f $(BODY) $(APPENDIX) images/*.pdf *.pdf *.log *.aux
 
 test:
+	@echo $(GRAPHS)
 	@echo $(IMAGES)
