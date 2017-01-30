@@ -72,5 +72,5 @@ $(APPENDIX): $(APPENDICES)
 	pandoc --no-tex-ligatures $(APPENDICES) -o $@
 
 clean:
-	rm -f $(BODY) $(APPENDIX) graphs/*.pdf *.pdf *.log *.aux
+	rm -f $(BODY) $(APPENDIX) images/*.pdf *.pdf *.log *.aux
 
