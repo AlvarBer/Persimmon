@@ -3,9 +3,14 @@ Implementation
 
 First Iteration
 ---------------
+For the first iteration the priority was to get a proof of concept in order to
+see where the difficulties can appear, a few simple classificators and
+cross-validation techniques.
 
-![Early "static" interface](graphs/early_interface.png)
+![Button based first interface](images/interface5.png)
 
-![File chooser](graphs/filechooser.png)
+Second Iteration
+----------------
 
-
+Third Iteration
+---------------
