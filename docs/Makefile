@@ -65,7 +65,7 @@ images/%.pdf: graphs/%.tex
 	mv $*.pdf images/
 
 # Body and Appendices Middle Steps creation
-$(BODY): $(MARKDOWN)
+$(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
 		metadata.yaml $(MARKDOWN) -o $@
 

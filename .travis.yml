@@ -11,8 +11,9 @@ script: true  # No Testing
 
 after_success:  # Build binaries and documentation
     - cd docs  # Time to do documentation
-    - sudo apt-get install -y --no-install-recommends pandoc pandoc-citeproc texlive-base texlive-latex-base texlive-generic-recommended texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils texlive-latex-recommended texlive-latex-extra texlive-xetex lmodern pgf
-    - make travis
+    -  make test
+      #- sudo apt-get install -y --no-install-recommends pandoc pandoc-citeproc texlive-base texlive-latex-base texlive-generic-recommended texlive-fonts-recommended texlive-fonts-extra texlive-extra-utils texlive-latex-recommended texlive-latex-extra texlive-xetex lmodern pgf
+      #- make travis
 
 # Run tests on master & dev
 branches:
