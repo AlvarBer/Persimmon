@@ -23,7 +23,7 @@ selected hyper-parameters, this involves making a grid of the possible
 hyper-parameters and trying all of them, resulting in finding the best
 possible value.
 
-![Adjustment of hyperparameters](images/regular_workflow.pdf)
+![Adjustment of hyper-parameters](images/regular_workflow.pdf)
 
 Complex
 -------
