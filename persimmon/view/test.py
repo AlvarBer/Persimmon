@@ -22,7 +22,7 @@ from sklearn.model_selection import LeaveOneOut
 
 class TestApp(App):
     def __init__(self, *args, **kwargs):
-        super(TestApp, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.train_file = None
         self.estimator = None
         self.cv = None
