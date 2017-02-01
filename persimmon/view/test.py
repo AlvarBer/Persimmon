@@ -4,7 +4,11 @@ import os
 import kivy
 kivy.require('1.9.0')
 import pandas as pd
-import backend
+if __name__ == '__main__':
+    import sys
+    import os
+    sys.path.append('{}/code/persimmon'.format(os.path.expanduser('~')))
+from persimmon import backend
 from functools import partial
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -49,7 +53,7 @@ class PrototypeScreen(BoxLayout):
     predict_file = StringProperty()
 
     def __init__(self, *args, **kwargs):
-        super(PrototypeScreen, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.current_app = App.get_running_app()
         self.current_app.estimator = SVC()
         self.current_app.cv = LeaveOneOut()
@@ -85,7 +89,7 @@ class FileDialog(Popup):
     selected_file = StringProperty()
 
     def __init__(self, dir='~', filters=None,*args, **kwargs):
-        super(FileDialog, self).__init__()
+        super().__init__()
         self.file_chooser.path = dir
         if filters:
             self.file_chooser.filters=filters
