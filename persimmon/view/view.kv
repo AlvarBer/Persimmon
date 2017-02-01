@@ -1,0 +1,29 @@
+BoxLayout:
+	orientation: 'vertical'
+	TabbedPanel:
+		size_hint_y: None
+		height: '100dp'
+		tab_width: '200dp'
+		do_default_tab: False
+		TabbedPanelItem:
+			text: 'Input/Output'
+			Label:
+				text: '.csv'
+		TabbedPanelItem:
+			text: 'Estimators'
+			Label:
+				text: 'Estimators'
+		TabbedPanelItem:
+			text: 'Cross Validation'
+			Label:
+				text: 'K-Folds'
+	FloatLayout:
+		DragLabel:
+			text: '.csv'
+			size_hint: 0.25, 0.2
+
+<DragLabel@DragBehavior+Label>:
+	drag_rectangle: self.x, self.y, self.width, self.height
+	drag_timeout: 10000000
+	drag_distance: 0
+
