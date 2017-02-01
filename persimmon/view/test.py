@@ -4,10 +4,6 @@ import os
 import kivy
 kivy.require('1.9.0')
 import pandas as pd
-if __name__ == '__main__':
-    import sys
-    import os
-    sys.path.append('{}/code/persimmon'.format(os.path.expanduser('~')))
 from persimmon import backend
 from functools import partial
 from kivy.app import App
