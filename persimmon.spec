@@ -6,10 +6,10 @@ from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
 
-a = Analysis(['__main__.py'],
+a = Analysis(['persimmon\\__main__.py'],
              pathex=['C:\\Users\\Mortadelegle\\Code\\Persimmon\\persimmon'],
              binaries=None,
-             datas=[('view/test.kv', 'persimmon/view')],
+             datas=[('persimmon/view/test.kv', 'persimmon/view')],
              hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['kivy.uix.filechooser', 'win32timezone'],
              hookspath=[],
              runtime_hooks=[],
@@ -23,18 +23,12 @@ pyz = PYZ(a.pure, a.zipped_data,
 
 exe = EXE(pyz,
           a.scripts,
-          exclude_binaries=True,
-          name='persimmon_debug',
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+	  *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
+          name='persimmon',
           debug=False,
           strip=False,
           upx=True,
-          console=True)
-
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-	       *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
-               strip=False,
-               upx=True,
-               name='persimmon_debug')
+          console=False)

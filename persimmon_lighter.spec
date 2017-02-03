@@ -7,10 +7,10 @@ from PyInstaller.utils.hooks import collect_submodules
 block_cipher = None
 flatten = lambda l: [item for sublist in l for item in sublist]
 
-a = Analysis(['__main__.py'],
+a = Analysis(['persimmon\\__main__.py'],
              pathex=['C:\\Users\\Mortadelegle\\Code\\Persimmon\\persimmon'],
              binaries=None,
-             datas=[('view/test.kv', 'persimmon/view')],
+             datas=[('persimmon/view/test.kv', 'persimmon/view')],
              hiddenimports=collect_submodules('scipy') + flatten([collect_submodules(module) for module in ['sklearn.svm', 'sklearn.ensemble', 'sklearn.model_selection', 'sklearn.neighbors']]) + ['kivy.uix.filechooser', 'win32timezone'],
              hookspath=[],
              runtime_hooks=[],
