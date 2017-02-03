@@ -6,12 +6,11 @@ from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
 
-
 a = Analysis(['__main__.py'],
              pathex=['C:\\Users\\Mortadelegle\\Code\\Persimmon\\persimmon'],
              binaries=None,
              datas=[('view/test.kv', 'persimmon/view')],
-             hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['kivy.uix.filechooser' + 'win32timezone'],
+             hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['kivy.uix.filechooser', 'win32timezone'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
