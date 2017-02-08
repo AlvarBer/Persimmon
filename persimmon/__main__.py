@@ -1,5 +1,4 @@
-from persimmon.view import TestApp
+from persimmon.view import TestApp, ViewApp
 
-
-TestApp().run()
+ViewApp().run()
 

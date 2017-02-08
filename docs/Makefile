@@ -1,7 +1,10 @@
 PDF := persimmon.pdf  # PDF Main Target
 MARKDOWN := introduction.md state_of_the_art.md workflow.md objectives.md \
 	risk_analysis.md implementation.md postmortem.md  # Markdown files
+MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
+	workflow.md objectives.md risk_analysis.md implementation.md postmortem.md
 BODY := body.tex  # Markdown files will be converted to this intermediate step
+BODY_COMPLUTENSE := body_complutense.tex
 #APPENDICES := appendixX.md  # Markdown Appendices
 #APPENDIX := appendix.tex  # And appendices to this intermediate step
 #METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
@@ -37,7 +40,7 @@ travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata colorlinks --metadata documentclass:scrreprt \
 		--chapters $(BODY) $(APPENDIX) -o $(PDF)
 
-complutense: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
 		--metadata title:Persimmon --metadata fontsize:12pt --toc \
@@ -46,7 +49,7 @@ complutense: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata documentclass:scrreprt --metadata institute:"Universidad Complutense" \
 		--metada keywords:"Machine Learning","Visual Programming","Serious Games" \
-		--top-level-division chapter $(BODY) $(APPENDIX) -o $(PDF)
+		--top-level-division chapter $(BODY_COMPLUTENSE) $(APPENDIX) -o $(PDF)
 
 twocol: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)  # Adjust Spacing with geometry
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
@@ -72,9 +75,10 @@ $(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
 $(APPENDIX): $(APPENDICES)
 	pandoc --no-tex-ligatures $(APPENDICES) -o $@
 
+$(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
+	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
+		metadata.yaml $(MARKDOWN_COMPLUTENSE) -o $@
+
 clean:
 	rm -f $(BODY) $(APPENDIX) images/*.pdf *.pdf *.log *.aux
 
-test:
-	@echo $(GRAPHS)
-	@echo $(IMAGES)
