@@ -1,10 +1,9 @@
 Objectives
 ==========
 
-The best way to describe the project is by dividing the objectives.
-And the best way to understand the progression of those and their relation
-is with a diagram.
-
+The best way to describe the project is by identifying the objectives.
+In order to understand their progression and the relation between them a
+diagram is presented.
 
 ![Objectives Tree](images/objectives.pdf)
 
@@ -31,12 +30,11 @@ integration that means the system would be accessible from a website interface,
 and script **synthesization**, which is the opposite of compilation, meaning
 the ability to visualize on persimmon a python source file.
 
-Now that we understand the objectives we can draw a much detailed Gantt diagram.
+Now that the objectives are layed down a Gantt diagram of the project
+development can be drawn.
 
-![Gantt Diagram](images/gantt.pdf)
+<!-- Improve Gantt Diagram? -->
+![Gantt Diagram of the project development.](images/gantt.pdf)
 
-
-We omitted previous months that included idea refinement but are not
-interesting for us.
 
 [^kaggle]: [Kaggle.com](https://www.kaggle.com/)

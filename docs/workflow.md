@@ -23,18 +23,26 @@ selected hyper-parameters, this involves making a grid of the possible
 hyper-parameters and trying all of them, resulting in finding the best
 possible value.
 
-![Adjustment of hyper-parameters](images/regular_workflow.pdf)
+![Adjustment of hyper parameters](images/regular_workflow.pdf)
 
 Complex
 -------
-More complex workflows that are out of our scope involve preprocessing, this
-varies wildly on a case by case basis, and can involve data cleaning, feature
-engineering (such as combining two features into one) or dimensionality
-reduction.
-
+More complex workflows involve preprocessing, this varies wildly on a case by
+case basis, and can involve data cleaning, feature engineering (such as
+combining two features into one) or dimensionality reduction.
 
 A extreme example can be seen in [@automatic], of course this kind of workflow
-is out of scope for us, as this is far away from exploratory work, nevertheless
-is a good examples on how complex can a Machine Learning workflow can be.
+is out of scope for us, as this is far away from exploratory work.
+
 ![Fully automatic Machine Learning framework](images/fully_automatic_workflow.png)
 
+In fact this kind of use case would result unwieldy and messy on a visual form,
+visual programming gets too bloated when we try to represent programs that are
+too complex. That is one of the main reasons visual programming languages never
+truly fulfilled their promises and gained mainstream adoption [@unbelievable],
+while they managed to be relevant in very small niches such as PLCs[^plc]
+[@plc].
+
+
+[^plc]: Programable Logic Controllers are industrial digital computers used for
+    controlling a manufacturing process.

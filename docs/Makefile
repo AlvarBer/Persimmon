@@ -21,9 +21,9 @@ all: $(PDF)
 
 $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES) # TODO: Add abstract
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" \
+		--metadata author:"Álvaro Bermejo" --table-of-contents \
 		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:Persimmon --metadata fontsize:12pt --toc \
+		--metadata title:Persimmon --metadata fontsize:12pt --metadata lof \
 		--metadata subtitle:"A sklearn visual programming interface" \
 		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
 		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
