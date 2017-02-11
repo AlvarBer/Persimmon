@@ -69,7 +69,7 @@ Faster exploratory work:
      they see fit.
 
 <!-- Justify these sources. -->
-Our hypothesis is supported by numerous sources such as [@fry2007visualizing]
+The hypothesis is supported by numerous sources such as [@fry2007visualizing]
 and [@principles].
 
 

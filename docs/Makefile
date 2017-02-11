@@ -3,11 +3,7 @@ MARKDOWN := introduction.md state_of_the_art.md workflow.md objectives.md \
 	risk_analysis.md implementation.md postmortem.md  # Markdown files
 MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
 	workflow.md objectives.md risk_analysis.md implementation.md postmortem.md
-BODY := body.tex  # Markdown files will be converted to this intermediate step
-BODY_COMPLUTENSE := body_complutense.tex
-#APPENDICES := appendixX.md  # Markdown Appendices
-#APPENDIX := appendix.tex  # And appendices to this intermediate step
-#METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
+METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
 TEMPLATE := template.tex  # LaTeX template for producing PDF
@@ -19,66 +15,39 @@ IMAGES += $(addprefix images/, $(notdir $(GRAPHS:.tex=.pdf)))  # Generated PDF I
 all: $(PDF)
 
 
-$(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES) # TODO: Add abstract
+$(PDF): $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --table-of-contents \
-		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:Persimmon --metadata fontsize:12pt --metadata lof \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
-		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata colorlinks --metadata documentclass:scrreprt \
-		--top-level-division chapter $(BODY) $(APPENDIX) -o $@
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) -o $@
 
-travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+travis: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata papersize:A4 \
-		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:Persimmon --metadata fontsize:12pt --toc \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
-		--metadata colorlinks --metadata documentclass:scrreprt \
-		--chapters $(BODY) $(APPENDIX) -o $(PDF)
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--chapters $(METADATA) $(MARKDOWN) -o $(PDF)
 
-complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+complutense: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata date:"Director: Pablo Moreno Ger" \
-		--metadata title:Persimmon --metadata fontsize:12pt --toc \
-		--metadata subtitle:"A scikitlearn visual programming interface" \
-		--metadata mainlang:English --metadata colorlinks --metadata titlepic:images/fdi.png \
-		--metadata papersize:A4 --metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata documentclass:scrreprt --metadata institute:"Universidad Complutense" \
-		--metada keywords:"Machine Learning","Visual Programming","Serious Games" \
-		--top-level-division chapter $(BODY_COMPLUTENSE) $(APPENDIX) -o $(PDF)
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --metadata titlepic:images/fdi.png \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata title:"A visual interface for scikit-learn" \
+		--metadata date:"Director: Pablo Moreno Ger" \
+		$(METADATA) $(MARKDOWN) -o $(PDF)
 
-twocol: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)  # Adjust Spacing with geometry
+twocol: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--metadata author:"Álvaro Bermejo" --metadata colorlinks \
-		--metadata date:"$(shell date +"%d/%m/%Y") ($(shell git describe --abbrev=0 --tags))" \
-		--metadata title:Persimmon --metadata fontsize:12p --toc \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata mainlang:English --metada keywords:"Machine Learning","Visual Programming" \
-		--metadata papersize:A4 --metadata classoption:twocolumn \
-		--metadata sansfont:"Helvetica Neue LT Com" --metadata documentclass:scrreprt \
-		--top-level-division chapter $(BODY) $(APPENDIX) -o $(PDF)
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --metadata classoption:twocolumn \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) -o $(PDF)
 
 # For standalone images
 images/%.pdf: graphs/%.tex
-	xelatex $< > /dev/null # TODO: actually output in graphs directory
+	xelatex $< > /dev/null
 	mv $*.pdf images/
 
-# Body and Appendices Middle Steps creation
-$(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
-		metadata.yaml $(MARKDOWN) -o $@
-
-$(APPENDIX): $(APPENDICES)
-	pandoc --no-tex-ligatures $(APPENDICES) -o $@
-
-$(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
-		metadata.yaml $(MARKDOWN_COMPLUTENSE) -o $@
 
 clean:
-	rm -f $(BODY) $(APPENDIX) images/*.pdf *.pdf *.log *.aux
+	rm -f images/*.pdf $(PDF) *.log *.aux
 
