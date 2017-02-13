@@ -18,12 +18,76 @@ BoxLayout:
 			Label:
 				text: 'K-Folds'
 	FloatLayout:
-		DragLabel:
-			text: '.csv'
-			size_hint: 0.25, 0.2
+		Block:
+			pos: 50, 200
+			block_label: '.csv'
+			block_color: .667, .224, .224, 1
+			BoxLayout:
+				canvas.before:
+					Color:
+						rgba: .2, .2, .2, 1
+					Rectangle:
+						pos: self.pos
+						size: self.size
+					Color:
+						rgba: 1, 0, 1, 1
+					Line:
+						circle: self.x + self.width - 15, self.y + self.height / 2, 10
+		Block:
+			pos: 300, 200
+			block_label: 'SVM'
+			block_color: .478, .624, .208, 1
+			BoxLayout:
+				canvas.before:
+					Color:
+						rgba: .2, .2, .2, 1
+					Rectangle:
+						pos: self.pos
+						size: self.size
+					Color:
+						rgba: 1, 0, 1, 1
+					Line:
+						circle: self.x + self.width - 15, self.y + self.height / 2, 10
+		Block:
+			pos: 550, 200
+			block_label: '10-fold'
+			block_color: .133, .40, .40, 1
+			BoxLayout:
+				canvas.before:
+					Color:
+						rgba: .2, .2, .2, 1
+					Rectangle:
+						pos: self.pos
+						size: self.size
+					Color:
+						rgba: 1, 0, 1, 1
+					Line:
+						circle: self.x + self.width - 15, self.y + self.height / 2, 10
 
-<DragLabel@DragBehavior+Label>:
+
+
+<Block@DragBehavior+BoxLayout>:
+	# Properties
+	block_color: 1, 1, 1, 1
+	block_label: ''
+
+	# Fixed options
+	size_hint: None, None
+	size: '200dp', '75dp'
+	orientation: 'vertical'
 	drag_rectangle: self.x, self.y, self.width, self.height
 	drag_timeout: 10000000
 	drag_distance: 0
+
+	# Children
+	Label:
+		size_hint_y: None
+		height: '20dp'
+		canvas.before:
+			Color:
+				rgba: root.block_color
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		text: root.block_label
 

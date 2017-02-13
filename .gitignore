@@ -17,3 +17,6 @@ __pycache__/
 # PyInstaller folders
 build/
 dist/
+
+# Egg info
+*.egg-info/
