@@ -1,5 +1,6 @@
 Focus
 =====
+
 Here is where we thought about contacting the *"e-learning UCM"* research group
 at Complutense University because we saw an opportunity to bring the power of
 the datascience to the educational world, in this case via the educative games.

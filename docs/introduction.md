@@ -57,10 +57,10 @@ So this project serves a double purpose
 
 Learning:
 
-:    It helps both with the programming barrier, easing the learning curve of
-     Machine Learning as it allows the learner to focus on the connections,
-     intuitions and mathematical basis and not on the implementation details
-     and the quirks of the concrete language.
+:   It helps both with the programming barrier, easing the learning curve of
+    Machine Learning as it allows the learner to focus on the connections,
+    intuitions and mathematical basis and not on the implementation details
+    and the quirks of the concrete language.
 
 Faster exploratory work:
 

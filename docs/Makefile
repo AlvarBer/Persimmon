@@ -26,14 +26,15 @@ travis: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--chapters $(METADATA) $(MARKDOWN) -o $(PDF)
 
-complutense: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
+complutense: $(MARKDOWN_COMPLUTENSE) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --metadata titlepic:images/fdi.png \
 		--metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata title:"A visual interface for scikit-learn" \
 		--metadata date:"Director: Pablo Moreno Ger" \
-		$(METADATA) $(MARKDOWN) -o $(PDF)
+		--metadata keywords:"Serious Games","Machine Learning","Visual Programming" \
+		$(METADATA) $(MARKDOWN_COMPLUTENSE) -o $(PDF)
 
 twocol: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
