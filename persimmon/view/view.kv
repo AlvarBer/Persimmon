@@ -25,17 +25,6 @@ BoxLayout:
 				pos: self.pos
 				size: self.size
 				texture: app.background
-		#Block:
-		#	pos: 50, 200
-		#	block_label: '.csv'
-		#	block_color: .667, .224, .224, 1
-		#	EmptyContent:
-		#		canvas.before:
-		#			Color:
-		#				rgba: 1, 0, 1, 1
-		#			Line:
-		#				circle: self.x + self.width - 15, self.y + self.height / 2, 10
-
 
 <Block>:
 	# Fixed options
@@ -57,8 +46,16 @@ BoxLayout:
 				pos: self.pos
 				size: self.size
 		text: root.block_label
-
-<EmptyContent@BoxLayout>:
+	Widget: # content
+		
+<SVMBlock>:
+	eyebolts: eyebolts
+	# Properties
+	block_label: 'SVM'
+	block_color: .478, .624, .208, 1
+	rad: 10
+	eyebolt_x: self.x + self.width - 15
+	eyebolt_y: self.y + self.height / 2
 	canvas.before:
 		Color:
 			rgba: .2, .2, .2, 1
@@ -66,5 +63,33 @@ BoxLayout:
 			pos: self.pos
 			size: self.size
 
-#<BlackBoard>:
+	FloatLayout:
+		id: eyebolts
+		CircularButton:
+			size_hint: None, None
+			size: '10dp', '10dp'
+			x: eyebolts.x + eyebolts.width - 15
+			y: eyebolts.y + eyebolts.height / 2 + 10
+
+
+<TenFoldBlock>:
+	block_label: '10-fold'
+	block_color: .133, .4, .4, 1
+
+<CircularButton>:
+	canvas:
+		Color:
+			rgba: 1, 1, 0, 1
+		Ellipse:
+			pos: self.pos
+			size: self.size
+
+<EmptyContent@Widget>:
+	canvas.before:
+		Color:
+			rgba: .2, .2, .2, 1
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
 
