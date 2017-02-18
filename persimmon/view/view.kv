@@ -27,19 +27,3 @@ BoxLayout:
 				size: self.size
 				texture: app.background
 
-<CircularButton>:
-	canvas:
-		Color:
-			rgba: 1, 1, 0, 1
-		Ellipse:
-			pos: self.pos
-			size: self.size
-
-<EmptyContent@Widget>:
-	canvas.before:
-		Color:
-			rgba: .2, .2, .2, 1
-		Rectangle:
-			pos: self.pos
-			size: self.size
-

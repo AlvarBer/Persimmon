@@ -1,16 +1,18 @@
-from blocks import Block
-from kivy.properties import ObjectProperty
+from persimmon.view.util import EmptyContent, CircularButton
+from persimmon.view.blocks import Block
+
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 
 
 Builder.load_file('view/blocks/svmblock.kv')
 
 class SVMBlock(Block):
-    eyebolts = ObjectProperty()
+    out_1 = ObjectProperty()
 
-    def on_pin(self, x, y):
-        for pin in self.eyebolts.children:
-            if pin.collide_point(x, y):
-                return True
-        else:
-            return False
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.pins.append(self.out_1)
+
+    def pin_relative_position(self):
+        return self.out_1.center

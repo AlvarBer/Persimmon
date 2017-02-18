@@ -1,18 +1,16 @@
 <SVMBlock>:
-	eyebolts: eyebolts
 	# Properties
+	out_1: out_1
 	block_label: 'SVM'
 	block_color: .478, .624, .208, 1
-	canvas.before:
-		Color:
-			rgba: .2, .2, .2, 1
-		Rectangle:
-			pos: self.pos
-			size: self.size
 	FloatLayout:
-		id: eyebolts
-		CircularButton:
-			size_hint: None, None
-			size: '10dp', '10dp'
-			x: eyebolts.x + eyebolts.width - 10 - 5
-			y: eyebolts.y + eyebolts.height / 2
+		id: content
+		EmptyContent:
+			pos: content.pos
+			CircularButton:
+				id: out_1
+				size_hint: None, None
+				size: '10dp', '10dp'
+				x: content.x + content.width - 10 - 5
+				y: content.y + content.height / 2
+
