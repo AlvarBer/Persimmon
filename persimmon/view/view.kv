@@ -1,4 +1,5 @@
-#:kivy 1.0
+#:kivy 1.9
+
 
 BoxLayout:
 	orientation: 'vertical'
@@ -26,56 +27,6 @@ BoxLayout:
 				size: self.size
 				texture: app.background
 
-<Block>:
-	# Fixed options
-	size_hint: None, None
-	size: '200dp', '75dp'
-	orientation: 'vertical'
-	drag_rectangle: self.x, self.y, self.width, self.height
-	drag_timeout: 10000000
-	drag_distance: 0
-
-	# Children
-	Label:
-		size_hint_y: None
-		height: '20dp'
-		canvas.before:
-			Color:
-				rgba: root.block_color
-			Rectangle:
-				pos: self.pos
-				size: self.size
-		text: root.block_label
-	Widget: # content
-		
-<SVMBlock>:
-	eyebolts: eyebolts
-	# Properties
-	block_label: 'SVM'
-	block_color: .478, .624, .208, 1
-	rad: 10
-	eyebolt_x: self.x + self.width - 15
-	eyebolt_y: self.y + self.height / 2
-	canvas.before:
-		Color:
-			rgba: .2, .2, .2, 1
-		Rectangle:
-			pos: self.pos
-			size: self.size
-
-	FloatLayout:
-		id: eyebolts
-		CircularButton:
-			size_hint: None, None
-			size: '10dp', '10dp'
-			x: eyebolts.x + eyebolts.width - 15
-			y: eyebolts.y + eyebolts.height / 2 + 10
-
-
-<TenFoldBlock>:
-	block_label: '10-fold'
-	block_color: .133, .4, .4, 1
-
 <CircularButton>:
 	canvas:
 		Color:
@@ -91,5 +42,4 @@ BoxLayout:
 		Rectangle:
 			pos: self.pos
 			size: self.size
-
 

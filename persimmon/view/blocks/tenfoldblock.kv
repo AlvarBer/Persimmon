@@ -1,0 +1,14 @@
+<TenFoldBlock>:
+	eyebolts: eyebolts
+	block_label: '10-fold'
+	block_color: .133, .4, .4, 1
+	FloatLayout:
+		id: cont
+		EmptyContent:
+			id: eyebolts
+			pos: cont.pos
+			CircularButton:
+				size_hint: None, None
+				size: '10dp', '10dp'
+				x: eyebolts.x + 5
+				y: eyebolts.y + eyebolts.height / 2

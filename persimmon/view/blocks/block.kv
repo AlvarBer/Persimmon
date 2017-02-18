@@ -1,0 +1,21 @@
+<Block>:
+    # Fixed options
+    size_hint: None, None
+    size: '200dp', '75dp'
+    orientation: 'vertical'
+    drag_rectangle: self.x, self.y, self.width, self.height
+    drag_timeout: 10000000
+    drag_distance: 0
+
+    # Children
+    Label:
+        pos: self.pos
+        size_hint_y: None
+        height: '20dp'
+		text: root.block_label
+        canvas.before:
+            Color:
+                rgba: root.block_color
+            Rectangle:
+                pos: self.pos
+                size: self.size

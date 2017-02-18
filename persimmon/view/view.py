@@ -12,10 +12,12 @@ from kivy.properties import (ObjectProperty, NumericProperty, StringProperty,
                              ListProperty)
 # Miscelaneous
 from kivy.config import Config
-from kivy.graphics import Color, Ellipse, Line, Rectangle
-from kivy.factory import Factory
+from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier, SmoothLine
 from kivy.core.window import Window
 from kivy.vector import Vector
+from functools import partial
+
+from blocks import Block, SVMBlock, TenFoldBlock
 
 
 class ViewApp(App):
@@ -27,7 +29,6 @@ class ViewApp(App):
         self.background.wrap = 'repeat'
         self.background.uvsize = (Window.width / self.background.width,
                                   Window.height / self.background.height)
-
 
 class BlackBoard(FloatLayout):
     blocks = ListProperty()
@@ -43,76 +44,60 @@ class BlackBoard(FloatLayout):
         self.blocks.append(ten_fold)
 
     def on_touch_down(self, touch):
-        if self.collide_point(*touch.pos) and touch.button == 'left':
-            print('Blackboard pressed')
+        if self.collide_point(*touch.pos) and touch.button =='left':
             for block in self.blocks:
                 if block.collide_point(*touch.pos):
-                    super().on_touch_down(touch)
-                    break
-            else:
-                self.dragging = True
-                with self.canvas:
-                    Color(1, 1, 0)
-                    d = 15
-                    Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
-                    touch.ud['line'] = Line(points=(touch.pos))
+                    if block.on_pin(*touch.pos):
+                        self.dragging = True
+                        with self.canvas:
+                            Color(1, 1, 0)
+                            touch.ud['start'] = Ellipse(pos=(touch.x - 15 / 2,
+                                                             touch.y - 15 / 2),
+                                                        size=(15, 15))
+                            touch.ud['line'] = SmoothLine(points=(*touch.pos,
+                                                                  *touch.pos))
+                        block.bind(pos=partial(circle_start, touch=touch))
+                        return True
+                    else:
+                        return super().on_touch_down(touch)
         else:
             return super().on_touch_down(touch)
 
     def on_touch_move(self, touch):
         if self.dragging:
-            with self.canvas:
-                touch.ud['line'].points += touch.pos
+            touch.ud['line'].points = (touch.ud['line'].points[:-2] +
+                                       [touch.x, touch.y])
             return True
         else:
             return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        if self.dragging:
-            with self.canvas:
-                d = 15
-                Ellipse(pos=(touch.x - d / 2, touch.y - d / 2), size=(d, d))
+        if self.dragging and touch.button == 'left':
             self.dragging = False
+            if self.collide_point(*touch.pos):
+                for block in self.blocks:
+                    if block.collide_point(*touch.pos):
+                        if block.on_pin(*touch.pos):
+                            with self.canvas:
+                                Ellipse(pos=(touch.x - 15 / 2, touch.y - 15 / 2),
+                                        size=(15, 15))
+                            return True
+            self.canvas.remove(touch.ud['line'])
+            self.canvas.remove(touch.ud['start'])
             return True
         else:
             return super().on_touch_up(touch)
 
-class Block(DragBehavior, BoxLayout):
-    block_color = ListProperty()
-    block_label = StringProperty()
-    content = ObjectProperty()
+def circle_start(block, pos, touch):
+    touch.ud['start'].pos = pos
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
-    def on_touch_down(self, touch):
-        if not self.is_eyebolt(*touch.pos):
-            return super().on_touch_down(touch)
-        else:
-            return True
-
-    def is_eyebolt(self, x, y):
-        return False
-
-class SVMBlock(Block):
-    eyebolts = ObjectProperty()
-
-    def is_eyebolt(self, x, y):
-        for pin in self.eyebolts.children:
-            if pin.collide_point(x, y):
-                return True
-        else:
-            return False
-
-class TenFoldBlock(Block):
-    def is_eyebolt(self, x, y):
-        return False
 
 class CircularButton(ButtonBehavior, Widget):
-    x_size = NumericProperty()
-    y_size = NumericProperty()
+
     def collide_point(self, x, y):
         return Vector(x, y).distance(self.center) <= self.width / 2
+
 
 if __name__ == '__main__':
     ViewApp().run()
