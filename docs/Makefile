@@ -24,7 +24,6 @@ BODY := body.tex
 APPENDIX := appendices.tex
 BODY_COMPLUTENSE := body_complutense.tex
 
-
 all: $(PDF)
 
 $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
@@ -39,16 +38,6 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata keywords:"Machine Learning","Visual Programming" \
 		$(BODY) $(APPENDIX) -o $@
 
-travis: $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
-	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--table-of-contents --chapters \
-		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A sklearn visual programming interface" \
-		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
-		--metadata colorlinks --metadata lof --metadata papersize:A4 \
-		--metadata fontsize:12pt --metadata mainlang:English \
-		--metadata keywords:"Machine Learning","Visual Programming" \
-		$(BODY) $(APPENDIX) -o $(PDF)
 
 complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
@@ -72,8 +61,9 @@ images/%.pdf: graphs/%.tex
 	rm -f $*.log $*.aux
 
 $(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --top-level-division chapter --table-of-contents \
+	pandoc --no-tex-ligatures --top-level-division chapter \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) $(MARKDOWN) -o $@
+
 
 $(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --no-tex-ligatures --top-level-division chapter --table -of-contents \
@@ -82,6 +72,27 @@ $(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
 
 $(APPENDIX): $(APPENDICES)
 	pandoc --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@
+
+# Travis generation, only necessary because travis version of pandoc is old.
+BODY_TRAVIS := body_travis.tex
+
+travis: $(BODY_TRAVIS) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--table-of-contents --chapters \
+		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
+		--metadata subtitle:"A sklearn visual programming interface" \
+		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
+		--metadata colorlinks --metadata lof --metadata papersize:A4 \
+		--metadata fontsize:12pt --metadata mainlang:English \
+		--metadata keywords:"Machine Learning","Visual Programming" \
+		$(BODY_TRAVIS) $(APPENDIX_TRAVIS) -o $(PDF)
+
+$(BODY_TRAVIS): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
+	pandoc --no-tex-ligatures --chapters --bibliography $(BIBLIOGRAPHY) --csl \
+		$(CSL) $(MARKDOWN) -o $@
+
+$(APPENDIX_TRAVIS): $(APPENDICES)
+	pandoc --no-tex-ligatures --chapters $(APPENDICES) -o $@
 
 
 clean:
