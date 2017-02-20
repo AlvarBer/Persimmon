@@ -8,7 +8,7 @@ inspiration and avoiding pitfalls.
 
 Microsoft Azure Machine Learning Studio
 ---------------------------------------
-![Azure ML Studio web interface](https://visualstudiomagazine.com/articles/2014/09/01/~/media/ECG/visualstudiomagazine/Images/2014/09/0914vsm_mccaffreyfig01.ashx)
+![Azure ML Studio web interface](images/azureML.jpg)
 
 Microsoft Azure ML Studio is one of the most direct inspirations for this
 project, there is plenty to like, lots of different preprocessing steps,
@@ -26,7 +26,7 @@ source we can't extend the code in any meaningful way.
 
 Weka
 ----
-![Weka Graphical User Interface](https://a.fsdn.com/con/app/proj/weka/screenshots/311303.jpg/1)
+![Weka Graphical User Interface](images/weka.jpeg)
 
 Weka is a popular machine learning suite, written in `Java` and developed at
 the University of Waikato. It provides both a command line interface and a
@@ -35,7 +35,7 @@ graphical interface.
 
 Unreal Engine 4 Blueprints
 --------------------------
-![Unreal Engine 4 Blueprint](https://forums.unrealengine.com/attachment.php?attachmentid=1767&d=1399231370)
+![Unreal Engine 4 Blueprint](images/unreal.png)
 
 Epic's Unreal Engine 4 introduced Blueprints as an alternative way to `C++`
 programming. It represents all the programming structures as blocks that
