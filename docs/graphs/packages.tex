@@ -1,0 +1,15 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\begin{document}
+  \begin{tikzpicture}[sibling distance=10em,
+    every node/.style = {shape=rectangle,
+      draw, align=center}]
+  \node {persimmon}
+    child { node {backend} }
+    child { node {view}
+      child { node {blocks} }
+      child { node {util} } };
+\end{tikzpicture}
+\end{document}
