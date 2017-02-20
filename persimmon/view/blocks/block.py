@@ -22,4 +22,4 @@ class Block(DragBehavior, BoxLayout):
         return None
 
     def pin_relative_position(self, pin):
-        return self.pos
+        return pin.center

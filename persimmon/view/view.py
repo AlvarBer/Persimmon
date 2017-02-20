@@ -2,6 +2,7 @@ from kivy.app import App
 # Widgets
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
+from kivy.uix.button import Button
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 # Properties
@@ -13,7 +14,8 @@ from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier, SmoothLine
 from kivy.core.window import Window
 from functools import partial
 
-from persimmon.view.blocks import Block, SVMBlock, TenFoldBlock, CSVInBlock
+from persimmon.view.blocks import (Block, SVMBlock, TenFoldBlock, CSVInBlock,
+                                   CSVOutBlock)
 from persimmon.view.util import CircularButton, EmptyContent
 
 
@@ -30,19 +32,25 @@ class ViewApp(App):
 
 class BlackBoard(FloatLayout):
     blocks = ListProperty()
+    initial_block = ObjectProperty()
+    final_block = ObjectProperty()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dragging = False
-        csv_in = CSVInBlock(pos=(50, 200))
+        csv_in = CSVInBlock(pos=(25, 200))
         self.add_widget(csv_in)
         self.blocks.append(csv_in)
-        svm = SVMBlock(pos=(300, 200))
+        self.initial_block = csv_in
+        svm = SVMBlock(pos=(275, 200))
         self.add_widget(svm)
         self.blocks.append(svm)
-        ten_fold = TenFoldBlock(pos=(550, 200))
+        ten_fold = TenFoldBlock(pos=(525, 200))
         self.add_widget(ten_fold)
         self.blocks.append(ten_fold)
+        csv_out = CSVOutBlock(pos=(550, 100))
+        self.add_widget(csv_out)
+        self.blocks.append(csv_out)
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and touch.button =='left':
@@ -58,6 +66,7 @@ class BlackBoard(FloatLayout):
                 block.bind(pos=partial(self.circle_bind,
                                        circle=touch.ud['start'],
                                        pin=pin))
+                touch.ud['start_pin'] = pin
                 return True
             else:
                 return super().on_touch_down(touch)
@@ -82,15 +91,18 @@ class BlackBoard(FloatLayout):
                     with self.canvas:
                         touch.ud['end'] = Ellipse(pos=pin.pos, size=pin.size)
                     start_block = touch.ud['start_block']
+                    print(pin.block)
                     block.bind(pos=partial(self.circle_bind,
                                            circle=touch.ud['end'],
                                            pin=pin))
                     block.bind(pos=partial(self.line_bind,
                                            line=touch.ud['line'],
-                                           pos_func=block.pin_relative_position))
+                                           pos_func=block.pin_relative_position,
+                                           pin=pin))
                     start_block.bind(pos=partial(self.line_bind,
                                                  line=touch.ud['line'],
                                                  pos_func=start_block.pin_relative_position,
+                                                 pin=touch.ud['start_pin'],
                                                  start=True))
                     return True
             self.canvas.remove(touch.ud['line'])
@@ -98,6 +110,10 @@ class BlackBoard(FloatLayout):
             return True
         else:
             return super().on_touch_up(touch)
+
+    def execute_graph(self):
+        for block in self.blocks:
+            print(block.__class__ == CSVInBlock)
 
     def in_block(self, x, y):
         for block in self.blocks:
@@ -108,11 +124,11 @@ class BlackBoard(FloatLayout):
     def circle_bind(self, block, pos, circle, pin):
         circle.pos = pin.pos
 
-    def line_bind(self, block, pos, line, pos_func, start=False):
+    def line_bind(self, block, pos, line, pos_func, pin, start=False):
         if start:
-            line.points = pos_func() + line.points[2:]
+            line.points = pos_func(pin) + line.points[2:]
         else:
-            line.points = line.points[:2] + pos_func()
+            line.points = line.points[:2] + pos_func(pin)
 
 if __name__ == '__main__':
     ViewApp().run()

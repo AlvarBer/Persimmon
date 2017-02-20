@@ -14,5 +14,3 @@ class CSVInBlock(Block):
         super().__init__(*args, **kwargs)
         self.pins.append(self.out_1)
 
-    def pin_relative_position(self):
-        return self.out_1.center

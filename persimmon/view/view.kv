@@ -26,4 +26,10 @@ BoxLayout:
 				pos: self.pos
 				size: self.size
 				texture: app.background
+<BlackBoard>:
+	Button:
+		text: 'Execute'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		on_press: root.execute_graph()
 

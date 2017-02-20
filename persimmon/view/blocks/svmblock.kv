@@ -1,5 +1,6 @@
 <SVMBlock>:
 	# Properties
+	in_1: in_1
 	out_1: out_1
 	block_label: 'SVM'
 	block_color: .478, .624, .208, 1
@@ -8,7 +9,15 @@
 		EmptyContent:
 			pos: content.pos
 			CircularButton:
+				id: in_1
+				block: root
+				size_hint: None, None
+				size: '10dp', '10dp'
+				x: content.x + 5
+				y: content.y + content.height / 2
+			CircularButton:
 				id: out_1
+				block: root
 				size_hint: None, None
 				size: '10dp', '10dp'
 				x: content.x + content.width - 10 - 5
