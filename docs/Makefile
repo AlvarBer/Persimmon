@@ -3,10 +3,15 @@ MARKDOWN := introduction.md state_of_the_art.md workflow.md objectives.md \
 	risk_analysis.md implementation.md postmortem.md  # Markdown files
 MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
 	workflow.md objectives.md risk_analysis.md implementation.md postmortem.md
+APPENDICES := appendixA.md appendixB.md
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
 TEMPLATE := template.tex  # LaTeX template for producing PDF
+
+MARKDOWN := $(addprefix src/, $(MARKDOWN))
+MARKDOWN_COMPLUTENSE := $(addprefix src/, $(MARKDOWN_COMPLUTENSE))
+APPENDICES := $(addprefix src/, $(APPENDICES))
 
 GRAPHS := $(wildcard graphs/*.tex)  # Latex diagrams
 IMAGES := $(wildcard images/*.png)  # .png images
@@ -14,7 +19,7 @@ IMAGES += $(addprefix images/, $(notdir $(GRAPHS:.tex=.pdf)))  # Generated PDF I
 
 BODY := body.tex
 APPENDIX := appendices.tex
-APPENDICES := appendixA.md appendixB.md
+BODY_COMPLUTENSE := body_complutense.tex
 
 
 all: $(PDF)
@@ -46,13 +51,13 @@ complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--table-of-contents --top-level-division chapter --metadata author:Álvaro \
 		--metadata title:"A sklearn visual programming interface" \
-		--metadata date:"Director: Pablo Moreno Ger" \
+		--metadata date:"Director:Manuel Freire Moran, Codirector: Pablo Moreno Ger" \
 		--metadata documentclass:scrreprt \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
 		--metadata keywords:"Serious Learning","Machine Learning","Visual Programming" \
-		--metadata titlepic:images/fdi.png
+		--metadata titlepic:images/fdi.png \
 		$(BODY_COMPLUTENSE) $(APPENDIX) -o $(PDF)
 
 twocol: $(MARKDOWN) $(METADATA) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL)
@@ -69,10 +74,12 @@ images/%.pdf: graphs/%.tex
 
 $(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --no-tex-ligatures --top-level-division chapter --table-of-contents \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) \
-		$(MARKDOWN) -o $@
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) $(MARKDOWN) -o $@
 
-$(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE)
+$(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
+	pandoc --no-tex-ligatures --top-level-division chapter --table -of-contents \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) $(MARKDOWN_COMPLUTENSE) \
+		-o $@
 
 $(APPENDIX): $(APPENDICES)
 	pandoc --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@

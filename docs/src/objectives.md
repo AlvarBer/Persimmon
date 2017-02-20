@@ -33,7 +33,7 @@ the ability to visualize on persimmon a python source file.
 Now that the objectives are layed down a Gantt diagram of the project
 development can be drawn.
 
-<!-- Improve Gantt Diagram? -->
+<!-- Improve Gantt Diagram according to previous feedback. -->
 ![Gantt Diagram of the project development.](images/gantt.pdf)
 
 
