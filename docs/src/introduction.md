@@ -4,7 +4,10 @@ Introduction
 
 Description
 -----------
-Persimmon is a visual programming interface for scikit-learn[^skl].
+Scikit-learn[^skl] is a python library that aims to bring machine learning to
+a more general public, by providing a high-level API that allows the ease of use
+and interchange of different estimators.
+<!-- Cite scikit-learn paper -->
 
 This projects involves a variety of Computer Science topics,
 
@@ -28,8 +31,8 @@ This projects involves a variety of Computer Science topics,
 * Data Wrangling. Some preconditions about the data have to be assumed or
     the user has to be provided with the tools to perform the transformation.
 
-* Compilation. The graphical form of a workflow involving several steps is
-    compiled down to Python source code (Transpilation).
+* Compilers. The graphical form of a workflow involving several steps is
+    compiled down to Python source code (Transcompilation).
 
 The hypothesis is that the visual representation of the workflow and the
 associated concepts can help to both learn and use Machine Learning techniques
@@ -59,8 +62,9 @@ The situation is even more complicated for newcomers to Machine Learning, as
 they not only have the programming barrier but also have to overcome the
 difficulties of the algorithms themselves.
 
-So this project serves a double purpose
 
+Objectives
+----------
 Learning:
 
 :   It helps both with the programming barrier, easing the learning curve of

@@ -1,8 +1,8 @@
 PDF := persimmon.pdf  # PDF Main Target
-MARKDOWN := introduction.md state_of_the_art.md workflow.md objectives.md \
+MARKDOWN := introduction.md state_of_the_art.md workflow.md milestones.md \
 	risk_analysis.md implementation.md postmortem.md  # Markdown files
 MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
-	workflow.md objectives.md risk_analysis.md implementation.md postmortem.md
+	workflow.md milestones.md risk_analysis.md implementation.md postmortem.md
 APPENDICES := appendixA.md appendixB.md  # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
@@ -30,13 +30,14 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--table-of-contents --top-level-division chapter \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A scikit-learn visual programming interface" \
+		--metadata subtitle:"A visual programming interface for machine learning" \
 		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
-		--metadata keywords:"Machine Learning","Visual Programming" \
-		--metadata abstract:"Abstract goes here" \
+		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
+		--metadata abstract:"Persimmon is a visual programming interface for scikit-learn.\
+		Based on the dataflow paradigm." \
 		$(BODY) $(APPENDIX) -o $@
 
 
