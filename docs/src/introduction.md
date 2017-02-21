@@ -8,8 +8,14 @@ Persimmon is a visual programming interface for scikit-learn[^skl].
 
 This projects involves a variety of Computer Science topics,
 
-* User Experience. Main topic as the project is driven by the users feedback
-    and engagement with the project.
+* Dataflow Programming. This paradigm presents programs as a directed graph,
+    pioneered on the 60 at MIT and Bell labs [@bell]. They emphasize programs
+    as connections of boxes, with explicit inputs and output blocks, resulting
+    in parallel programs, closer to the functional programming rather than
+    imperative programming and the Von Neumman architecture.
+
+* User Experience. The project is driven by the users feedback and engagement
+    with the project.
 
 * Software Engineering. Interfacing with previous existing code, laying
     well-defined interfaces and organizing code though object-oriented

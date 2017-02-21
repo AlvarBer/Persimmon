@@ -235,6 +235,14 @@ $endif$
 \titleformat*{\paragraph}{\sffamily\large\bfseries}
 \titleformat*{\subparagraph}{\sffamily\large\bfseries}
 
+\renewenvironment{abstract}{%
+    \clearpage\small
+    \null\vfil
+    \begin{center}%
+        {\bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
+    \end{center}%
+    \quotation
+    }
 
 \begin{document}
 	$if(title)$
@@ -247,7 +255,8 @@ $endif$
 	$endif$
 
 	$if(keywords)$
-		{\bfseries Keywords:}$for(keywords)$ $keywords$ $sep$,$endfor$.
+		\vfill
+    \textbf{Keywords:}$for(keywords)$ $keywords$ $sep$,$endfor$.
 	$endif$
 
 	$for(include-before)$

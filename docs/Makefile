@@ -30,12 +30,13 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--table-of-contents --top-level-division chapter \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A sklearn visual programming interface" \
+		--metadata subtitle:"A scikit-learn visual programming interface" \
 		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
 		--metadata keywords:"Machine Learning","Visual Programming" \
+		--metadata abstract:"Abstract goes here" \
 		$(BODY) $(APPENDIX) -o $@
 
 
@@ -80,7 +81,7 @@ travis: $(BODY_TRAVIS) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--table-of-contents --chapters \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A sklearn visual programming interface" \
+		--metadata subtitle:"A scikit-learn visual programming interface" \
 		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
 		--metadata colorlinks --metadata lof --metadata papersize:A4 \
 		--metadata fontsize:12pt --metadata mainlang:English \
