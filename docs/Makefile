@@ -31,7 +31,7 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--table-of-contents --top-level-division chapter \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
 		--metadata subtitle:"A visual programming interface for machine learning" \
-		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
+		--metadata date:"$(shell date +%Y/%M/%d)" --metadata documentclass:scrreprt \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
