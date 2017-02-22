@@ -1,8 +1,10 @@
-from persimmon.view.util import EmptyContent, CircularButton
+from persimmon.view.util import EmptyContent, OutputPin
 from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+
+import pandas as pd
 
 
 Builder.load_file('view/blocks/csvinblock.kv')
@@ -10,7 +12,5 @@ Builder.load_file('view/blocks/csvinblock.kv')
 class CSVInBlock(Block):
     out_1 = ObjectProperty()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.pins.append(self.out_1)
-
+    def function(self):
+        self.out_1.val = pd.read_csv('iris.csv', header=0)

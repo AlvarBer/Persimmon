@@ -1,25 +1,29 @@
 <SVMBlock>:
 	# Properties
-	in_1: in_1
+	#in_1: in_1
 	out_1: out_1
 	block_label: 'SVM'
-	block_color: .478, .624, .208, 1
+	block_color: .667, .424, .224, 1
+	#inputs: inputs
+	outputs: outputs
 	FloatLayout:
 		id: content
 		EmptyContent:
 			pos: content.pos
-			CircularButton:
-				id: in_1
-				block: root
-				size_hint: None, None
-				size: '10dp', '10dp'
-				x: content.x + 5
-				y: content.y + content.height / 2
-			CircularButton:
-				id: out_1
-				block: root
-				size_hint: None, None
-				size: '10dp', '10dp'
-				x: content.x + content.width - 10 - 5
-				y: content.y + content.height / 2
+			#Widget:
+				#id: inputs
+				#InputPin:
+					#id: in_1
+					#size_hint: None, None
+					#size: '10dp', '10dp'
+					#x: content.x + 5
+					#y: content.y + content.height / 2
+			Widget:
+				id: outputs
+				OutputPin:
+					id: out_1
+					size_hint: None, None
+					size: '10dp', '10dp'
+					x: content.x + content.width - 10 - 5
+					y: content.y + content.height / 2
 

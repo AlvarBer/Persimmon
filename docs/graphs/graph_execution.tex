@@ -19,13 +19,13 @@
       \ForAll {$in\_pin \in current.get\_in\_pins()$}
         \State $input \gets in\_pin.parent$
         \If {$seen.has(input)$}
-          \State $in\_pin.value \gets reference.get(input)$
+          \State $in\_pin.value \gets in\_pin.get(input)$
         \Else
           \State $dependency \gets input.block$
           \If {$dependency \in queue$} \Comment {Remove if already in queue}
             \State $queue.get\_element(dependency)$
           \EndIf
-          \State $queue$, $references \gets$ \Call {explore}{dependency, queue, seen}
+          \State $queue$, $seen \gets$ \Call {explore}{dependency, queue, seen}
         \EndIf
       \EndFor
       \State $current.function()$ \Comment {The function uses in\_pins and produces out\_pins}

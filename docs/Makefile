@@ -1,8 +1,10 @@
 PDF := persimmon.pdf  # PDF Main Target
 MARKDOWN := introduction.md state_of_the_art.md workflow.md milestones.md \
-	risk_analysis.md implementation.md postmortem.md  # Markdown files
+	risk_analysis.md interface.md implementation.md type_checking.md \
+	postmortem.md  # Markdown files
 MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
-	workflow.md milestones.md risk_analysis.md implementation.md postmortem.md
+	workflow.md milestones.md risk_analysis.md interface.md implementation.md \
+	type_checking.md postmortem.md
 APPENDICES := appendixA.md appendixB.md  # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
@@ -31,19 +33,19 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--table-of-contents --top-level-division chapter \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
 		--metadata subtitle:"A visual programming interface for machine learning" \
-		--metadata date:"$(shell date +%Y/%M/%d)" --metadata documentclass:scrreprt \
+		--metadata date:"$(shell date +%Y/%m/%d)" --metadata documentclass:scrreprt \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
 		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
 		--metadata abstract:"Persimmon is a visual programming interface for scikit-learn.\
-		Based on the dataflow paradigm." \
+		Based on the dataflow paradigm it provides a drag and drop interface for creating Machine Learning pipelines." \
 		$(BODY) $(APPENDIX) -o $@
 
 
 complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--table-of-contents --top-level-division chapter
+		--table-of-contents --top-level-division chapter \
 		--metadata author:"Álvaro Bermejo García" \
 		--metadata title:"A scikit-learn visual programming interface" \
 		--metadata date:"Director:Manuel Freire Moran, Codirector: Pablo Moreno Ger" \

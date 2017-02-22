@@ -5,6 +5,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.scatterlayout import ScatterLayout
 # Properties
 from kivy.properties import (ObjectProperty, NumericProperty, StringProperty,
                              ListProperty)
@@ -15,8 +16,10 @@ from kivy.core.window import Window
 from functools import partial
 
 from persimmon.view.blocks import (Block, SVMBlock, TenFoldBlock, CSVInBlock,
-                                   CSVOutBlock)
+                                   CSVOutBlock, CrossValidationBlock)
 from persimmon.view.util import CircularButton, EmptyContent
+
+from collections import deque
 
 
 Config.read('config.ini')
@@ -25,12 +28,13 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
-        self.background = Image(source='background.png').texture
+        self.background = Image(source='connections.png').texture
         self.background.wrap = 'repeat'
-        self.background.uvsize = (Window.width / self.background.width,
-                                  Window.height / self.background.height)
+        self.background.uvsize = 30, 30
+        #self.background.uvsize = (Window.width / self.background.width,
+        #                          Window.height / self.background.height)
 
-class BlackBoard(FloatLayout):
+class BlackBoard(ScatterLayout):
     blocks = ListProperty()
     initial_block = ObjectProperty()
     final_block = ObjectProperty()
@@ -38,17 +42,20 @@ class BlackBoard(FloatLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dragging = False
-        csv_in = CSVInBlock(pos=(25, 200))
+        csv_in = CSVInBlock(pos=(25, 350))
         self.add_widget(csv_in)
         self.blocks.append(csv_in)
         self.initial_block = csv_in
-        svm = SVMBlock(pos=(275, 200))
+        svm = SVMBlock(pos=(25, 250))
         self.add_widget(svm)
         self.blocks.append(svm)
-        ten_fold = TenFoldBlock(pos=(525, 200))
+        ten_fold = TenFoldBlock(pos=(25, 150))
         self.add_widget(ten_fold)
         self.blocks.append(ten_fold)
-        csv_out = CSVOutBlock(pos=(550, 100))
+        cross_val = CrossValidationBlock(pos=(300, 250))
+        self.add_widget(cross_val)
+        self.blocks.append(cross_val)
+        csv_out = CSVOutBlock(pos=(575, 250))
         self.add_widget(csv_out)
         self.blocks.append(csv_out)
 
@@ -91,7 +98,6 @@ class BlackBoard(FloatLayout):
                     with self.canvas:
                         touch.ud['end'] = Ellipse(pos=pin.pos, size=pin.size)
                     start_block = touch.ud['start_block']
-                    print(pin.block)
                     block.bind(pos=partial(self.circle_bind,
                                            circle=touch.ud['end'],
                                            pin=pin))
@@ -112,8 +118,30 @@ class BlackBoard(FloatLayout):
             return super().on_touch_up(touch)
 
     def execute_graph(self):
-        for block in self.blocks:
-            print(block.__class__ == CSVInBlock)
+        queue = deque()
+        seen = {}
+        queue.append(self.blocks[0])
+        while queue:
+            queque, seen = self.explore_graph(queue.popleft(), queue, seen)
+
+    def explore_graph(self, block, queue: deque, seen: dict) -> (deque, dict):
+        for in_pin in block.input_pins:
+            pin_uid = id(in_pin.origin)
+            if pin_uid in seen:
+                in_pin.val = seen[pin_uid]
+            else:
+                dependency = in_pin.origin.block
+                if dependency in queue:
+                    queue.remove(dependency)
+                queue, seen = self.explore_graph(dependency, queue, seen)
+        print(f'About to execute {block.__class__}')
+        block.function()
+        print(f'Executed {block.__class__}')
+        for out_pin in block.output_pins:
+            seen[id(out_pin)] = out_pin.val
+        return queue, seen
+
+
 
     def in_block(self, x, y):
         for block in self.blocks:

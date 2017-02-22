@@ -3,10 +3,11 @@ Implementation
 
 How does it actually work?
 --------------------------
-A graph is drawn on screen using the provided blocks and their respective
-connections (called pins). Pins on the left side of a block are called
-input pins and each must come from a single output pin. Pins on the right side
-are called output pins and one can be connected to multiple input pins.
+A graph is drawn on screen using the provided blocks (Blocks can be either
+functions or I/O blocks) and their respective connections (called pins).
+Pins on the left side of a block are called input pins and each must come from
+a single output pin. Pins on the right side are called output pins and one can
+be connected to multiple input pins.
 
 <!-- Talk about compilation, topological sort and abstract syntax tree. -->
 Then when the user press play this graph is sent to the backend,

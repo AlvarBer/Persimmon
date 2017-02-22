@@ -1,10 +1,11 @@
 Milestones
 ==========
 
-The best way to describe the project development is by identifying the
-objectives milestones.
-In order to understand their progression and the relation between them a
-diagram is presented.
+
+In order to guarantee the delivery of the software a incremental software
+development has been chosen, this implies breaking down the objectives into
+smaller milestones that can be reached more easily, so in case the last
+milestone isn ot reached there is still a substancial product to submit.
 
 ![Milestones Tree](images/objectives.pdf)
 
@@ -31,8 +32,8 @@ integration that means the system would be accessible from a website interface,
 and script **synthesization**, which is the opposite of compilation, meaning
 the ability to visualize on persimmon a python source file.
 
-Now that the objectives are layed down a Gantt diagram of the project
-development can be drawn.
+With the settled milestones a Gantt diagram of the project development can be
+drawn.
 
 <!-- Improve Gantt Diagram according to previous feedback. -->
 ![Gantt Diagram of the project development.](images/gantt.pdf)

@@ -35,7 +35,7 @@ graphical interface.
 
 Unreal Engine 4 Blueprints
 --------------------------
-![Unreal Engine 4 Blueprint](images/unreal.png)
+![Unreal Engine 4 Blueprint system](images/unreal.png)
 
 Epic's Unreal Engine 4 introduced Blueprints as an alternative way to `C++`
 programming. It represents all the programming structures as blocks that
@@ -48,4 +48,4 @@ previous block.
 Details such as this speed up development and lower the cognitive load
 necessary to use the software.
 
-<!-- Add one or two more -->
+<!-- Add python visual examples/dataflow examples -->

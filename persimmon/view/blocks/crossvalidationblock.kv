@@ -1,0 +1,29 @@
+<CrossValidationBlock>:
+	block_label: 'Cross Validation'
+	block_color: .176, .533, .176, 1
+	inputs: inputs
+	outputs: outputs
+	FloatLayout:
+		id: content
+		EmptyContent:
+			pos: content.pos
+			Widget:
+				id: inputs
+				InputPin:
+					id: data_input
+					x: content.x + 5
+					y: content.y + content.height - 15
+				InputPin:
+					id: estimator_input
+					x: content.x + 5
+					y: content.y + content.height / 2 - 5
+				InputPin:
+					id: cross_val_input
+					x: content.x + 5
+					y: content.y + 5
+			Widget:
+				id: outputs
+				OutputPin:
+					x: content.x + content.width - 15
+					y: content.y + content.height / 2
+					

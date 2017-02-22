@@ -6,6 +6,7 @@ the typical ML exploratory work analysis, i.e. the possible pipelines we use
 early on the project when we still do not know what strategies will work best
 for the data.
 
+
 Simple
 ------
 The simplest workflows are those that involve no preprocessing, no adjustment,
@@ -16,6 +17,7 @@ the train file and another file without class feature.
 
 ![Prediction using the whole dataset](images/simpler_workflow.pdf)
 
+
 Regular
 -------
 A more usual workflow involves also tunning the hyper-parameters of the
@@ -24,6 +26,7 @@ hyper-parameters and trying all of them, resulting in finding the best
 possible value.
 
 ![Adjustment of hyper parameters](images/regular_workflow.pdf)
+
 
 Complex
 -------
@@ -38,11 +41,17 @@ is out of scope for us, as this is far away from exploratory work.
 
 In fact this kind of use case would result unwieldy and messy on a visual form,
 visual programming gets too bloated when we try to represent programs that are
-too complex. That is one of the main reasons visual programming languages never
-truly fulfilled their promises and gained mainstream adoption [@unbelievable],
-while they managed to be relevant in very small niches such as PLCs[^plc]
-[@plc].
+too complex [@2003DalkeVisualProgramming], on this article some workarounds such
+as modules, different shape for different kinds of blocks, etc. Even with those
+visual programming languages never truly fulfilled their promises and managed
+to reach mainstream adoption [@unbelievable].
 
+However they managed to be relevant in very small niches such as PLCs design
+[@plc] or music composition [@music].
+Presumably because the complexity can be predicted and accounted for when the
+number of actions is limited, this is the basis for the project programming
+interface being limited on the number of blocks, as not to allow the graphs to
+become inscrutable.
 
 [^plc]: Programable Logic Controllers are industrial digital computers used for
     controlling a manufacturing process.

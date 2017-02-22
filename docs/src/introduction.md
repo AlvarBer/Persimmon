@@ -12,10 +12,17 @@ and interchange of different estimators.
 This projects involves a variety of Computer Science topics,
 
 * Dataflow Programming. This paradigm presents programs as a directed graph,
-    pioneered on the 60 at MIT and Bell labs [@bell]. They emphasize programs
-    as connections of boxes, with explicit inputs and output blocks, resulting
-    in parallel programs, closer to the functional programming rather than
-    imperative programming and the Von Neumman architecture.
+    pioneered on the 60 at MIT and Bell labs [@bell]. It presents programs
+    as a stream of data that is run through a pipeline of instructions
+    rather than a set of instructions that operates on external data, i.e.
+    instructions flowing through data. This results in parallel programs by
+    nature, closer to the functional paradigm than imperative programming and
+    the Von Neumann architecture.
+
+* Visual Programming. The natural fit for a dataflow representation is a visual
+    interface, as we can present the graph visually. Further improvements
+    include type-checking at write time, i.e. when connecting the blocks only
+    allow for connections that are type safe.
 
 * User Experience. The project is driven by the users feedback and engagement
     with the project.
@@ -82,6 +89,13 @@ Faster exploratory work:
 The hypothesis is supported by numerous sources such as [@fry2007visualizing]
 and [@principles].
 
+
+What the project is not
+-----------------------
+The project is not concerned with the following:
+
+* Data Visualization
+* General Purpose Visual Programming
 
 [^skl]: [Scikit-learn](http://scikit-learn.org/) is one of the most widely used
         machine learning frameworks, with more than 16 thousand starts on Github

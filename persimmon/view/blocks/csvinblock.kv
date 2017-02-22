@@ -2,14 +2,16 @@
 	out_1: out_1
 	block_label: 'csv input'
 	block_color: .667, .224, .224, 1
+	outputs: outputs
 	FloatLayout:
 		id: content
 		EmptyContent:
 			pos: content.pos
-			CircularButton:
-				id: out_1
-				block: root
-				size_hint: None, None
-				size: '10dp', '10dp'
-				x: content.x + content.width - 10 - 5
-				y: content.y + content.height / 2
+			Widget:
+				id: outputs
+				OutputPin:
+					id: out_1
+					size_hint: None, None
+					size: '10dp', '10dp'
+					x: content.x + content.width - 10 - 5
+					y: content.y + content.height / 2
