@@ -10,3 +10,5 @@ Builder.load_file('view/blocks/csvoutblock.kv')
 class CSVOutBlock(Block):
     in_1 = ObjectProperty()
 
+    def function(self):
+        print(self.in_1.val)

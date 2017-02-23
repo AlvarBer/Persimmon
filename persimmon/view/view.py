@@ -89,6 +89,7 @@ class BlackBoard(ScatterLayout):
             return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
+        # TODO: Check if we are connecting forward or backwards
         if self.dragging and touch.button == 'left':
             self.dragging = False
             if self.collide_point(*touch.pos):
@@ -110,6 +111,7 @@ class BlackBoard(ScatterLayout):
                                                  pos_func=start_block.pin_relative_position,
                                                  pin=touch.ud['start_pin'],
                                                  start=True))
+                    pin.origin = touch.ud['start_pin']
                     return True
             self.canvas.remove(touch.ud['line'])
             self.canvas.remove(touch.ud['start'])
@@ -120,11 +122,12 @@ class BlackBoard(ScatterLayout):
     def execute_graph(self):
         queue = deque()
         seen = {}
-        queue.append(self.blocks[0])
+        queue.extend(self.blocks)
         while queue:
             queque, seen = self.explore_graph(queue.popleft(), queue, seen)
 
     def explore_graph(self, block, queue: deque, seen: dict) -> (deque, dict):
+        #print(f'Exploring {block.__class__}')
         for in_pin in block.input_pins:
             pin_uid = id(in_pin.origin)
             if pin_uid in seen:
@@ -134,11 +137,10 @@ class BlackBoard(ScatterLayout):
                 if dependency in queue:
                     queue.remove(dependency)
                 queue, seen = self.explore_graph(dependency, queue, seen)
-        print(f'About to execute {block.__class__}')
         block.function()
-        print(f'Executed {block.__class__}')
         for out_pin in block.output_pins:
             seen[id(out_pin)] = out_pin.val
+        #print(f'Explored {block.__class__}')
         return queue, seen
 
 

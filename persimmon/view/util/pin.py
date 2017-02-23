@@ -7,6 +7,6 @@ from kivy.lang import Builder
 Builder.load_file('view/util/pin.kv')
 
 class Pin(CircularButton):
-    val = ObjectProperty()
-    parent = ObjectProperty()
+    val = ObjectProperty(force_dispatch=True)
+    #parent = ObjectProperty()
 

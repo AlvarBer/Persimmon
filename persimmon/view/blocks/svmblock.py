@@ -13,4 +13,4 @@ class SVMBlock(Block):
     out_1 = ObjectProperty()
     
     def function(self):
-        out_1.val = SVC()
+        self.out_1.val = SVC()
