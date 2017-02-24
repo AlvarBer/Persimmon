@@ -17,12 +17,12 @@ from functools import partial
 
 from persimmon.view.blocks import (Block, SVMBlock, TenFoldBlock, CSVInBlock,
                                    CSVOutBlock, CrossValidationBlock)
-from persimmon.view.util import CircularButton, EmptyContent
+from persimmon.view.util import CircularButton, EmptyContent, InputPin
 
 from collections import deque
 
 
-Config.read('config.ini')
+#Config.read('config.ini')
 
 class ViewApp(App):
     background = ObjectProperty()
@@ -66,10 +66,9 @@ class BlackBoard(ScatterLayout):
                 self.dragging = True
                 pin = block.in_pin(*touch.pos)
                 with self.canvas:
-                    Color(1, 1, 0)
+                    Color(*pin.color[:-1])
                     touch.ud['start'] = Ellipse(pos=pin.pos, size=pin.size)
                     touch.ud['line'] = SmoothLine(points=(*pin.center, *touch.pos))
-                touch.ud['start_block'] = block
                 block.bind(pos=partial(self.circle_bind,
                                        circle=touch.ud['start'],
                                        pin=pin))
@@ -89,7 +88,6 @@ class BlackBoard(ScatterLayout):
             return super().on_touch_move(touch)
 
     def on_touch_up(self, touch):
-        # TODO: Check if we are connecting forward or backwards
         if self.dragging and touch.button == 'left':
             self.dragging = False
             if self.collide_point(*touch.pos):
@@ -98,7 +96,8 @@ class BlackBoard(ScatterLayout):
                     pin = block.in_pin(*touch.pos)
                     with self.canvas:
                         touch.ud['end'] = Ellipse(pos=pin.pos, size=pin.size)
-                    start_block = touch.ud['start_block']
+                    start_pin = touch.ud['start_pin']
+                    start_block = start_pin.block
                     block.bind(pos=partial(self.circle_bind,
                                            circle=touch.ud['end'],
                                            pin=pin))
@@ -109,9 +108,14 @@ class BlackBoard(ScatterLayout):
                     start_block.bind(pos=partial(self.line_bind,
                                                  line=touch.ud['line'],
                                                  pos_func=start_block.pin_relative_position,
-                                                 pin=touch.ud['start_pin'],
+                                                 pin=start_pin,
                                                  start=True))
-                    pin.origin = touch.ud['start_pin']
+                    if issubclass(pin.__class__, InputPin):
+                        pin.origin = start_pin
+                        start_pin.destinations.append(pin)
+                    else:
+                        start_pin.origin = pin
+                        pin.destinations.append(start_pin)
                     return True
             self.canvas.remove(touch.ud['line'])
             self.canvas.remove(touch.ud['start'])
@@ -122,7 +126,7 @@ class BlackBoard(ScatterLayout):
     def execute_graph(self):
         queue = deque()
         seen = {}
-        queue.extend(self.blocks)
+        queue.append(self.blocks[0])
         while queue:
             queque, seen = self.explore_graph(queue.popleft(), queue, seen)
 
@@ -130,16 +134,19 @@ class BlackBoard(ScatterLayout):
         #print(f'Exploring {block.__class__}')
         for in_pin in block.input_pins:
             pin_uid = id(in_pin.origin)
-            if pin_uid in seen:
-                in_pin.val = seen[pin_uid]
-            else:
+            if pin_uid not in seen:
                 dependency = in_pin.origin.block
                 if dependency in queue:
                     queue.remove(dependency)
                 queue, seen = self.explore_graph(dependency, queue, seen)
+            in_pin.val = seen[pin_uid]
         block.function()
         for out_pin in block.output_pins:
             seen[id(out_pin)] = out_pin.val
+            for future_block in map(lambda x: x.block, out_pin.destinations):
+                if future_block not in queue:
+                    queue.append(future_block)
+
         #print(f'Explored {block.__class__}')
         return queue, seen
 

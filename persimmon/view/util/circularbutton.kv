@@ -1,7 +1,13 @@
 <CircularButton>:
 	canvas:
 		Color:
-			rgba: root.color
+			rgba: .3, .3, .3, 1
 		Ellipse:
-			pos: self.pos
-			size: self.size
+			pos: self.x + .5, self.y + .5
+			size: self.width - 1, self.height -1
+		Color:
+			rgba: root.color
+		Line:
+			width: 1.05
+			ellipse: self.x , self.y , (*self.size)
+
