@@ -6,6 +6,11 @@
 
 # TeX aux files
 *.aux
+*.log
+*.tex
+
+# Except graphs
+!docs/graphs/*.tex
 
 # Vim Backup files
 *.swp
@@ -20,3 +25,6 @@ dist/
 
 # Egg info
 *.egg-info/
+
+# CSV Files
+*.csv

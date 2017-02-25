@@ -2,7 +2,7 @@ State of the art
 ================
 
 Before working on the system let's take a look at the previous works on the
-field of visual programming and Machine Learning visualizing tools for both
+field of visual programming and visual Machine Learning tools for
 inspiration and avoiding pitfalls.
 
 
@@ -31,7 +31,12 @@ Weka
 Weka is a popular machine learning suite, written in `Java` and developed at
 the University of Waikato. It provides both a command line interface and a
 graphical interface.
-<!-- Add more -->
+
+However it starts to show its age, the interface feels dated and the
+composition of algorithms on a graphical is very restricted. Because it is
+written on Java it also means that it need the JVM, which is a bit of a
+con, specially in productions servers where dependencies bring a long and
+arduous process of review and approval.
 
 Unreal Engine 4 Blueprints
 --------------------------
@@ -44,8 +49,10 @@ returns one output.
 
 The flow of the interface is very good, when one cable is dragged from a block
 a prompt appears with only the blocks that make sense to be connected to the
-previous block.
-Details such as this speed up development and lower the cognitive load
-necessary to use the software.
+previous block. Or different types are represented by different colors in both
+pins and cables.
 
-<!-- Add python visual examples/dataflow examples -->
+These small details improve the user experience, making it faster and easier
+to use.
+
+<!-- Add more -->

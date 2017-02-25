@@ -9,7 +9,7 @@
     \Function{execute}{$G: Graph$}
       \State $queue \gets Queue()$
       \State $seen \gets Map()$
-      \State $queue.put(G.get(random()))$ \Comment {We can start in a random vertex}
+      \State $queue.put(G.get\_input\_blocks())$ \Comment {We can start in a random vertex}
       \While {$\neg queue.empty()$}
         \State $queue$, $seen \gets$ \Call {explore}{queue.get(), queue, seen}
       \EndWhile
@@ -17,18 +17,17 @@
     \\
     \Function{explore}{$current: Vertex,$ $queue: Queue, seen: Map$}{ $\to$ $Queue,$ $Map$}
       \ForAll {$in\_pin \in current.get\_in\_pins()$}
-        \State $input \gets in\_pin.parent$
-        \If {$seen.has(input)$}
-          \State $in\_pin.value \gets in\_pin.get(input)$
-        \Else
-          \State $dependency \gets input.block$
+        \State $corresponding \gets in\_pin.origin.uid$
+        \If {$\neg seen.has(corresponding)$}
+          \State $dependency \gets corresponding.block$
           \If {$dependency \in queue$} \Comment {Remove if already in queue}
-            \State $queue.get\_element(dependency)$
+            \State $queue.remove(dependency)$
           \EndIf
           \State $queue$, $seen \gets$ \Call {explore}{dependency, queue, seen}
         \EndIf
+        \State $in\_pin.value \gets seen.get(corresponding)$
       \EndFor
-      \State $current.function()$ \Comment {The function uses in\_pins and produces out\_pins}
+      \State $current.function()$ \Comment {function uses in\_pins and sets out\_pins}
       \ForAll {$out\_pin \in current.get\_out\_pins()$}
         \State $seen.put(out\_pin, out\_pin.value)$
       \EndFor

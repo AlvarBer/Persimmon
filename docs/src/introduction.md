@@ -4,10 +4,19 @@ Introduction
 
 Description
 -----------
-Scikit-learn[^skl] is a python library that aims to bring machine learning to
-a more general public, by providing a high-level API that allows the ease of use
-and interchange of different estimators.
-<!-- Cite scikit-learn paper -->
+Data Science has seen exponential growth in the market on recent years, with
+some predictions stating that One Million Data Scientist will be needed by
+2018 [@onemillion]. Bubble or not Data Scientists are in a golden age, for
+the Harvard Business Review it is the sexiest job of the 21st century [@sexy].
+Despite all of this there is a shortage of Data Scientists, the field is
+inherently multidisciplinary, coding, statistics and domain knowledge are
+required, often this involves many years of education.
+
+Tools such as Scikit-learn[^skl], Weka or Tableau try to provide a very high
+level access to some of the required tools data scientist require, easing the
+learning curve and widening the pool of possible data scientist.
+Persimmon aims to provide a visual interface for scikit-learn, giving the
+ability to create pipelines without a single line of code.
 
 This projects involves a variety of Computer Science topics,
 
@@ -25,7 +34,8 @@ This projects involves a variety of Computer Science topics,
     allow for connections that are type safe.
 
 * User Experience. The project is driven by the users feedback and engagement
-    with the project.
+    with the project. The interface needs to convey and give users hints in
+    order to ease the difficulty curve.
 
 * Software Engineering. Interfacing with previous existing code, laying
     well-defined interfaces and organizing code though object-oriented
@@ -41,10 +51,15 @@ This projects involves a variety of Computer Science topics,
 * Compilers. The graphical form of a workflow involving several steps is
     compiled down to Python source code (Transcompilation).
 
-The hypothesis is that the visual representation of the workflow and the
-associated concepts can help to both learn and use Machine Learning techniques
-and the faster iteration of exploratory datascience work.
+The hypothesis of the project is that the visual representation of the workflow
+and the associated concepts can help to both learn and use Machine Learning
+techniques and the faster iteration of exploratory datascience work.
 
+This is converges with the spirit of sklearn, [see @scikitlearn, pp29] which has
+managed to become one of the most important machine learning libraries, with
+over 16000 start on Github, and used on companies such as Spotify, Facebook or
+Evernote.
+<!-- Category Theory -> Functional Programming -> Mainstream programming -->
 
 Motivation
 ----------
@@ -53,7 +68,7 @@ internship on an algorithmic trading company.
 
 My main task was helping moving the existing codebase from `MATLAB` to
 `Python`, and during that process some of my co-workers were having
-some struggles with the language switch. They came from backgrounds such as
+struggles with the language switch. They all came from backgrounds such as
 Maths, Physics, Electric Engineering, Statistics or Aerospace Engineering.
 
 But there were no Computer Scientists even though their work requires, apart
@@ -62,7 +77,7 @@ from theoretical maths knowledge, a very good level of programming expertise.
 Expert from these fields tend to not have a lot of general programming skills,
 as they mostly work with scientific computing oriented languages such as
 `MATLAB`, `R` or `Julia`, and moving to a general purpose language such as
-Python involves learning about a plethora of additional topics, such as Object
+`Python` involves learning about a plethora of additional topics, such as Object
 Oriented Programming, custom complex Data structures or cache optimization.
 
 The situation is even more complicated for newcomers to Machine Learning, as
@@ -85,18 +100,19 @@ Faster exploratory work:
      plethora of different estimators and adjusting the hyper-parameters as
      they see fit.
 
-<!-- Justify these sources. -->
-The hypothesis is supported by numerous sources such as [@fry2007visualizing]
-and [@principles].
-
 
 What the project is not
 -----------------------
 The project is not concerned with the following:
 
-* Data Visualization
-* General Purpose Visual Programming
+* Data Visualization. Since this kind of work is very hard to represent without
+    requiring explict coding on a case by case basis, and is outside the scope
+    of the project.
+* General Purpose Visual Programming. Since focusing on Machine Learning allows
+    Persimmon to make assumptions about the possible programs that enable
+    features such as type simplication or removing explicit flow management.
+    This is further discussed on the workflows chapter.
 
-[^skl]: [Scikit-learn](http://scikit-learn.org/) is one of the most widely used
-        machine learning frameworks, with more than 16 thousand starts on Github
-        and endorsed by companies such as Spotify, EverNote or Booking.com.
+[^skl]: Scikit-learn is a python library that aims to bring machine learning to
+    a more general public, by providing a high-level API that allows the ease of
+    use and interchange of different estimators.

@@ -6,6 +6,8 @@ the typical ML exploratory work analysis, i.e. the possible pipelines we use
 early on the project when we still do not know what strategies will work best
 for the data.
 
+This concept is generalization of sklearn [pipelines](http://scikit-learn.org/stable/modules/pipeline.html).
+
 
 Simple
 ------
@@ -47,7 +49,7 @@ visual programming languages never truly fulfilled their promises and managed
 to reach mainstream adoption [@unbelievable].
 
 However they managed to be relevant in very small niches such as PLCs design
-[@plc] or music composition [@music].
+[@plc] or music composition [@musicprogramming].
 Presumably because the complexity can be predicted and accounted for when the
 number of actions is limited, this is the basis for the project programming
 interface being limited on the number of blocks, as not to allow the graphs to

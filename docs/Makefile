@@ -38,8 +38,8 @@ $(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
 		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
-		--metadata abstract:"Persimmon is a visual programming interface for scikit-learn.\
-		Based on the dataflow paradigm it provides a drag and drop interface for creating Machine Learning pipelines." \
+		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
+		a drag and drop interface for creating Machine Learning pipelines." \
 		$(BODY) $(APPENDIX) -o $@
 
 

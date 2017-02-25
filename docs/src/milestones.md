@@ -5,7 +5,7 @@ Milestones
 In order to guarantee the delivery of the software a incremental software
 development has been chosen, this implies breaking down the objectives into
 smaller milestones that can be reached more easily, so in case the last
-milestone isn ot reached there is still a substancial product to submit.
+milestone is not reached there is still a substantial product to submit.
 
 ![Milestones Tree](images/objectives.pdf)
 
@@ -39,4 +39,27 @@ drawn.
 ![Gantt Diagram of the project development.](images/gantt.pdf)
 
 
+Development Methodology
+-----------------------
+The chosen methodology is based on agile methodologies such as **Scrum** or
+**Extreme Programming**, with two weeks sprints, using a board to keep track of
+all current and future tasks.
+
+However there are some fundamental changes, since there is no team and there is
+no need for superfluous and unnecessary processes. There is no retrospective
+after each sprint, there is no specific weight or cost assigned to each task.
+During a sprint the next sprint tasks are moved from the product backlog into
+the sprint planning column and broken down further if necessary.
+
+Task are defined by use cases and can be broken down further by using
+checklists on the tasks.
+
+If a task is not fully completed it can be moved back onto the product backlog.
+
+The trello board can be found at [trello](https://trello.com/b/JmG3xy0U/persimmon).
+
+
 [^kaggle]: [Kaggle.com](https://www.kaggle.com/)
+[^trello]: trello is a software for having a digital board where tracks can be
+    pinned.
+
