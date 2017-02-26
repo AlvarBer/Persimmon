@@ -8,7 +8,7 @@ from kivy.properties import ListProperty
 Builder.load_file('view/util/circularbutton.kv')
 
 class CircularButton(ButtonBehavior, Widget):
-    color = ListProperty([.7, .7, .7, 1])
+    color = ListProperty([.7, .7, .7])
 
     def collide_point(self, x, y):
         return Vector(x, y).distance(self.center) <= self.width / 2

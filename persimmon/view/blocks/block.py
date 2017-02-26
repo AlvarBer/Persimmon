@@ -7,7 +7,7 @@ from kivy.lang import Builder
 Builder.load_file('view/blocks/block.kv')
 
 class Block(DragBehavior, BoxLayout):
-    block_color = ListProperty([1, 1, 1, 1])
+    block_color = ListProperty([1, 1, 1])
     block_label = StringProperty('label')
     inputs = ObjectProperty()
     outputs = ObjectProperty()
@@ -38,3 +38,5 @@ class Block(DragBehavior, BoxLayout):
     def pin_relative_position(self, pin):
         return pin.center
 
+    def circle_bind(self, bind):
+        pass

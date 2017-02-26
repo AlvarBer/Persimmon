@@ -3,4 +3,4 @@ from kivy.properties import ObjectProperty
 
 
 class InputPin(Pin):
-    origin = ObjectProperty()
+    origin = ObjectProperty(allownone=True)

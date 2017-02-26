@@ -9,4 +9,6 @@ Builder.load_file('view/util/pin.kv')
 class Pin(CircularButton):
     val = ObjectProperty(force_dispatch=True)
     block = ObjectProperty()
+    ellipse = ObjectProperty()
+    line = ObjectProperty()
 
