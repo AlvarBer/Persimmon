@@ -87,9 +87,9 @@ been applied, separating Model (represented by the subpackage backend), View
 (represented by the `.py` files on view subpackage) and Controller
 (corresponding to the `.kv` files on view subpackage).
 
-This way we reduce coupling as much as possible, enabling swapping
+This way coupling is kept as minimal as possible, enabling swapping
 the current kivy framework for another one by just changed the view, no
-modifications to the backend.
+modifications to the backend needed.
 
 In order to avoid repetition extensive use of classes coupled with reusable
 custom kivy Widgets was used. This for example meant that each individual pin
