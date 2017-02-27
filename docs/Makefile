@@ -79,6 +79,7 @@ $(APPENDIX): $(APPENDICES)
 
 # Travis generation, only necessary because travis version of pandoc is old.
 BODY_TRAVIS := body_travis.tex
+APPENDIX_TRAVIS := appendix_travis.tex
 
 travis: $(BODY_TRAVIS) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
