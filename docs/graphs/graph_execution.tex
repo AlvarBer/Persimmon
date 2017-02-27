@@ -1,0 +1,37 @@
+\documentclass[12pt, varwidth=20cm]{standalone}
+
+\usepackage[noend]{algpseudocode}
+
+\begin{document}
+  \begin{algorithmic}[1]
+    \Require G is a Directed Acyclic Graph that does not break
+    type safety on all the relationships.
+    \Function{execute}{$G: Graph$}
+      \State $queue \gets Queue()$
+      \State $seen \gets Map()$
+      \State $queue.put(G.get\_input\_blocks())$ \Comment {We can start in a random vertex}
+      \While {$\neg queue.empty()$}
+        \State $queue$, $seen \gets$ \Call {explore}{queue.get(), queue, seen}
+      \EndWhile
+    \EndFunction
+    \\
+    \Function{explore}{$current: Vertex,$ $queue: Queue, seen: Map$}{ $\to$ $Queue,$ $Map$}
+      \ForAll {$in\_pin \in current.get\_in\_pins()$}
+        \State $corresponding \gets in\_pin.origin.uid$
+        \If {$\neg seen.has(corresponding)$}
+          \State $dependency \gets corresponding.block$
+          \If {$dependency \in queue$} \Comment {Remove if already in queue}
+            \State $queue.remove(dependency)$
+          \EndIf
+          \State $queue$, $seen \gets$ \Call {explore}{dependency, queue, seen}
+        \EndIf
+        \State $in\_pin.value \gets seen.get(corresponding)$
+      \EndFor
+      \State $current.function()$ \Comment {function uses in\_pins and sets out\_pins}
+      \ForAll {$out\_pin \in current.get\_out\_pins()$}
+        \State $seen.put(out\_pin, out\_pin.value)$
+      \EndFor
+      \State \Return $queue$, $seen$
+    \EndFunction
+  \end{algorithmic}
+\end{document}

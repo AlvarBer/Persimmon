@@ -1,4 +1,4 @@
-Appendix X: How was this document made?
+Appendix B: How was this document made?
 =======================================
 
 This document was written on Markdown, and converted to PDF

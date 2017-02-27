@@ -6,10 +6,25 @@
 
 # TeX aux files
 *.aux
+*.log
+*.tex
+
+# Except graphs
+!docs/graphs/*.tex
 
 # Vim Backup files
 *.swp
 *~
 
 # Python cache folders
-__pycache__
+__pycache__/
+
+# PyInstaller folders
+build/
+dist/
+
+# Egg info
+*.egg-info/
+
+# CSV Files
+*.csv

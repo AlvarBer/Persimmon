@@ -1,0 +1,43 @@
+#:kivy 1.9
+
+
+FloatLayout:
+	BlackBoard:
+		id: bb
+		pos: 0, 0
+		size: 32*30, 32*30
+		do_rotation: False
+		auto_bring_to_front: False
+		canvas.before:
+			Rectangle:
+				pos: 0, 0
+				size: bb.size
+				texture: app.background
+	TabbedPanel:
+		pos_hint: {'top': 1}
+		size_hint_y: None
+		height: '100dp'
+		tab_width: '200dp'
+		do_default_tab: False
+		TabbedPanelItem:
+			text: 'Input/Output'
+			Label:
+				text: '.csv'
+		TabbedPanelItem:
+			text: 'Estimators'
+			Label:
+				text: 'Estimators'
+		TabbedPanelItem:
+			text: 'Cross Validation'
+			Label:
+				text: 'K-Folds'
+
+
+<BlackBoard>:
+	Button:
+		text: 'Execute'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 0, 0
+		on_press: root.execute_graph()
+
