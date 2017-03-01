@@ -5,7 +5,7 @@ MARKDOWN := introduction.md state_of_the_art.md workflow.md milestones.md \
 MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
 	workflow.md milestones.md risk_analysis.md interface.md implementation.md \
 	type_checking.md postmortem.md
-APPENDICES := appendixA.md appendixB.md  # Appendix after bibliography
+APPENDICES := package_organization.md how.md  # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
@@ -22,43 +22,25 @@ IMAGES := $(wildcard images/*.png)  # .png images
 IMAGES += $(addprefix images/, $(notdir $(GRAPHS:.tex=.pdf)))
 
 # Intermediate tex files required for appending after bibliography
-BODY := body.tex
-APPENDIX := appendices.tex
-BODY_COMPLUTENSE := body_complutense.tex
+APPENDIX := appendix.tex
 
 all: $(PDF)
 
-$(PDF): $(BODY) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+$(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--table-of-contents --top-level-division chapter \
-		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A visual programming interface for machine learning" \
-		--metadata date:"$(shell date +%Y/%m/%d)" --metadata documentclass:scrreprt \
-		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
-		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
-		--metadata mainlang:English \
-		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
-		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
-		a drag and drop interface for creating Machine Learning pipelines." \
-		$(BODY) $(APPENDIX) -o $@
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --metadata date:"$(shell date +%Y/%m/%d)" \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
-
-complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
+complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--table-of-contents --top-level-division chapter \
-		--metadata author:"Álvaro Bermejo García" \
-		--metadata title:"A scikit-learn visual programming interface" \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --metadata title:"A scikit-learn visual programming interface" \
 		--metadata date:"Director:Manuel Freire Moran, Codirector: Pablo Moreno Ger" \
-		--metadata documentclass:scrreprt \
-		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
-		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
-		--metadata mainlang:English \
-		--metadata keywords:"Serious Learning","Machine Learning","Visual Programming","Dataflow Programming" \
-		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
-		a drag and drop interface for creating Machine Learning pipelines." \
-		--metadata titlepic:images/fdi.png $(BODY_COMPLUTENSE) $(APPENDIX) \
-		-o $(PDF)
-
+		--metadata sansfont:"Helvetica Neue LT Com" --metadata keywords:"Serious Learning","Visual Programming","Dataflow Programming" \
+		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLUTENSE) \
+		--include-after-body $(APPENDIX) -o $(PDF)
 
 # For standalone images
 images/%.pdf: graphs/%.tex
@@ -66,46 +48,22 @@ images/%.pdf: graphs/%.tex
 	mv $*.pdf images/
 	rm -f $*.log $*.aux
 
-$(BODY): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --top-level-division chapter \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) $(MARKDOWN) -o $@
-
-
-$(BODY_COMPLUTENSE): $(MARKDOWN_COMPLUTENSE) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --top-level-division chapter --table -of-contents \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) $(MARKDOWN_COMPLUTENSE) \
-		-o $@
-
 $(APPENDIX): $(APPENDICES)
-	pandoc --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@
+	pandoc --smart --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@
 
 # Travis generation, only necessary because travis version of pandoc is old.
-BODY_TRAVIS := body_travis.tex
 APPENDIX_TRAVIS := appendix_travis.tex
 
-travis: $(BODY_TRAVIS) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES)
+travis: $(MARKDOWN) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--table-of-contents --chapters \
-		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A visual programming interface for machine learning" \
-		--metadata date:"$(shell date +%Y/%m/%d)" --metadata documentclass:scrreprt \
-		--metadata colorlinks \
-		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
-		--metadata mainlang:English \
-		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
-		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
-		a drag and drop interface for creating Machine Learning pipelines." \
-		$(BODY_TRAVIS) $(APPENDIX_TRAVIS) -o $(PDF)
-
-
-$(BODY_TRAVIS): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
-	pandoc --no-tex-ligatures --chapters --bibliography $(BIBLIOGRAPHY) --csl \
-		$(CSL) $(MARKDOWN) -o $@
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--chapters --metadata date:"$(shell date +%Y/%m/%d)" \
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX_TRAVIS) -o $(PDF)
 
 $(APPENDIX_TRAVIS): $(APPENDICES)
 	pandoc --no-tex-ligatures --chapters $(APPENDICES) -o $@
 
 
 clean:
-	rm -f images/*.pdf $(PDF) *.log *.aux $(BODY) $(APPENDIX)
+	rm -f images/*.pdf $(PDF) *.log *.aux appendix*
 

@@ -1,5 +1,5 @@
-Appendix B: How was this document made?
-=======================================
+How was this document made?
+===========================
 
 This document was written on Markdown, and converted to PDF
 using Pandoc.
@@ -15,9 +15,9 @@ what output we are creating and the template/reference we are using.
 
 Diagrams
 --------
-Diagrams are were created with LaTeX packages such as tikz or pgfgantt, they
+Diagrams are were created with \LaTeX packages such as tikz or pgfgantt, they
 can be inserted directly as PDF, but if we desire to output to formats other
-than LaTeX is more convenient to convert them to .png filesi with tools such
+than \LaTeX is more convenient to convert them to .png files with tools such
 as `pdftoppm`.
 
 

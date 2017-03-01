@@ -1,5 +1,5 @@
-Appendix A: Package Organization
-================================
+Package Organization
+====================
 
 Persimmon source code is written on the form of a typical python package,
 on the following section the specifics of how the different subpackages
