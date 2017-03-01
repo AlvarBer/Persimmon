@@ -53,7 +53,9 @@ complutense: $(BODY_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES)
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata colorlinks \
 		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
 		--metadata mainlang:English \
-		--metadata keywords:"Serious Learning","Machine Learning","Visual Programming" \
+		--metadata keywords:"Serious Learning","Machine Learning","Visual Programming","Dataflow Programming" \
+		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
+		a drag and drop interface for creating Machine Learning pipelines." \
 		--metadata titlepic:images/fdi.png $(BODY_COMPLUTENSE) $(APPENDIX) \
 		-o $(PDF)
 
@@ -85,12 +87,16 @@ travis: $(BODY_TRAVIS) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--table-of-contents --chapters \
 		--metadata author:"Álvaro Bermejo García" --metadata title:Persimmon \
-		--metadata subtitle:"A scikit-learn visual programming interface" \
-		--metadata date:2017-02-18 --metadata documentclass:scrreprt \
-		--metadata colorlinks --metadata lof --metadata papersize:A4 \
-		--metadata fontsize:12pt --metadata mainlang:English \
-		--metadata keywords:"Machine Learning","Visual Programming" \
+		--metadata subtitle:"A visual programming interface for machine learning" \
+		--metadata date:"$(shell date +%Y/%m/%d)" --metadata documentclass:scrreprt \
+		--metadata colorlinks \
+		--metadata lof --metadata papersize:A4 --metadata fontsize:12pt \
+		--metadata mainlang:English \
+		--metadata keywords:"Dataflow Programming","Machine Learning","Visual Programming","Compilers" \
+		--metadata abstract:"Persimmon is a visual programming interface that leverages scikit-learn to provide\
+		a drag and drop interface for creating Machine Learning pipelines." \
 		$(BODY_TRAVIS) $(APPENDIX_TRAVIS) -o $(PDF)
+
 
 $(BODY_TRAVIS): $(MARKDOWN) $(BIBLIOGRAPHY) $(CSL)
 	pandoc --no-tex-ligatures --chapters --bibliography $(BIBLIOGRAPHY) --csl \
