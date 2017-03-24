@@ -1,8 +1,8 @@
 Interface Design
 ================
 
-Color Palette
--------------
+Colour Palette
+--------------
 
 Typography
 ----------

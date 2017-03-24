@@ -1,11 +1,14 @@
 Milestones
 ==========
 
-
 In order to guarantee the delivery of the software a incremental software
 development has been chosen, this implies breaking down the objectives into
 smaller milestones that can be reached more easily, so in case the last
 milestone is not reached there is still a substantial product to submit.
+
+
+Tree
+----
 
 ![Milestones Tree](images/objectives.pdf)
 
@@ -31,6 +34,10 @@ Out of scope, but possible further applications of the system are **web/junyper*
 integration that means the system would be accessible from a website interface,
 and script **synthesization**, which is the opposite of compilation, meaning
 the ability to visualize on persimmon a python source file.
+
+Gantt Diagram
+-------------
+
 
 With the settled milestones a Gantt diagram of the project development can be
 drawn.
