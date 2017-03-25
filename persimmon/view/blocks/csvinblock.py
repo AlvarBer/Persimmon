@@ -1,4 +1,4 @@
-from persimmon.view.util import EmptyContent, OutputPin
+from persimmon.view.util import OutputPin
 from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty

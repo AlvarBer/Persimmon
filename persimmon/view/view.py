@@ -63,8 +63,12 @@ class BlackBoard(ScatterLayout):
         self.add_widget(csv_out)
         self.blocks.append(csv_out)
 
-    def on_touch_down(self, touch):
-        # TODO: Refactor these three callbacks, maybe move onto pins itself?
+    #def on_touch_down(self, touch):
+        #print(f'{self.__class__} on touch_down')
+        #return super().on_touch_down(touch)
+
+    """
+    def on_touch_down(self, touch): # TODO: Refactor these three callbacks, maybe move onto pins itself?
         if self.collide_point(*touch.pos) and touch.button =='left':
             block = self.in_block(*touch.pos)
             if block:
@@ -98,6 +102,20 @@ class BlackBoard(ScatterLayout):
                             touch.ud['start_pin'] = pin
                     return True
         return super().on_touch_down(touch)
+
+    def on_touch_down(self, touch):
+        print(f'{self} on touch down')
+        # TODO: Refactor these three callbacks, maybe move onto pins itself?
+        if self.collide_point(*touch.pos) and touch.button =='left':
+            return super().on_touch_down(touch)
+        else:
+            return False
+            block = self.in_block(*touch.pos)
+            if not block:
+                print('Not in block!')
+                return super().on_touch_down(touch)
+        return super().on_touch_down(touch)
+
 
     def on_touch_move(self, touch):
         if self.dragging:
@@ -152,6 +170,7 @@ class BlackBoard(ScatterLayout):
             return True
         else:
             return super().on_touch_up(touch)
+    """
 
     def execute_graph(self):
         queue = deque()

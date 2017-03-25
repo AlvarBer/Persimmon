@@ -1,4 +1,4 @@
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
@@ -6,7 +6,7 @@ from kivy.lang import Builder
 
 Builder.load_file('view/blocks/block.kv')
 
-class Block(DragBehavior, BoxLayout):
+class Block(DragBehavior, FloatLayout):
     block_color = ListProperty([1, 1, 1])
     block_label = StringProperty('label')
     inputs = ObjectProperty()
@@ -40,3 +40,12 @@ class Block(DragBehavior, BoxLayout):
 
     def circle_bind(self, bind):
         pass
+
+    def on_touch_down(self, touch):
+        #print(f'{self.__class__} on touch down')
+        pin = self.in_pin(*touch.pos)
+        if pin:  # if touch is on pin let them handle
+            return pin.on_touch_down(touch)
+        else:  # else default behavior (drag if collide)
+            return super().on_touch_down(touch)
+        
