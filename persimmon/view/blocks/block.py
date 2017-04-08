@@ -48,4 +48,7 @@ class Block(DragBehavior, FloatLayout):
             return pin.on_touch_down(touch)
         else:  # else default behavior (drag if collide)
             return super().on_touch_down(touch)
-        
+
+    #def on_touch_up(self, touch):
+        #result = super().on_touch_up(touch)
+        #return result

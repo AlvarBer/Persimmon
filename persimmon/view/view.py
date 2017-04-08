@@ -37,8 +37,6 @@ class ViewApp(App):
 
 class BlackBoard(ScatterLayout):
     blocks = ListProperty()
-    initial_block = ObjectProperty()
-    final_block = ObjectProperty()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,7 +44,6 @@ class BlackBoard(ScatterLayout):
         csv_in = CSVInBlock(pos=(15, 400))
         self.add_widget(csv_in)
         self.blocks.append(csv_in)
-        self.initial_block = csv_in
         svm = SVMBlock(pos=(30, 310))
         self.add_widget(svm)
         self.blocks.append(svm)
@@ -149,10 +146,45 @@ class BlackBoard(ScatterLayout):
     def on_touch_move(self, touch):
         if (touch.button == 'left' and 'dragging' in touch.ud.keys() and
             touch.ud['dragging']):
+            #print(self.get_root_window().mouse_pos)
             touch.ud['cur_line'].follow_cursor(touch.pos)
             return True
         else:
             return super().on_touch_move(touch)
+
+    # TODO: Refactor this mess
+    # TODO: Move dragging info into blackboard class instead of touch global
+    def on_touch_up(self, touch):
+        """ Based on default implementation."""
+        if self.disabled:
+            return
+
+        x, y = touch.x, touch.y
+        # if the touch isnt on the widget we do nothing, just try children
+        if not touch.grab_current == self:
+            touch.push()
+            touch.apply_transform_2d(self.to_local)
+            for child in self.children[:]:
+                if child.dispatch('on_touch_up', touch):
+                    touch.pop()
+                    return True
+            touch.pop()
+
+        # remove it from our saved touches
+        if touch in self._touches and touch.grab_state:
+            touch.ungrab(self)
+            del self._last_touch_pos[touch]
+            self._touches.remove(touch)
+
+        if ('dragging' in touch.ud.keys() and touch.ud['dragging'] and
+            touch.button == 'left'):
+            print('Delete connection')
+            touch.ud['cur_line'].delete_connection(self)
+            return True
+
+        # stop propagating if its within our bounds
+        if self.collide_point(x, y):
+            return True
 
     def execute_graph(self):
         queue = deque()
@@ -186,16 +218,6 @@ class BlackBoard(ScatterLayout):
             if block.collide_point(x, y):
                 return block
         return None
-
-    def circle_bind(self, pin, pos, circle):
-        circle.pos = pin.pos
-
-    def line_bind(self, block, pos, line, pos_func, pin):
-        if issubclass(pin.__class__, InputPin):
-            line.points = pos_func(pin) + line.points[2:]
-        else:
-            line.points = line.points[:2] + pos_func(pin)
-
 
 if __name__ == '__main__':
     ViewApp().run()
