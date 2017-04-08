@@ -1,6 +1,10 @@
 Risk Analysis
 =============
 
+Since there is a significant number of different stakeholders with different
+interest on the project it is necessary to lay down the risk associated and
+planning for the biggest and more probable risks.
+
 
 Stakeholders
 ------------

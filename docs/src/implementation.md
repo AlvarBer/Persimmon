@@ -1,12 +1,13 @@
 Implementation
 ==============
-<!-- High level overview + low level overview -->
+
+The system is implemented in python, using the `Kivy` framework for the
+frontend and multiple scientific tools such as `Numpy`, `Scipy`, `Pandas` and
+most important `scikit-learn` for the backend.
 
 
 First Iteration
 ---------------
-![Sketch of the first interface](images/sketch_1.png)
-
 For the first iteration the priority was to get a proof of concept in order to
 see where the difficulties can appear, with a few simple classifiers and
 cross-validation techniques. As such a button-based interface with very limited
@@ -33,8 +34,6 @@ executed those.
 
 Second Iteration
 ----------------
-![Sketch of the second interface](images/sketch_2.png)
-
 For the second interface the drag and drop feel was the main priority.
 As such after developing the tab panel draggable boxes were developed, these
 boxes needed to be connected through pins.
@@ -99,6 +98,11 @@ different blocks (Like when connection a pin that sends data to a pin that
 receives it).
 
 For more information about internal package distribution check appendix A.
+
+
+Intermediate Representation
+---------------------------
+<!-- Talk about language intermediate representation -->
 
 [^blackboard]: Blackboard is how the canvas where the blocks and connections
     are lay down.

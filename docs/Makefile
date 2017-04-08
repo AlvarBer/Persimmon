@@ -1,9 +1,9 @@
 PDF := persimmon.pdf  # PDF Main Target
-MARKDOWN := introduction.md state_of_the_art.md workflow.md milestones.md \
-	risk_analysis.md interface.md implementation.md type_checking.md \
-	postmortem.md  # Markdown files
-MARKDOWN_COMPLUTENSE := introduction.md focus.md state_of_the_art.md \
-	workflow.md milestones.md risk_analysis.md interface.md implementation.md \
+MARKDOWN := introduction.md literature.md workflow.md milestones.md \
+	risk.md interface.md implementation.md type_checking.md \
+	evaluation.md postmortem.md  # Markdown files
+MARKDOWN_COMPLUTENSE := introduction.md focus.md literature.md \
+	workflow.md milestones.md risk.md interface.md implementation.md \
 	type_checking.md analysis.md postmortem.md
 APPENDICES := package_organization.md how.md  # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
@@ -54,8 +54,8 @@ twocol: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 # For standalone images
 images/%.pdf: graphs/%.tex
 	xelatex $< > /dev/null
-	mv $*.pdf images/
-	rm -f $*.log $*.aux
+	@mv $*.pdf images/
+	@rm -f $*.log $*.aux
 
 $(APPENDIX): $(APPENDICES)
 	pandoc --smart --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@

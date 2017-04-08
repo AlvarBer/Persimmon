@@ -1,10 +1,10 @@
 Workflows
 =========
 
-What is a workflow on this context? When we talk about workflow we refer to
-the typical ML exploratory work analysis, i.e. the possible pipelines we use
-early on the project when we still do not know what strategies will work best
-for the data.
+What is a workflow on the project context? When workflow is mentioned it refers
+to the typical ML exploratory work analysis, i.e. the possible pipelines that
+are used early on the project when it is still not known what strategies will
+work best for the data.
 
 This concept is generalization of sklearn [pipelines](http://scikit-learn.org/stable/modules/pipeline.html).
 
@@ -37,7 +37,7 @@ case basis, and can involve data cleaning, feature engineering (such as
 combining two features into one) or dimensionality reduction.
 
 A extreme example can be seen in [@automatic], of course this kind of workflow
-is out of scope for us, as this is far away from exploratory work.
+is out of scope for the project, as this is far away from exploratory work.
 
 ![Fully automatic Machine Learning framework](images/fully_automatic_workflow.png)
 
