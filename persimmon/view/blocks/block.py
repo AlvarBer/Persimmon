@@ -38,17 +38,17 @@ class Block(DragBehavior, FloatLayout):
     def pin_relative_position(self, pin):
         return pin.center
 
-    def circle_bind(self, bind):
-        pass
-
     def on_touch_down(self, touch):
-        #print(f'{self.__class__} on touch down')
         pin = self.in_pin(*touch.pos)
         if pin:  # if touch is on pin let them handle
             return pin.on_touch_down(touch)
         else:  # else default behavior (drag if collide)
             return super().on_touch_down(touch)
 
-    #def on_touch_up(self, touch):
-        #result = super().on_touch_up(touch)
-        #return result
+    def on_touch_up(self, touch):
+        pin = self.in_pin(*touch.pos)
+        if pin:
+            result = pin.on_touch_up(touch)
+        else:
+            result = super().on_touch_up(touch)
+        return result

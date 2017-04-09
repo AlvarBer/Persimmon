@@ -144,10 +144,11 @@ class BlackBoard(ScatterLayout):
     """
 
     def on_touch_move(self, touch):
-        if (touch.button == 'left' and 'dragging' in touch.ud.keys() and
-            touch.ud['dragging']):
+        if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
             touch.ud['cur_line'].follow_cursor(touch.pos)
+            if self.in_block(*touch.pos):
+                pass
             return True
         else:
             return super().on_touch_move(touch)
@@ -155,7 +156,6 @@ class BlackBoard(ScatterLayout):
     # TODO: Refactor this mess
     # TODO: Move dragging info into blackboard class instead of touch global
     def on_touch_up(self, touch):
-        """ Based on default implementation."""
         if self.disabled:
             return
 
@@ -164,7 +164,7 @@ class BlackBoard(ScatterLayout):
         if not touch.grab_current == self:
             touch.push()
             touch.apply_transform_2d(self.to_local)
-            for child in self.children[:]:
+            for child in self.children:
                 if child.dispatch('on_touch_up', touch):
                     touch.pop()
                     return True
@@ -176,8 +176,7 @@ class BlackBoard(ScatterLayout):
             del self._last_touch_pos[touch]
             self._touches.remove(touch)
 
-        if ('dragging' in touch.ud.keys() and touch.ud['dragging'] and
-            touch.button == 'left'):
+        if ('cur_line' in touch.ud.keys() and touch.button == 'left'):
             print('Delete connection')
             touch.ud['cur_line'].delete_connection(self)
             return True
