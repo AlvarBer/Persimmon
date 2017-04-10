@@ -10,7 +10,6 @@ from sklearn.model_selection import KFold
 Builder.load_file('view/blocks/tenfoldblock.kv')
 
 class TenFoldBlock(Block):
-    #in_1 = ObjectProperty()
     out_1 = ObjectProperty()
 
     def function(self):

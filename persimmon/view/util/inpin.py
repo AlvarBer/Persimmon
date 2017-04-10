@@ -12,7 +12,7 @@ class InputPin(Pin):
                                               color=self.color)
             self.origin = touch.ud['cur_line']
             # Add to blackboard
-            self.parent.parent.parent.add_widget(touch.ud['cur_line'])
+            self.block.parent.add_widget(touch.ud['cur_line'])
             return True
         else:
             return False
@@ -22,7 +22,8 @@ class InputPin(Pin):
                 self.collide_point(*touch.pos)):
             if self.typesafe(touch.ud['cur_line'].end):
                 print('Establishing connection')
-                touch.ud['cur_line'].rebind_start(self)
+                touch.ud['cur_line'].finish_connection(self)
+                self.origin = touch.ud['cur_line']
             else:
                 print('Deleting connection')
                 touch.ud['cur_line'].delete_connection(self.parent.parent.parent)
@@ -33,3 +34,5 @@ class InputPin(Pin):
     def on_connection_delete(self, connection):
         self.origin = None
 
+    def typesafe(self, other):
+        return super().typesafe(other) and self.origin == None

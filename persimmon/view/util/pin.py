@@ -2,7 +2,6 @@ from persimmon.view.util import CircularButton, Connection
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
-from functools import partial
 
 
 Builder.load_file('view/util/pin.kv')
