@@ -1,0 +1,24 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\begin{document}
+  \begin{tikzpicture}
+    \node at (0, 0) (c) {Connection};
+    \node [left = 1cm of c] (alpha) {Block α};
+    \node [below = 1cm of alpha] (o) {OutPin};
+    \draw [<->] (alpha) -- (o);
+    \node [below left = 1cm and -1cm of c] (e) {end};
+    \draw [<-] (o) -- (e);
+    \node [right = 1cm of c] (beta) {Block β};
+    \node [below = 1cm of beta] (i) {InPin};
+    \draw [<->] (beta) -- (i);
+    \node [below right = 1cm and -1cm of c] (s) {start};
+    \draw [->] (s) -- (i);
+    \draw [->] (c) -- (e);
+    \draw [->] (c) -- (s);
+    \draw [->] (o) -- (c);
+    \draw [->] (i) -- (c);
+  \end{tikzpicture}
+\end{document}

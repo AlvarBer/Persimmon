@@ -30,7 +30,7 @@ $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata sansfont:"Helvetica Neue LT Com" --highlight-style breezedark\
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
 complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)

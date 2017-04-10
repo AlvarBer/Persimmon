@@ -1,0 +1,14 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\begin{document}
+  \begin{tikzpicture}[sibling distance=5em]
+    \node {Blackboard}
+      child { node {Block α} 
+        child { node {OutPin} } }
+      child { node {Connection} }
+      child { node {Block β} 
+        child { node {InPin} } };
+  \end{tikzpicture}
+\end{document}
