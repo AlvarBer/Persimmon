@@ -3,13 +3,9 @@
 	block_label: 'csv output'
 	block_color: .667, .224, .224
 	inputs: inputs
-	FloatLayout:
-		id: content
-		EmptyContent:
-			pos: content.pos
-			Widget:
-				id: inputs
-				InputPin:
-					id: in_1
-					x: content.x + 5
-					y: content.y + content.height / 2
+	Widget:
+		id: inputs
+		InputPin:
+			id: in_1
+			x: root.x + 5
+			y: root.y + root.height / 2

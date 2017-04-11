@@ -2,16 +2,22 @@
     # Fixed options
     size_hint: None, None
     size: '200dp', '75dp'
-    orientation: 'vertical'
     drag_rectangle: self.x, self.y, self.width, self.height
     drag_timeout: 10000000
     drag_distance: 0
+	canvas.before:
+		Color:
+			rgb: .2, .2, .2
+		Rectangle:
+			pos: self.pos
+			size: self.size
 
     # Children
     Label:
-        pos: self.pos
-        size_hint_y: None
+        pos: root.x, root.y + root.height - 20
+        size_hint: None, None
         height: '20dp'
+		width: root.width
 		text: root.block_label
         canvas.before:
             Color:

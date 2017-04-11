@@ -1,18 +1,23 @@
+Literature Review
+=================
+
+<!-- Actual literature review, on visual progrraming, dataflow and machine
+learning -->
+
 State of the art
-================
+----------------
 
-Before working on the system let's take a look at the previous works on the
-field of visual programming and visual Machine Learning tools for
-inspiration and avoiding pitfalls.
+Before implementing the system it is necessary to take a look at the previous
+works on the field of visual programming and visual Machine Learning tools for
+inspiration and avoiding common pitfalls.
 
 
-Microsoft Azure Machine Learning Studio
----------------------------------------
+<!-- Microsoft Azure Machine Learning Studio -->
 ![Azure ML Studio web interface](images/azureML.jpg)
 
 Microsoft Azure ML Studio is one of the most direct inspirations for this
 project, there is plenty to like, lots of different preprocessing steps,
-multitude of estimators, runs on the cloud, a web interface.
+multitude of estimators, runs on the cloud, and a web interface.
 
 But some of these features are also shortcomings, the web interface feels a
 bit clunky, lack of native support means that dragging and dropping do not feel
@@ -24,8 +29,6 @@ them is a pity, we know that azure is written on R, but because is closed
 source we can't extend the code in any meaningful way.
 
 
-Weka
-----
 ![Weka Graphical User Interface](images/weka.jpeg)
 
 Weka is a popular machine learning suite, written in `Java` and developed at
@@ -38,8 +41,7 @@ written on Java it also means that it need the JVM, which is a bit of a
 con, specially in productions servers where dependencies bring a long and
 arduous process of review and approval.
 
-Unreal Engine 4 Blueprints
---------------------------
+
 ![Unreal Engine 4 Blueprint system](images/unreal.png)
 
 Epic's Unreal Engine 4 introduced Blueprints as an alternative way to `C++`

@@ -11,7 +11,7 @@ FloatLayout:
 		canvas.before:
 			Rectangle:
 				pos: 0, 0
-				size: bb.size
+				size: self.size
 				texture: app.background
 	TabbedPanel:
 		pos_hint: {'top': 1}
@@ -39,5 +39,5 @@ FloatLayout:
 		size_hint: None, None
 		size: '100dp', '100dp'
 		pos: 0, 0
-		on_press: root.execute_graph()
+		on_press: root.process()
 

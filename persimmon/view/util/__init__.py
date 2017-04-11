@@ -1,5 +1,5 @@
 from .circularbutton import CircularButton
-from .emptycontent import EmptyContent
+from .connection import Connection
 
 from .pin import Pin
 from .inpin import InputPin

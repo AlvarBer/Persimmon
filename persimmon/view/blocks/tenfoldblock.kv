@@ -3,14 +3,10 @@
 	block_label: '10-fold'
 	block_color: .133, .40, .40
 	outputs: outputs
-	FloatLayout:
-		id: content
-		EmptyContent:
-			pos: content.pos
-			Widget:
-				id: outputs
-				OutputPin:
-					id: out_1
-					color: root.block_color
-					x: content.x + content.width - 10 - 5
-					y: content.y + content.height / 2
+	Widget:
+		id: outputs
+		OutputPin:
+			id: out_1
+			color: root.block_color
+			x: root.x + root.width - 10 - 5
+			y: root.y + root.height / 2

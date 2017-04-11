@@ -3,14 +3,10 @@
 	block_label: 'Random Forest'
 	block_color: .667, .424, .224
 	outputs: outputs
-	FloatLayout:
-		id: content
-		EmptyContent:
-			pos: content.pos
-			Widget:
-				id: outputs
-				OutputPin:
-					id: out_1
-					x: content.x + content.width - 10 - 5
-					y: content.y + content.height / 2
-					color: root.block_color
+	Widget:
+		id: outputs
+		OutputPin:
+			id: out_1
+			x: root.x + root.width - 10 - 5
+			y: root.y + root.height / 2
+			color: root.block_color

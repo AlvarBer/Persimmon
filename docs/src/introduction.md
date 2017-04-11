@@ -1,24 +1,35 @@
 Introduction
 ============
 
+On this chapter Persimmon is introduced, along its main objectives and
+motivations.
+It is also outlined what is outside the scope of the project.
+
 
 Description
 -----------
 Data Science has seen exponential growth in the market on recent years, with
 some predictions stating that One Million Data Scientist will be needed by
-2018 [@onemillion]. Bubble or not Data Scientists are in a golden age, for
-the Harvard Business Review it is the sexiest job of the 21st century [@sexy].
-Despite all of this there is a shortage of Data Scientists, the field is
-inherently multidisciplinary, coding, statistics and domain knowledge are
-required, often this involves many years of education.
+2018 [@onemillion]. Bubble or not Data Scientists find themselves on a golden
+age, for the Harvard Business Review it is the sexiest job of the 21st century
+[@sexy].
+Despite all the boom, there is a shortage of skilled Data Scientists, the field
+is inherently multidisciplinary, as coding, statistics and domain knowledge are
+required, making the path to Data Science long and complex, leading to the so
+called Unicorn hunts [@unicorn, @hunt].
 
-Tools such as Scikit-learn[^skl], Weka or Tableau try to provide a very high
+Tools such as Scikit-learn[^skl], Weka or Tableau provide a very high
 level access to some of the required tools data scientist require, easing the
-learning curve and widening the pool of possible data scientist.
+learning curve and widening the pool of available data scientists.
+However this tools either focus on preprocessing tasks (cleaning of the data)
+or provide a very limited interface.
+
 Persimmon aims to provide a visual interface for scikit-learn, giving the
 ability to create pipelines without a single line of code.
+Thus giving most of the power of hand coding the pipelines with a helpful
+visual representation.
 
-This projects involves a variety of Computer Science topics,
+In order to accomplish this the project tackles the following topics,
 
 * Dataflow Programming. This paradigm presents programs as a directed graph,
     pioneered on the 60 at MIT and Bell labs [@bell]. It presents programs
@@ -53,13 +64,16 @@ This projects involves a variety of Computer Science topics,
 
 The hypothesis of the project is that the visual representation of the workflow
 and the associated concepts can help to both learn and use Machine Learning
-techniques and the faster iteration of exploratory datascience work.
+techniques and the accelerate exploratory datascience work.
 
-This is converges with the spirit of sklearn, [see @scikitlearn, pp29] which has
-managed to become one of the most important machine learning libraries, with
-over 16000 start on Github, and used on companies such as Spotify, Facebook or
-Evernote.
-<!-- Category Theory -> Functional Programming -> Mainstream programming -->
+This hypothesis converges with the spirit of sklearn, [see @scikitlearn, pp29]
+that also tries to bring the Machine Learning techniques out of phd
+disertations and obscure libraries into the mainstream, providing high-level,
+easy to use access to those resources.
+This strategy worked, as sklearn has managed to become one of the most important
+open source machine learning libraries, with over 16000 stars on Github, and
+is being used on companies such as Spotify, Facebook or Evernote.
+
 
 Motivation
 ----------
@@ -112,6 +126,10 @@ The project is not concerned with the following:
     Persimmon to make assumptions about the possible programs that enable
     features such as type simplication or removing explicit flow management.
     This is further discussed on the workflows chapter.
+
+Project Structure
+-----------------
+<!-- Do this when finished -->
 
 [^skl]: Scikit-learn is a python library that aims to bring machine learning to
     a more general public, by providing a high-level API that allows the ease of
