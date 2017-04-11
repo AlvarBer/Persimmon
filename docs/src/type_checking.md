@@ -18,19 +18,23 @@ new python code, however they run outside the python execution (i.e. they run
 on the non-existent python compile time) and we need run time type checking
 for dynamic block connections.
 
-Nevertheless this is a useful tool for improving the code quality.
+Nevertheless this is a useful tool for improving the code quality, specially
+for the backend code, because it is much pure that the frontend.
 
 
 Write Time
 ----------
 On the previous section runtime type checking was mentioned, this is because
-on the python side the run time checks have to be done at runtime, the blocks
-are spawned and connected dynamically. But from the visual language perspective
-the checks are done even before compile time (on the literature referred as
-write time).
-However the actual types of the python underlying functions and parameters do
-not support this, as they mostly do not reflect compatibility.
+on the python side the type checks have to be done at runtime due to blocks
+being spawned and connected dynamically.
+But from the visual language perspective the checks are done even before
+compile time (on the literature referred as write time).
+However the actual types of the python code underlying functions and parameters
+do not support this, as duck typing makes interfaces not defined on explicit
+manners but on the methods used by the underlying code.
 For example most algorithms accept numpy arrays, panda dataframes, scipy sparse
-matrices and almost any array type that implements `__get__` in a manner
-numpy understands.
+matrices and almost any array type that implements `__get__` in a manner numpy
+understands, but there is no hard interface that can be used to know which
+objects will run without crashing without executing the code.
+<!-- Explain the type safety as it is implemented -->
 

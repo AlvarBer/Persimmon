@@ -5,6 +5,7 @@ The system is implemented in python, using the `Kivy` framework for the
 frontend and multiple scientific tools such as `Numpy`, `Scipy`, `Pandas` and
 most important `scikit-learn` for the backend.
 
+<!-- Technical analysis of visual frameworks/libraries for python here? -->
 
 First Iteration
 ---------------
@@ -27,7 +28,6 @@ regressors and clustering have some incompatibilities.
 Apart from the temporary interface the backend had to be built. Since the
 workflow was fixed the backend simply received the node as arguments and
 executed those.
-<!-- First backend algorithm? -->
 
 ![Implementation of the first interface](images/interface.png)
 
@@ -46,34 +46,6 @@ This tight coupling means there is a noticeable lag when moving the cable too
 fast on low-end computers, there are several solutions to this, but the most
 convenient is optimizing the method. If more optimization is needed for this
 particular function tools such as `Numba`[^Numba] or `Cython` could be used.
-
-Pins on the left side of a block are called input pins and each must come from
-a single output pin. Pins on the right side are called output pins and one can
-be connected to multiple input pins.
-
-This kind of programming is called Dataflow Programming, which was already
-introduced on the Introduction chapter. Now that we have a directed acyclic
-graph, in order to compile and run the program (actually we can theoretically
-have multiple parallel programs on the same blackboard) we have to
-explore the graph from the input block until the whole graph has been executed.
-
-![Graph Execution algorithm](images/graph_execution.pdf)
-
-The implementation looks each input pin on the block. If the corresponding
-value has already been computed (i.e. is already on a hashtable) it is assigned,
-if not that block is processed first and then the execution of the current
-block resumes. Then the function inside the block is executed and after that
-the value of each output pin is saved on the hashtable.
-
-There is an alternative way of doing the compilation, that is using topological
-sort on the graph and then the graph can be processed on a single way, no
-recursive step is needed, both approaches are $\mathcal{O}(N)$ on both time and
-space, more closely they are $\mathcal{O}(n*m)$ where n is the number of nodes
-and m the number of edges, since the graph is very sparse we can consider it
-a constant factor.
-
-<!-- Appendix on compilation? -->
-
 
 Third Iteration
 ---------------
@@ -102,9 +74,9 @@ For more information about internal package distribution check appendix A.
 
 Making a Connection
 -------------------
-One of the most complex part is the connection, reconnection and deletion of
-connection between blocks, it involves several actors, asynchronous callbacks
-and a very strong coupling between all elements.
+One of the most complex part of the system is starting, reconnecting and
+deleting a connection between blocks, it involves several actors, asynchronous
+callbacks and a very strong coupling between all elements.
 
 ![Widget Tree](images/hierarchical.pdf)
 
@@ -112,7 +84,7 @@ In order to understand how connections are made it is necessary to understand
 how `Kivy` handles input.
 At surface level `Kivy` follows the traditional event-based input management,
 with the event propagating downwards from the root.
-However while traditionaly inputs events are only passed down to components
+However while traditionally inputs events are only passed down to components
 that are on the event position `Kivy` passes the events to almost all children
 by default, this is done because in phones (one of `Kivy` targets is Android)
 gestures tend to start outside the actual widget they intend to affect.
@@ -122,15 +94,15 @@ when a key is is pressed, `on_touch_move` that is notified when the touch is
 moved, i.e. a finger moves across the screen, or on this cases when the mouse
 moves, and `on_touch_up` that is fired when the touch is released.
 
-Lets represent the possible actions as use cases, the \* represents
+Lets represent the possible actions as use cases, the outer \* represents
 `on_touch_down`, - represents `on_touch_move`, and the inner \* `on_touch_up`:
 
-* (On pin) Start a connection
-* (On connection) Modify a connection
-    - Follow cursor
-    - (On pin) Typecheck
-        * (On a pin) Establish connection if possible
-        * (Elsewhere) Remove connection
+* (On pin) Start a connection.
+* (On connection) Modify a connection.
+    - Follow cursor.
+    - (On pin) Typecheck.
+        * (On a pin) Establish connection if possible.
+        * (Elsewhere) Remove connection.
 
 Logic is split in two big cases, creating a connection and modifying an
 existing one.
@@ -140,15 +112,16 @@ On the other hand modifying a connection means removing the end that is being
 touched.
 This two cases can be handled by different classes, pin on the first case and
 connection for the last.
-Moving and finishing the connection are the same.
+Moving and finishing the connection use the same code for both.
 
-Without getting too deep into implementation details ends cannot just be
-removed, there are visual binds that have to be unbinded, and when a connection
-is destroyed (this only happens inside `on_touch_up`, but it can be either
-the pins or the blackboard `on_touch_up` depending if the connection is
-destroyed because the pin violates type safety or there is no pin under the
-cursor respectively) it has to unbind the logical connections of the pins
-themselves.
+<!-- Add connection diagram -->
+Without getting too deep into implementation details, ends cannot just be
+removed, there are visual binds that have to be unbinded and removed from the
+canvas, and when a connection is destroyed (this only happens inside
+`on_touch_up`, but it can be either the pins or the blackboard `on_touch_up`
+depending if the connection is destroyed because the pin violates type safety
+or there is no pin under the cursor respectively) it has to unbind the logical
+connections of the pins themselves.
 For this reason connection has high-level functions that do the unbind, rebind
 and deletion of ends, as long as the necessary elements are passed (dependency
 injection pattern).
@@ -179,7 +152,7 @@ data IR = IR {inputs :: Map Id Inputs, blocks :: Map Id Blocks,
 ~~~
 
 As we can see on the Haskell definition the intermediation representation is
-just three Maps, one for blocks, one for input pins and one for output pins.
+just three Maps[^Map], one for blocks, one for input pins and one for output pins.
 But the maps do not contains pins themselves, merely unique hashes (Int on
 this case).
 This reflects the fact that pins model only relationships, not state.
@@ -190,7 +163,7 @@ they involve side effects?.
 
 There are actually first two reasons, first on the actual python programs this
 types do not exist, at least not on an enforceable way, so when translating
-them to haskell the `function` field represents the "worst case", that is to
+them to Haskell the `function` field represents the "worst case", that is to
 say only a few functions will actually end up producing side-effects.
 The second and more important reason is that blocks actually execute
 themselves, meaning the block function does not has parameters, it relays on
@@ -213,6 +186,9 @@ but merely were harder to do.
 
 <!-- Talk about function composition -->
 
+Binary Distribution
+-------------------
+<!-- Talk about CI, PyInstaller, alternatives, etc -->
 
 [^blackboard]: Blackboard is how the canvas where the blocks and connections
     are lay down.
@@ -220,3 +196,6 @@ but merely were harder to do.
 [^Numba]: Numba is a python library that allows the compilation and jitting of
     functions into both the CPU and the GPU
     [http://numba.pydata.org/](http://numba.pydata.org/)
+[^Map]: A Map is haskell is called a dictionary in Python and Hashtable in other
+    languages. It represents a data structure in which keys are used to
+    retrieve values in a very efficient manner (on hashmap $\mathcal{O}(1)$).

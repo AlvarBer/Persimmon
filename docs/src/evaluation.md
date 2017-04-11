@@ -9,7 +9,11 @@ Method
 Based on in place recollection, mainly based on a questionnaire, plus some
 additional information that is harvested by the system (mainly timings).
 
-The questionnaire selected is the System Usability Scale.
+The questionnaire selected is the System Usability Scale [@brooke1996sus].
+There is also questions about the candidate knowledge and familiarity with
+Data Science/Machine Learning, that will be used for comparing between groups
+with different level knowledge.
+<!-- Put them more explicit. -->
 
 
 Proposed tasks
@@ -35,11 +39,9 @@ The evaluation is composed by three different closed tasks.
     - Save to file.
 * Third task and final task. This one involves adding hyper-parameter tunning,
     which in turns means providing a dictionary with desired parameters.
-<!--
-    - Create an entirely new workflow, either by putting it on the same
-        blackboard or on a new one.
--->
     - Use `gridsearch` for hyper-parameter tunning.
     - Use print output block again to return best hyper-parameters.
 
+Evaluation Results
+------------------
 <!-- Actual evaluation -->

@@ -3,7 +3,7 @@ Milestones
 
 In order to guarantee the delivery of the software an incremental approach
 has been chosen, this implies breaking down the objectives into
-smaller milestones that can be reached more easily, so in case the last
+smaller milestones that can be accomplished more easily, so in case the last
 milestone is not reached there is still a substantial product to submit.
 
 
@@ -14,26 +14,29 @@ Tree
 
 **Capped** is more than a minimum viable product, a extensive proof-of-concept,
 with a few limited algorithms and the ability of inputing `.csv` files, with a
-restricted interface in which we don't drag & drop algorithms but merely select
-buttons.
+restricted interface in which algorithms are not dragged and dropped but merely
+selected through buttons.
 
 **Parity** means a more or less complete parity in terms of features and visual
-interaction. It is not very important to have the same number of
-underlying algorithms because that's not the focus of the project.
+interaction.
+It is not very important to have the same number of underlying algorithms
+because that's not the focus of the project, and creating new blocks having the
+underlying algorithm is easy.
 
 And the final milestone is **Compilation**, the ability to get the python
 source code from the visual representation, also improving the interface to
-have a better flow, such as in unreal blueprints, which provide a very
-intuitive interface [@shah2014mastering].
+have a better flow, more akin to Unreal Engine, as discussed on the literature
+review chapter, state of the art section.
 
-This milestone would bring Persimmon utility outside just the realm of
-learning, as it would be a convenient tool for the exploratory work of any
-ML solution (Business case, a Kaggle[^kaggle] competition, etc...
+This milestone would bring Persimmon utility beyond the realm of learning tool,
+as it would be a convenient tool for the exploratory work of any ML solution
+(business case, a Kaggle[^kaggle] competition, etc...).
 
 Out of scope, but possible further applications of the system are **web/junyper**
-integration that means the system would be accessible from a website interface,
-and script **synthesization**, which is the opposite of compilation, meaning
-the ability to visualize on persimmon a python source file.
+integration, which would mean the system would be accessible from a website
+interface, and script **synthesization**, which is the opposite of compilation,
+in other words the ability to translate a python source file to the Persimmon
+visual representation.
 
 
 Gantt Diagram
@@ -49,11 +52,11 @@ Development Methodology
 -----------------------
 The chosen methodology is based on agile methodologies such as **Scrum** or
 **Extreme Programming**, meaning that there is not a complete model of the
-desired system like in model driven development, nor a complete planning of
-every development detail such as on a Waterfall development at the start of
-development, instead there are continuous iterations, faster and smaller than
-traditional development iterations that allow for more opportunity to react and
-adapt to change.
+desired system like in model driven development [@selic2003pragmatics], nor a
+complete planning of every development detail at the start of development, such
+as on Waterfall [@petersen2009waterfall], instead there are continuous
+iterations, faster and smaller than traditional development iterations that
+allow for more opportunity to react and adapt to change [@beck2001manifesto].
 This iterations last two weeks and are called sprints, and a board is used to
 keep track of all current and future tasks.
 
