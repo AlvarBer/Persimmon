@@ -5,7 +5,7 @@ MARKDOWN := introduction.md literature.md workflow.md milestones.md \
 MARKDOWN_COMPLUTENSE := introduction.md focus.md literature.md \
 	workflow.md milestones.md risk.md interface.md implementation.md \
 	types.md analysis.md postmortem.md
-APPENDICES := package_organization.md how.md  # Appendix after bibliography
+APPENDICES := packages.md how.md  # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
