@@ -33,10 +33,17 @@ possible value.
 
 Complex
 -------
-More complex workflows involve preprocessing, this varies widely on a case by
-case basis, and can involve data cleaning, feature engineering (such as
-combining two features into one) or dimensionality reduction.
+More complex workflows involve preprocessing, or automating multiple
+classificator hyper-parameter tuning at the same time through the use of
+pipelines, this varies widely on a case by case basis, and can often involve
+data cleaning, feature engineering (such as combining two features into one) or
+dimensionality reduction (like PCA).
 
+
+However there are even further examples of pipelines where the whole process is
+automated to the maximum, even going as far as identifying the suitable data
+features, selecting classificators for bagging, boosting and other
+meta-classificators, etc...
 A extreme example can be seen in [@automatic], it should be noted that this
 kind of workflow is outside the scope of the project, as this is far away from
 exploratory work.
@@ -57,7 +64,7 @@ Presumably because the complexity can be predicted and accounted for when the
 number of actions is limited, this is the basis for the project programming
 interface being limited on the number of blocks, as not to allow the graphs to
 become inscrutable, and as mentioned on the introduction this also allows
-making asumptions about the interface which reduce the complexity such as
+making assumptions about the interface which reduce the complexity such as
 not needing an explicit flow line (such as Unreal Engine blueprints).
 
 [^plc]: Programable Logic Controllers are industrial digital computers used for

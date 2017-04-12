@@ -5,7 +5,6 @@ The system is implemented in python, using the `Kivy` framework for the
 frontend and multiple scientific tools such as `Numpy`, `Scipy`, `Pandas` and
 most important `scikit-learn` for the backend.
 
-<!-- Technical analysis of visual frameworks/libraries for python here? -->
 
 First Iteration
 ---------------
@@ -65,7 +64,7 @@ modifications to the backend needed.
 
 In order to avoid repetition extensive use of classes coupled with reusable
 custom kivy Widgets was used. This for example meant that each individual pin
-on each block is a class, this proved usefull for defining matching pins in
+on each block is a class, this proved useful for defining matching pins in
 different blocks (Like when connection a pin that sends data to a pin that
 receives it).
 
@@ -100,7 +99,7 @@ Lets represent the possible actions as use cases, the outer \* represents
 * (On pin) Start a connection.
 * (On connection) Modify a connection.
     - Follow cursor.
-    - (On pin) Typecheck.
+    - (On pin) Type check.
         * (On a pin) Establish connection if possible.
         * (Elsewhere) Remove connection.
 
@@ -196,6 +195,6 @@ Binary Distribution
 [^Numba]: Numba is a python library that allows the compilation and jitting of
     functions into both the CPU and the GPU
     [http://numba.pydata.org/](http://numba.pydata.org/)
-[^Map]: A Map is haskell is called a dictionary in Python and Hashtable in other
+[^Map]: A Map is Haskell is called a dictionary in Python and Hashtable in other
     languages. It represents a data structure in which keys are used to
     retrieve values in a very efficient manner (on hashmap $\mathcal{O}(1)$).

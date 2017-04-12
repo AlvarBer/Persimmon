@@ -123,7 +123,7 @@ Faster exploratory work:
 
 :    By providing an easy to use, drag and drop interface the user can try a
      plethora of different estimators and adjusting the hyper-parameters as
-     they see fit.
+     they see fit without writing a single line of code.
 
 
 What the project is not
@@ -141,7 +141,7 @@ The project is not concerned with the following:
 * General Purpose Visual Programming. Since focusing on Machine Learning allows
     Persimmon to make assumptions about the possible programs that enable
     features such as type simplication (check type chapter) or removing
-    explicit flow management (workflow chapter).
+    explicit flow management (more on the literature review chapter).
 
 Project Structure
 -----------------

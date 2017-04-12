@@ -29,14 +29,16 @@ all: $(PDF)
 $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata sansfont:"Helvetica Neue LT Com" --highlight-style breezedark\
+		--top-level-division chapter --highlight-style breezedark \
+		--metadata date:"$(shell date +%Y/%m/%d)" \
+		--metadata sansfont:"Helvetica Neue LT Com" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
 complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --metadata title:"A scikit-learn visual programming interface" \
+		--top-level-division chapter --highlight-style breezedark \
+		--metadata title:"A scikit-learn visual programming interface" \
 		--metadata date:"Director:Manuel Freire Moran, Codirector: Pablo Moreno Ger" \
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata keywords:"Serious Learning","Visual Programming","Dataflow Programming" \
 		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLUTENSE) \
@@ -45,7 +47,8 @@ complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOG
 twocol: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --metadata date:"$(shell date +%Y/%m/%d)" \
+		--top-level-division chapter --highlight-style breezedark \
+		--metadata date:"$(shell date +%Y/%m/%d)" \
 		--metadata sansfont:"Helvetica Neue LT Com" -H table.tex \
 		--metadata classoption:'twocolumn' \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o test.pdf
@@ -66,8 +69,10 @@ APPENDIX_TRAVIS := appendix_travis.tex
 travis: $(MARKDOWN) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--chapters --metadata date:"$(shell date +%Y/%m/%d)" \
-		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX_TRAVIS) -o $(PDF)
+		--chapters --highlight-style breezedark \
+		--metadata date:"$(shell date +%Y/%m/%d)" \
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX_TRAVIS) \
+		-o $(PDF)
 
 $(APPENDIX_TRAVIS): $(APPENDICES)
 	pandoc --no-tex-ligatures --chapters $(APPENDICES) -o $@

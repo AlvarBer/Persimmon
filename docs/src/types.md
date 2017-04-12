@@ -32,8 +32,8 @@ compile time (on the literature referred as write time).
 However the actual types of the python code underlying functions and parameters
 do not support this, as duck typing makes interfaces not defined on explicit
 manners but on the methods used by the underlying code.
-For example most algorithms accept numpy arrays, panda dataframes, scipy sparse
-matrices and almost any array type that implements `__get__` in a manner numpy
+For example most algorithms accept Numpy arrays, panda dataframes, Scipy sparse
+matrices and almost any array type that implements `__get__` in a manner Numpy
 understands, but there is no hard interface that can be used to know which
 objects will run without crashing without executing the code.
 <!-- Explain the type safety as it is implemented -->
