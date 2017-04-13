@@ -15,15 +15,15 @@ from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier
 from kivy.core.window import Window
 from functools import partial
 
-from persimmon.view.blocks import (Block, SVMBlock, TenFoldBlock, CSVInBlock,
+from persimmon.view.blocks import (SVMBlock, TenFoldBlock, CSVInBlock,
                                    CSVOutBlock, CrossValidationBlock,
-                                   RandomForestBlock)
+                                   RandomForestBlock, GridSearchBlock,
+                                   PredictBlock)
 from persimmon.view.util import CircularButton, InputPin, OutputPin
 
 from collections import deque
 from persimmon.backend import (IR, InputEntry, OutputEntry, BlockEntry,
                                execute_graph)
-
 
 Config.read('config.ini')
 
@@ -38,30 +38,24 @@ class ViewApp(App):
         #                          Window.height / self.background.height)
 
 class BlackBoard(ScatterLayout):
-    blocks = ListProperty()
+    #blocks = ObjectProperty()
 
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.dragging = False
         csv_in = CSVInBlock(pos=(15, 400))
-        self.add_widget(csv_in)
-        self.blocks.append(csv_in)
+        self.blocks.add_widget(csv_in)
         svm = SVMBlock(pos=(30, 310))
-        self.add_widget(svm)
-        self.blocks.append(svm)
+        self.blocks.add_widget(svm)
         rf = RandomForestBlock(pos=(30, 215))
-        self.add_widget(rf)
-        self.blocks.append(rf)
+        self.blocks.add_widget(rf)
         ten_fold = TenFoldBlock(pos=(15, 125))
-        self.add_widget(ten_fold)
-        self.blocks.append(ten_fold)
+        self.blocks.add_widget(ten_fold)
         cross_val = CrossValidationBlock(pos=(300, 250))
-        self.add_widget(cross_val)
-        self.blocks.append(cross_val)
+        self.blocks.add_widget(cross_val)
         csv_out = CSVOutBlock(pos=(575, 250))
-        self.add_widget(csv_out)
-        self.blocks.append(csv_out)
-
+        self.blocks.add_widget(csv_out)
+    """
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
@@ -72,7 +66,6 @@ class BlackBoard(ScatterLayout):
         else:
             return super().on_touch_move(touch)
 
-    # TODO: Refactor this mess
     # TODO: Move dragging info into blackboard class instead of touch global
     def on_touch_up(self, touch):
         if self.disabled:
@@ -105,22 +98,21 @@ class BlackBoard(ScatterLayout):
             return True
 
     def in_block(self, x, y):
-        for block in self.blocks:
+        for block in self.blocks.children:
             if block.collide_point(x, y):
                 return block
         return None
 
     def see_relations(self):
-        for block in self.blocks:
-            print(f'{block.__class__.__name__}')
+        for block in self.blocks.children:
             if block.inputs:
                 for pin in block.inputs.children:
                     if pin.origin:
-                        print(f'-> {pin.origin.end.block.__class__.__name__}')
+                        print(f'{block.__class__.__name__} -> {pin.origin.end.block.__class__.__name__}')
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        print(f'{destination.start.block.__class__.__name__} ->')
+                        print(f'{block.__class__.__name__} <- {destination.start.block.__class__.__name__}')
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate
@@ -128,7 +120,7 @@ class BlackBoard(ScatterLayout):
         ir_blocks = {}
         ir_inputs = {}
         ir_outputs = {}
-        for block in self.blocks:
+        for block in self.blocks.children:
             block_hash = id(block)
             block_inputs, block_outputs = [], []
             if block.inputs:

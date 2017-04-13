@@ -3,6 +3,12 @@
 	block_label: 'csv input'
 	block_color: .667, .224, .224
 	outputs: outputs
+	Button:
+		pos: root.x + 30, root.y + 10
+		size_hint: None, None
+		size: '145dp', '35dp'
+		text: 'File Dialog'
+		on_press: root.file_dialog.open()
 	Widget:
 		id: outputs
 		OutputPin:

@@ -1,0 +1,33 @@
+<GridSearchBlock>:
+	block_label: 'Grid Search'
+	block_color: (0.5, 0.5, 0.5)
+	est_in: est_in
+	params_in: params_in
+	est_out: est_out
+	score_out: score_out
+	inputs: inputs
+	outputs: outputs
+	Widget:
+		id: inputs
+		InputPin:
+			id: est_in
+			x: root.x + 5
+			y: root.y + root.height - 35
+			color: .667, .424, .224
+		InputPin:
+			id: params_in
+			x: root.x + 5
+			y: root.y + 5
+			color: 0.9, 0.9, 0.9
+	Widget:
+		id: outputs
+		OutputPin:
+			id: est_out
+			x: root.x + root.width - 15
+			y: root.y + root.height - 35
+			color: .667, .424, .224
+		OutputPin:
+			id: score_out
+			x: root.x + root.width - 15
+			y: root.y + 5
+			color: 0.1, 0.1, 0.1

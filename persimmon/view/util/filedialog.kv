@@ -1,0 +1,31 @@
+<FileDialog>: # A file chooser dialog (Popup)
+	# This is the file selected by the user, this is what we care about
+	file_chosen: file_chooser.selection and file_chooser.selection[0] or ''
+	load_button: load_button
+	file_chooser: file_chooser
+	BoxLayout:
+		#pos: root.pos
+		orientation: 'vertical'
+		FileChooserIconView:
+			id: file_chooser
+			on_selection: root.toggle_load_button(self.selection)
+			on_submit: root.dismiss()
+		TextInput:
+			text: root.file_chosen
+			size_hint_y: None
+			height: '30dp'
+			multiline: False
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: '30dp'
+			Button:
+				text: 'Cancel'
+				on_release: root.dismiss()
+			Button:
+				id: load_button
+				# Load button is disabled by default, we enable when a suitable
+				# file is selected
+				disabled: True
+				text: 'Load'
+				on_release: root.dismiss()

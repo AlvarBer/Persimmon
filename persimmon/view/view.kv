@@ -1,9 +1,10 @@
 #:kivy 1.9
+#:import b persimmon.view.blocks
 
 
 FloatLayout:
 	BlackBoard:
-		id: bb
+		id: blackboard
 		pos: 0, 0
 		size: 32*30, 32*30
 		do_rotation: False
@@ -13,6 +14,12 @@ FloatLayout:
 				pos: 0, 0
 				size: self.size
 				texture: app.background
+	Button:
+		text: 'Execute'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 0, 0
+		on_press: blackboard.process()
 	TabbedPanel:
 		pos_hint: {'top': 1}
 		size_hint_y: None
@@ -21,23 +28,55 @@ FloatLayout:
 		do_default_tab: False
 		TabbedPanelItem:
 			text: 'Input/Output'
-			Label:
-				text: '.csv'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: '.csv input'
+					on_press: blackboard.blocks.add_widget(b.CSVInBlock())
+				Button:
+					text: '.csv output'
+					on_press: blackboard.blocks.add_widget(b.CSVOutBlock())
 		TabbedPanelItem:
 			text: 'Estimators'
-			Label:
-				text: 'Estimators'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Random Forest'
+					on_press: blackboard.blocks.add_widget(b.RandomForestBlock())
+				Button:
+					text: 'SVM'
+					on_press: blackboard.blocks.add_widget(b.SVMBlock())
 		TabbedPanelItem:
 			text: 'Cross Validation'
-			Label:
-				text: 'K-Folds'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Cross Validation Score'
+					on_press: blackboard.blocks.add_widget(b.CrossValidationBlock())
+				Button:
+					text: 'K-Folds'
+					on_press: blackboard.blocks.add_widget(b.TenFoldBlock())
+				Button:
+					text: 'Grid Search'
+					on_press: blackboard.blocks.add_widget(b.GridSearchBlock())
+		TabbedPanelItem:
+			text: 'Others'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Predict'
+					on_press: blackboard.blocks.add_widget(b.PredictBlock())
+				Button:
+					text: 'Dictionary'
+					on_press: blackboard.blocks.add_widget(b.DictBlock())
 
 
-<BlackBoard>:
-	Button:
-		text: 'Execute'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 0, 0
-		on_press: root.process()
-
+				
+<Blackboard>:
+	blocks: blocks
+	Widget:
+		id: blocks

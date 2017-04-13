@@ -1,4 +1,5 @@
 from persimmon.view.util import CircularButton, Connection
+from persimmon.backend import Test
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
@@ -7,22 +8,13 @@ from kivy.graphics import Color, Ellipse, Line
 Builder.load_file('view/util/pin.kv')
 
 class Pin(CircularButton):
-    val = ObjectProperty(force_dispatch=True)
+    val = ObjectProperty(Test.NIL, force_dispatch=True)
     block = ObjectProperty()
     ellipse = ObjectProperty()
     line = ObjectProperty()
 
     def on_touch_down(self, touch):
-        if self.collide_point(*touch.pos) and touch.button == 'left':
-            print('Creating connection')
-            touch.ud['cur_line'] = Connection(start=self,
-                                              end=self,
-                                              color=self.color)
-            # Add to blackboard
-            self.parent.parent.parent.add_widget(touch.ud['cur_line'])
-            return True
-        else:
-            return False
+       pass 
 
     def on_touch_up(self, touch):
         if ('cur_line' in touch.ud.keys() and touch.button == 'left' and

@@ -11,7 +11,6 @@ class Block(DragBehavior, FloatLayout):
     block_label = StringProperty('label')
     inputs = ObjectProperty()
     outputs = ObjectProperty()
-    #block = ObjectProperty()
     input_pins = ListProperty()
     output_pins = ListProperty()
 

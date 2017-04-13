@@ -1,0 +1,16 @@
+<DictBlock>:
+	block_label: 'Dictionary'
+	block_color: 0.5, 0.5, 0.5
+	outputs: outputs
+	dict_out: dict_out
+	Widget:
+		id: outputs
+		OutputPin:
+			id: dict_out
+			x: root.x + root.width - 15
+			y: root.y + root.height / 2 - 5
+			color: .5, .5, .5
+	TextInput:
+		pos: root.x + 5, root.y + 5
+		size_hint: 0.8, 0.6
+		text: root.string

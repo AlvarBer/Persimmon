@@ -3,11 +3,13 @@ import pandas as pd
 from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from collections import deque, namedtuple
-from typing import TypeVar
+from enum import Enum, auto
 
+
+class Test(Enum):
+    NIL = auto()
 
 # backend types
-T = TypeVar('T')
 InputEntry = namedtuple('InputEntry', ['origin', 'pin', 'block'])
 BlockEntry = namedtuple('BlockEntry', ['inputs', 'function', 'outputs'])
 OutputEntry = namedtuple('OutputEntry', ['destinations', 'pin', 'block'])
@@ -15,13 +17,16 @@ IR = namedtuple('IR', ['blocks', 'inputs', 'outputs'])
 
 def execute_graph(ir: IR):
     queue = deque()
-    seen = {}
-    queue.append(list(ir.blocks.keys())[0])  # Random start
-    while queue:
-        queque, seen = explore_graph(queue.popleft(), ir, queue, seen)
+    seen = {}  # Saves seen output pins and blocks
+    for block in ir.blocks:
+        if block not in seen:
+            queue.append(block)
+            while queue:
+                queque, seen = explore_graph(queue.popleft(), ir, queue, seen)
     print('Execution done!')
 
-def explore_graph(current: int, ir: IR, queue: deque, seen: {int: T}) -> (deque, {int: T}):
+def explore_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}) -> (deque, {int: OutputEntry}):
+    #print(f'Executing block {current}')
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin
@@ -31,8 +36,16 @@ def explore_graph(current: int, ir: IR, queue: deque, seen: {int: T}) -> (deque,
                 if dependency in queue:
                     queue.remove(dependency)
                 queue, seen = explore_graph(dependency, ir, queue, seen)
-            in_pin.pin.val = seen[origin]
+            if seen[origin] is not Test.NIL:
+                in_pin.pin.val = seen[origin]
+                continue
+        seen[current] = None
+        seen = taint_block(current_block, seen)
+        return queue, seen
+
     current_block.function()
+    seen[current] = Test.NIL
+
     for out_id in current_block.outputs:
         seen[out_id] = ir.outputs[out_id].pin.val
         for future_block in [ir.inputs[x].block for x in ir.outputs[out_id].destinations]:
@@ -40,9 +53,8 @@ def explore_graph(current: int, ir: IR, queue: deque, seen: {int: T}) -> (deque,
                 queue.append(future_block)
     return queue, seen
 
-
-if __name__ == '__main__':
-    est = SVC()
-    df = pd.read_csv('~/Downloads/iris.csv', header=0)
-    print(perform(df, est, None, df.iloc[:, :-1]))
+def taint_block(block, seen):
+    for out_id in block.outputs:
+        seen[out_id] = Test.NIL  # Tainted
+    return seen
 
