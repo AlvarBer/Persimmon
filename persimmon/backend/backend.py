@@ -26,7 +26,7 @@ def execute_graph(ir: IR):
     print('Execution done!')
 
 def explore_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}) -> (deque, {int: OutputEntry}):
-    #print(f'Executing block {current}')
+    #print('Executing block {}'.format(current))
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin

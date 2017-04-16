@@ -108,11 +108,11 @@ class BlackBoard(ScatterLayout):
             if block.inputs:
                 for pin in block.inputs.children:
                     if pin.origin:
-                        print(f'{block.__class__.__name__} -> {pin.origin.end.block.__class__.__name__}')
+                        print('{} -> {}'.format(block.__class__.__name__, pin.origin.end.block.__class__.__name__))
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        print(f'{block.__class__.__name__} <- {destination.start.block.__class__.__name__}')
+                        print(f'{} <- {}'.format(block.__class__.__name__, destination.start.block.__class__.__name__))
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate
