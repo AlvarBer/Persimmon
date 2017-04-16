@@ -30,6 +30,7 @@
       \State $current.function()$ \Comment {function uses in\_pins and sets out\_pins}
       \ForAll {$out\_pin \in current.get\_out\_pins()$}
         \State $seen.put(out\_pin, out\_pin.value)$
+        \State $queue.add(pin.destinations)$
       \EndFor
       \State \Return $queue$, $seen$
     \EndFunction

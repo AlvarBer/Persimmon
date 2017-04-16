@@ -1,8 +1,13 @@
-<CSVOutBLock>:
+<CSVOutBlock>:
 	in_1: in_1
 	block_label: 'csv output'
 	block_color: .667, .224, .224
 	inputs: inputs
+	Button:
+		pos: root.x + 30, root.y + 10
+		size_hint: 0.7, 0.5
+		text: 'Choose File'
+		on_press: root.file_dialog.open()
 	Widget:
 		id: inputs
 		InputPin:

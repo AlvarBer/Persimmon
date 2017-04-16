@@ -3,8 +3,6 @@ from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.scatterlayout import ScatterLayout
 
 import pandas as pd
 

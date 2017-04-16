@@ -26,7 +26,8 @@ regressors and clustering have some incompatibilities.
 
 Apart from the temporary interface the backend had to be built. Since the
 workflow was fixed the backend simply received the node as arguments and
-executed those.
+executed those, menaing the previously explained execution algorithm was not
+needed for this iteration.
 
 ![Implementation of the first interface](images/interface.png)
 
@@ -39,7 +40,10 @@ boxes needed to be connected through pins.
 The logic behind the pins and the blocks is quite heavy, as there is a tight
 coupling between the blackboard[^blackboard], blocks and the pins on them, as
 all of these parts relay information to each other while the user is
-dragging a cable between two pins.
+dragging a cable between two pins, this is further explained on the "Making a
+connection" section.
+
+![Second iteration implementation](images/iter2.png)
 
 This tight coupling means there is a noticeable lag when moving the cable too
 fast on low-end computers, there are several solutions to this, but the most

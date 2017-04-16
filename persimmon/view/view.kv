@@ -37,6 +37,9 @@ FloatLayout:
 				Button:
 					text: '.csv output'
 					on_press: blackboard.blocks.add_widget(b.CSVOutBlock())
+				Button:
+					text: 'Print'
+					on_press: blackboard.blocks.add_widget(b.PrintBlock())
 		TabbedPanelItem:
 			text: 'Estimators'
 			BoxLayout:
@@ -75,7 +78,7 @@ FloatLayout:
 					on_press: blackboard.blocks.add_widget(b.DictBlock())
 
 
-				
+
 <Blackboard>:
 	blocks: blocks
 	Widget:
