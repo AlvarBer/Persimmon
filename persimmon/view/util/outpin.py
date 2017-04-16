@@ -34,4 +34,6 @@ class OutputPin(Pin):
             return False
 
     def on_connection_delete(self, connection):
-        self.destinations.remove(connection)
+        if connection in self.destinations:
+            self.destinations.remove(connection)
+        
