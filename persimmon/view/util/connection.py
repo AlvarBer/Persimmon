@@ -90,6 +90,7 @@ class Connection(Widget):
             self.uncircle_pin(self.start)
             self.start.on_connection_delete(self)
             touch.ud['cur_line'] = self
+            self.start = None
             return True
         elif self.end.collide_point(*touch.pos):
             self.forward = True
@@ -97,6 +98,7 @@ class Connection(Widget):
             self.uncircle_pin(self.end)
             self.end.on_connection_delete(self)
             touch.ud['cur_line'] = self
+            self.end = None
             return True
         else:
             return False
