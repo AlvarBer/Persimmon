@@ -1,0 +1,71 @@
+#:import dp kivy.metrics.dp
+#:import stopTouchApp kivy.base.stopTouchApp
+
+BoxLayout:
+    canvas:
+        Color:
+            rgba: app.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'vertical'
+
+    GridLayout:
+        cols: 2
+        size_hint_y: 0.2
+        canvas:
+            Color:
+                rgba: app.line_color
+
+            Line:
+                points:
+                    [self.pos[0], self.pos[1] + dp(1),
+                    self.pos[0] + self.width,
+                    self.pos[1] + dp(1)]
+
+        Label:
+            color: app.color
+            text_size:
+                [self.width - dp(10),
+                self.height]
+            text: app.notif_title
+            halign: 'left'
+            markup: True
+            shorten: True
+            shorten_from: 'right'
+
+        Button:
+            background_normal:
+                'atlas://data/images/defaulttheme/bubble_btn'
+            color: app.color
+            size_hint_x: None
+            width: self.height
+            text: 'X'
+            on_release: stopTouchApp()
+
+    GridLayout:
+        id: container
+        cols: 2
+        size_hint_y: 0.8
+
+        FloatLayout:
+            size_hint_x: 0.3
+            Image:
+                source: app.notif_icon
+                size_hint: (None, None)
+                width: dp(64)
+                height: dp(64)
+                pos_hint: {'center': (0.5, 0.5)}
+
+        ScrollView:
+            Label:
+                color: app.color
+                text: app.message
+                text_size:
+                    [self.width,
+                    self.height]
+                size_hint_y: None
+                padding: (5, 5)
+                text_size: self.width, None
+                height: self.texture_size[1]
+                markup: True

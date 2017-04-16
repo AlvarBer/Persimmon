@@ -19,12 +19,13 @@ from persimmon.view.blocks import (SVMBlock, TenFoldBlock, CSVInBlock,
                                    CSVOutBlock, CrossValidationBlock,
                                    RandomForestBlock, GridSearchBlock,
                                    PredictBlock)
-from persimmon.view.util import CircularButton, InputPin, OutputPin
+from persimmon.view.util import (CircularButton, InputPin, OutputPin)
 
 from collections import deque
 from persimmon.backend import (IR, InputEntry, OutputEntry, BlockEntry,
                                execute_graph)
 from kivy.lang import Builder
+from kivy.garden.notification import Notification
 
 
 Config.read('config.ini')
@@ -107,15 +108,17 @@ class BlackBoard(ScatterLayout):
         return None
 
     def see_relations(self):
+        string = ''
         for block in self.blocks.children:
             if block.inputs:
                 for pin in block.inputs.children:
                     if pin.origin:
-                        print('{} -> {}'.format(block.__class__.__name__, pin.origin.end.block.__class__.__name__))
+                        string += '{} -> {}\n'.format(block.__class__.__name__, pin.origin.end.block.__class__.__name__)
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        print('{} <- {}'.format(block.__class__.__name__, destination.start.block.__class__.__name__))
+                        string += '{} <- {}\n'.format(block.__class__.__name__, destination.start.block.__class__.__name__)
+        Notification().open(title='Relations', message=string)
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate
