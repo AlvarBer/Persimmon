@@ -26,7 +26,7 @@ class InputPin(Pin):
                 self.origin = touch.ud['cur_line']
             else:
                 print('Deleting connection')
-                touch.ud['cur_line'].delete_connection(self.parent.parent.parent)
+                touch.ud['cur_line'].delete_connection(self.block.parent.parent)
             return True
         else:
             return False

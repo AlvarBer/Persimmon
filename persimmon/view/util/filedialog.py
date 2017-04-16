@@ -1,6 +1,7 @@
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
+import kivy.uix.filechooser
 
 
 Builder.load_file('view/util/filedialog.kv')

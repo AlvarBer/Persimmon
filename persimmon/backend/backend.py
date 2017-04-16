@@ -3,11 +3,11 @@ import pandas as pd
 from sklearn.svm import SVC
 from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from collections import deque, namedtuple
-from enum import Enum, auto
+from enum import Enum
 
 
 class Test(Enum):
-    NIL = auto()
+    NIL = 0
 
 # backend types
 InputEntry = namedtuple('InputEntry', ['origin', 'pin', 'block'])

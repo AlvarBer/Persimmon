@@ -24,6 +24,8 @@ from persimmon.view.util import CircularButton, InputPin, OutputPin
 from collections import deque
 from persimmon.backend import (IR, InputEntry, OutputEntry, BlockEntry,
                                execute_graph)
+from kivy.lang import Builder
+
 
 Config.read('config.ini')
 
@@ -36,6 +38,7 @@ class ViewApp(App):
         self.background.uvsize = 30, 30
         #self.background.uvsize = (Window.width / self.background.width,
         #                          Window.height / self.background.height)
+        return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):
     #blocks = ObjectProperty()
@@ -112,7 +115,7 @@ class BlackBoard(ScatterLayout):
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        print(f'{} <- {}'.format(block.__class__.__name__, destination.start.block.__class__.__name__))
+                        print('{} <- {}'.format(block.__class__.__name__, destination.start.block.__class__.__name__))
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate

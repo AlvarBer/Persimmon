@@ -6,6 +6,7 @@ class OutputPin(Pin):
     destinations = ListProperty()
 
     def on_touch_down(self, touch):
+        #print('on touch down')
         if self.collide_point(*touch.pos) and touch.button == 'left':
             print('Creating connection')
             touch.ud['cur_line'] = Connection(end=self,
@@ -18,6 +19,7 @@ class OutputPin(Pin):
             return False
 
     def on_touch_up(self, touch):
+        #print('on touch up')
         if ('cur_line' in touch.ud.keys() and touch.button == 'left' and
                 self.collide_point(*touch.pos)):
             if self.typesafe(touch.ud['cur_line'].start):
@@ -26,13 +28,10 @@ class OutputPin(Pin):
                 self.destinations.append(touch.ud['cur_line'])
             else:
                 print('Deleting connection')
-                touch.ud['cur_line'].delete_connection(self.parent.parent.parent)
+                touch.ud['cur_line'].delete_connection(self.block.parent.parent)
             return True
         else:
             return False
 
     def on_connection_delete(self, connection):
-        if connection in self.destinations:
-            self.destinations.remove(connection)
-        else:
-            print('Attempted already removed connection')
+        self.destinations.remove(connection)
