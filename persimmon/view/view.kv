@@ -8,6 +8,8 @@ FloatLayout:
 		pos: 0, 0
 		size: 32*30, 32*30
 		do_rotation: False
+		do_scale: False
+		do_translation: False
 		auto_bring_to_front: False
 		canvas.before:
 			Rectangle:
@@ -39,13 +41,13 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: '.csv input'
-					on_press: blackboard.blocks.add_widget(b.CSVInBlock())
+					on_press: blackboard.blocks.add_widget(b.CSVInBlock(pos=(300, 250)))
 				Button:
 					text: '.csv output'
-					on_press: blackboard.blocks.add_widget(b.CSVOutBlock())
+					on_press: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
 				Button:
 					text: 'Print'
-					on_press: blackboard.blocks.add_widget(b.PrintBlock())
+					on_press: blackboard.blocks.add_widget(b.PrintBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Estimators'
 			BoxLayout:
@@ -53,10 +55,10 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Random Forest'
-					on_press: blackboard.blocks.add_widget(b.RandomForestBlock())
+					on_press: blackboard.blocks.add_widget(b.RandomForestBlock(pos=(300, 250)))
 				Button:
 					text: 'SVM'
-					on_press: blackboard.blocks.add_widget(b.SVMBlock())
+					on_press: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Cross Validation'
 			BoxLayout:
@@ -64,13 +66,13 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Cross Validation Score'
-					on_press: blackboard.blocks.add_widget(b.CrossValidationBlock())
+					on_press: blackboard.blocks.add_widget(b.CrossValidationBlock(pos=(300, 250)))
 				Button:
 					text: 'K-Folds'
-					on_press: blackboard.blocks.add_widget(b.TenFoldBlock())
+					on_press: blackboard.blocks.add_widget(b.TenFoldBlock(pos=(300, 250)))
 				Button:
 					text: 'Grid Search'
-					on_press: blackboard.blocks.add_widget(b.GridSearchBlock())
+					on_press: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Others'
 			BoxLayout:
@@ -78,10 +80,10 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Predict'
-					on_press: blackboard.blocks.add_widget(b.PredictBlock())
+					on_press: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
 				Button:
 					text: 'Dictionary'
-					on_press: blackboard.blocks.add_widget(b.DictBlock())
+					on_press: blackboard.blocks.add_widget(b.DictBlock(pos=(300, 250)))
 
 
 

@@ -20,10 +20,15 @@ class CSVInBlock(Block):
                                       size_hint=(0.8, 0.8))
         # This binds two properties together
         self.file_dialog.bind(file_chosen=self.setter('file_chosen'))
+        self.tainted = True
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.__class__.__name__)
 
     def function(self):
-        if self.file_chosen:
-            self.out_1.val = pd.read_csv(self.file_chosen, header=0)
+        self.out_1.val = pd.read_csv(self.file_chosen, header=0)
+
+    def on_file_chosen(self, instance, value):
+        if value != '':
+            self.tainted = False
         else:
-            print('File not set!')
+            self.tainted = True
 

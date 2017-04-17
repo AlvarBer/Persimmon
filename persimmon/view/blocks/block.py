@@ -24,6 +24,8 @@ class Block(DragBehavior, FloatLayout):
             for pin in self.outputs.children:
                 self.output_pins.append(pin)
                 pin.block = self
+        self.tainted = False
+        self.tainted_msg = ''
 
     def in_pin(self, x, y):
         for pin in self.input_pins + self.output_pins:

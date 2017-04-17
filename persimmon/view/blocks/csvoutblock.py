@@ -19,9 +19,15 @@ class CSVOutBlock(Block):
                                       size_hint=(0.8, 0.8))
         # Let's bind two together
         self.file_dialog.bind(file_chosen=self.setter('path'))
+        self.tainted = True
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.__class__.__name__)
+
 
     def function(self):
-        if self.path:
-            self.in_1.val.to_csv(path_or_buf=path)
+        self.in_1.val.to_csv(path_or_buf=path)
+
+    def on_path(self, instance, value):
+        if value != '':
+            self.tainted = False
         else:
-            print('File not set!')
+            self.tainted = True

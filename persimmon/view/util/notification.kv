@@ -1,9 +1,20 @@
 <Notification>:
-	msg_label: msg_label
+	#msg_label: msg_label
 	size_hint: None, None
-	size: '100dp', '100dp'
+	size: '420dp', '320dp'
 	Label:
-		id: msg_label
+		valign: 'middle'
 		size: self.texture_size
 		text: root.message
-
+		#shorten: True
+		text_size: 380, 280
+		#size: 410, 310
+#	AnchorLayout:
+#		anchor_x: 'center'
+#		anchor_y: 'center'
+#		ScrollView:
+#			#pos: root.x - 350, root.y - 200
+#			size_hint: None, None
+#			do_scroll_x: False
+#			size: 310, 200
+			

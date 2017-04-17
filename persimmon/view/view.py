@@ -49,7 +49,7 @@ class BlackBoard(ScatterLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.warning = Notification(title='Warning', message='test')
+        self.warning = Notification(title='Warning')
 
     """
     def __init__(self, *args, **kwargs):
@@ -116,6 +116,7 @@ class BlackBoard(ScatterLayout):
         return None
 
     def see_relations(self):
+        print('seeing')
         string = ''
         for block in self.blocks.children:
             if block.inputs:
@@ -128,6 +129,7 @@ class BlackBoard(ScatterLayout):
                     for destination in pin.destinations:
                         string += '{} <- {}\n'.format(block.__class__.__name__,
                                                       destination.start.block.__class__.__name__)
+
         self.warning.message = string
         self.warning.open()
 
@@ -168,7 +170,22 @@ class BlackBoard(ScatterLayout):
         return IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
     def process(self):
-        execute_graph(self.to_ir())
+        tainted, tainted_msg = self.check_taint()
+        if tainted:
+            self.warning.message = tainted_msg
+            self.warning.open()
+        else:
+            execute_graph(self.to_ir())
+
+    def check_taint(self):
+        for block in self.blocks.children:
+            if block.inputs:
+                if any([x.origin == None for x in block.inputs.children]):
+                    return True, 'Block {} has unconnected inputs!'.format(
+                                    block.__class__.__name__)
+            if block.tainted:
+                return True, block.tainted_msg
+        return False, ''
 
 if __name__ == '__main__':
     ViewApp().run()
