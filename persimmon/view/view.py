@@ -3,6 +3,8 @@ from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatterlayout import ScatterLayout
@@ -19,13 +21,13 @@ from persimmon.view.blocks import (SVMBlock, TenFoldBlock, CSVInBlock,
                                    CSVOutBlock, CrossValidationBlock,
                                    RandomForestBlock, GridSearchBlock,
                                    PredictBlock)
-from persimmon.view.util import (CircularButton, InputPin, OutputPin)
+from persimmon.view.util import (CircularButton, InputPin, OutputPin,
+                                 Notification)
 
 from collections import deque
 from persimmon.backend import (IR, InputEntry, OutputEntry, BlockEntry,
                                execute_graph)
 from kivy.lang import Builder
-from kivy.garden.notification import Notification
 
 
 Config.read('config.ini')
@@ -42,7 +44,12 @@ class ViewApp(App):
         return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):
-    #blocks = ObjectProperty()
+    blocks = ObjectProperty()
+    warning = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.warning = Notification(title='Warning', message='test')
 
     """
     def __init__(self, *args, **kwargs):
@@ -60,6 +67,7 @@ class BlackBoard(ScatterLayout):
         csv_out = CSVOutBlock(pos=(575, 250))
         self.blocks.add_widget(csv_out)
     """
+
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
@@ -113,12 +121,15 @@ class BlackBoard(ScatterLayout):
             if block.inputs:
                 for pin in block.inputs.children:
                     if pin.origin:
-                        string += '{} -> {}\n'.format(block.__class__.__name__, pin.origin.end.block.__class__.__name__)
+                        string += '{} -> {}\n'.format(block.__class__.__name__,
+                                                      pin.origin.end.block.__class__.__name__)
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        string += '{} <- {}\n'.format(block.__class__.__name__, destination.start.block.__class__.__name__)
-        Notification().open(title='Relations', message=string)
+                        string += '{} <- {}\n'.format(block.__class__.__name__,
+                                                      destination.start.block.__class__.__name__)
+        self.warning.message = string
+        self.warning.open()
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate

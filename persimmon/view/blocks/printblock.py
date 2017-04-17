@@ -11,4 +11,5 @@ class PrintBlock(Block):
     in_1 = ObjectProperty()
 
     def function(self):
-        print(self.in_1.val)
+        self.parent.parent.parent.warning.message = str(self.in_1.val)
+        self.parent.parent.parent.warning.open()
