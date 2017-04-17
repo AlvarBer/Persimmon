@@ -180,7 +180,8 @@ class BlackBoard(ScatterLayout):
     def check_taint(self):
         for block in self.blocks.children:
             if block.inputs:
-                if any([x.origin == None for x in block.inputs.children]):
+                orphaned = [x.origin == None for x in block.inputs.children]
+                if not all(orphaned) and any(orphaned):
                     return True, 'Block {} has unconnected inputs!'.format(
                                     block.__class__.__name__)
             if block.tainted:
