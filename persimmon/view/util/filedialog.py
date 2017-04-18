@@ -31,4 +31,10 @@ class FileDialog(Popup):
             self.load_button.disabled = False
         else:
             self.load_button.disabled = True
+    
+    def oea(self, file_chooser, entry, _):
+        self.tinput.text = file_chooser.path
 
+    def oste(self, *args):
+        print('on oste')
+        print(*args)

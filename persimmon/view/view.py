@@ -116,7 +116,6 @@ class BlackBoard(ScatterLayout):
         return None
 
     def see_relations(self):
-        print('seeing')
         string = ''
         for block in self.blocks.children:
             if block.inputs:

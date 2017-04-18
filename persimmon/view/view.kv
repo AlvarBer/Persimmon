@@ -40,10 +40,10 @@ FloatLayout:
 				spacing: '10dp'
 				padding: '5dp'
 				Button:
-					text: '.csv input'
+					text: 'Read .csv'
 					on_press: blackboard.blocks.add_widget(b.CSVInBlock(pos=(300, 250)))
 				Button:
-					text: '.csv output'
+					text: 'Write .csv'
 					on_press: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
 				Button:
 					text: 'Print'
@@ -60,7 +60,17 @@ FloatLayout:
 					text: 'SVM'
 					on_press: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
 		TabbedPanelItem:
-			text: 'Cross Validation'
+			text: 'Fit & Predict'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Fit'
+				Button:
+					text: 'Predict'
+					on_press: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Model Selection'
 			BoxLayout:
 				spacing: '10dp'
 				padding: '5dp'
@@ -68,19 +78,16 @@ FloatLayout:
 					text: 'Cross Validation Score'
 					on_press: blackboard.blocks.add_widget(b.CrossValidationBlock(pos=(300, 250)))
 				Button:
+					text: 'Grid Search'
+					on_press: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
+				Button:
 					text: 'K-Folds'
 					on_press: blackboard.blocks.add_widget(b.TenFoldBlock(pos=(300, 250)))
 				Button:
-					text: 'Grid Search'
-					on_press: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
+					text: 'Time Series Split'
 		TabbedPanelItem:
 			text: 'Others'
 			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Predict'
-					on_press: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
 				Button:
 					text: 'Dictionary'
 					on_press: blackboard.blocks.add_widget(b.DictBlock(pos=(300, 250)))

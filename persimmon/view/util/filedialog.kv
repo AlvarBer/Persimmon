@@ -10,6 +10,8 @@
 			id: file_chooser
 			on_selection: root.toggle_load_button(self.selection)
 			on_submit: root.dismiss()
+			on_entry_added: root.oea(*args)
+			on_subentry_to_entry: root.oste(*args)
 		TextInput:
 			id: tinput
 			#text: root.file_chosen

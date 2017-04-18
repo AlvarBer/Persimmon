@@ -24,7 +24,7 @@ class CSVOutBlock(Block):
 
 
     def function(self):
-        self.in_1.val.to_csv(path_or_buf=path)
+        self.in_1.val.to_csv(path_or_buf=self.path)
 
     def on_path(self, instance, value):
         if value != '':

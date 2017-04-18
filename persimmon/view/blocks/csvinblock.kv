@@ -1,12 +1,12 @@
 <CSVInBLock>:
 	out_1: out_1
-	block_label: 'csv input'
+	block_label: 'Read .csv'
 	block_color: .667, .224, .224
 	outputs: outputs
 	Button:
 		pos: root.x + 30, root.y + 10
 		size_hint: 0.7, 0.5
-		text: 'File Dialog'
+		text: 'Load file'
 		on_press: root.file_dialog.open()
 	Widget:
 		id: outputs
