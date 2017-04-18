@@ -3,6 +3,7 @@ from persimmon.backend import Test
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
+from persimmon.view.util import Type
 
 
 Builder.load_file('view/util/pin.kv')
@@ -12,6 +13,12 @@ class Pin(CircularButton):
     block = ObjectProperty()
     ellipse = ObjectProperty()
     line = ObjectProperty()
+    _type = ObjectProperty(Type.ANY) 
+
+    def on__type(self, instance, value):
+        """ If the kv lang was a bit smarted this would not be needed
+        """
+        self.color = value.value
 
     def on_touch_down(self, touch):
        pass 
@@ -23,4 +30,9 @@ class Pin(CircularButton):
         pass
 
     def typesafe(self, other):
-        return other != None and other.__class__ != self.__class__ and self.block != other.block
+        if other == None: # Really should not happen...
+            return False
+        elif self._type == Type.ANY or other._type == Type.ANY:
+            return True  # Anything is possible with ANY
+        else:
+            return self._type == other._type and self.block != other.block

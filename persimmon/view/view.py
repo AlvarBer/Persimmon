@@ -121,13 +121,13 @@ class BlackBoard(ScatterLayout):
             if block.inputs:
                 for pin in block.inputs.children:
                     if pin.origin:
-                        string += '{} -> {}\n'.format(block.__class__.__name__,
-                                                      pin.origin.end.block.__class__.__name__)
+                        string += '{} -> {}\n'.format(block.block_label,
+                                                      pin.origin.end.block.block_label)
             if block.outputs:
                 for pin in block.outputs.children:
                     for destination in pin.destinations:
-                        string += '{} <- {}\n'.format(block.__class__.__name__,
-                                                      destination.start.block.__class__.__name__)
+                        string += '{} <- {}\n'.format(block.block_label,
+                                                      destination.start.block.block_label)
 
         self.warning.message = string
         self.warning.open()
@@ -181,8 +181,8 @@ class BlackBoard(ScatterLayout):
             if block.inputs:
                 orphaned = [x.origin == None for x in block.inputs.children]
                 if not all(orphaned) and any(orphaned):
-                    return True, 'Block {} has unconnected inputs!'.format(
-                                    block.__class__.__name__)
+                    return True, 'Block "{}" has unconnected inputs!'.format(
+                                    block.block_label)
             if block.tainted:
                 return True, block.tainted_msg
         return False, ''

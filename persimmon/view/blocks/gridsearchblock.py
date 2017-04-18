@@ -9,6 +9,7 @@ from sklearn.model_selection import GridSearchCV
 Builder.load_file('view/blocks/gridsearchblock.kv')
 
 class GridSearchBlock(Block):
+    data_in = ObjectProperty()
     est_in = ObjectProperty()
     params_in = ObjectProperty()
     est_out = ObjectProperty()
@@ -17,5 +18,7 @@ class GridSearchBlock(Block):
     def function(self):
         results = GridSearchCV(self.est_in.val, self.params_in.val,
                                n_jobs=-1)
+        results.fit(self.data_input.val.iloc[:, :-1],
+                    self.data_input.val.iloc[:, -1])
         self.est_out, self.score_out = (results.best_estimators_,
                                         results.best_score_)

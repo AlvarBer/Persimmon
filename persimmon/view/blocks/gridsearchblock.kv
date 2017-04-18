@@ -1,6 +1,7 @@
 <GridSearchBlock>:
 	block_label: 'Grid Search'
-	block_color: (0.5, 0.5, 0.5)
+	block_color: 0.5, 0.5, 0.5
+	data_in: data_in
 	est_in: est_in
 	params_in: params_in
 	est_out: est_out
@@ -10,24 +11,29 @@
 	Widget:
 		id: inputs
 		InputPin:
+			id: data_in
+			x: root.x + 5
+			y: root.y + root.height - 15
+			_type: root.t.DATAFRAME
+		InputPin:
 			id: est_in
 			x: root.x + 5
-			y: root.y + root.height - 35
-			color: .667, .424, .224
+			y: root.y + root.height / 2 - 5
+			_type: root.t.CLASSIFICATOR
 		InputPin:
 			id: params_in
 			x: root.x + 5
 			y: root.y + 5
-			color: 0.9, 0.9, 0.9
+			#color: 0, 0, 0
 	Widget:
 		id: outputs
 		OutputPin:
 			id: est_out
 			x: root.x + root.width - 15
 			y: root.y + root.height - 35
-			color: .667, .424, .224
+			_type: root.t.CLASSIFICATOR
 		OutputPin:
 			id: score_out
 			x: root.x + root.width - 15
 			y: root.y + 5
-			color: 0.1, 0.1, 0.1
+			_type: root.t.ANY

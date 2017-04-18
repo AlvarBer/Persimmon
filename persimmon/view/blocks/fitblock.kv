@@ -1,27 +1,27 @@
-<PredictBlock>:
-	block_label: 'Predict'
+<FitBlock>:
+	block_label: 'Fit'
 	block_color: 0.5, 0.5, 0.5
 	inputs: inputs
 	outputs: outputs
-	est_in: est_in
 	data_in: data_in
-	plain_out: plain_out
+	est_in: est_in
+	est_out: est_out
 	Widget:
 		id: inputs
 		InputPin:
-			id: est_in
-			x: root.x + 5
-			y: root.y + root.height - 35
-			_type: root.t.CLASSIFICATOR
-		InputPin:
 			id: data_in
 			x: root.x + 5
-			y: root.y + 5
+			y: root.y + root.height - 35
 			_type: root.t.DATAFRAME
+		InputPin:
+			id: est_in
+			x: root.x + 5
+			y: root.y + 5
+			_type: root.t.CLASSIFICATOR
 	Widget:
 		id: outputs
 		OutputPin:
-			id: plain_out
+			id: est_out
 			x: root.x + root.width - 15
 			y: root.y + root.height / 2 - 5
-			_type: root.t.ANY
+			_type: root.t.CLASSIFICATOR

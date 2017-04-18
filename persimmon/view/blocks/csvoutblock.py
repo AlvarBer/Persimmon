@@ -5,7 +5,6 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
 
 
-
 Builder.load_file('view/blocks/csvoutblock.kv')
 
 class CSVOutBlock(Block):
@@ -20,7 +19,7 @@ class CSVOutBlock(Block):
         # Let's bind two together
         self.file_dialog.bind(file_chosen=self.setter('path'))
         self.tainted = True
-        self.tainted_msg = 'File not chosen in block {}!'.format(self.__class__.__name__)
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.block_label)
 
 
     def function(self):

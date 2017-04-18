@@ -35,6 +35,3 @@ class FileDialog(Popup):
     def oea(self, file_chooser, entry, _):
         self.tinput.text = file_chooser.path
 
-    def oste(self, *args):
-        print('on oste')
-        print(*args)

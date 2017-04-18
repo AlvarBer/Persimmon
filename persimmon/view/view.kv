@@ -59,6 +59,10 @@ FloatLayout:
 				Button:
 					text: 'SVM'
 					on_press: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
+				Button:
+					text: 'KNN'
+				Button:
+					text: 'SGD'
 		TabbedPanelItem:
 			text: 'Fit & Predict'
 			BoxLayout:
@@ -66,6 +70,7 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Fit'
+					on_press: blackboard.blocks.add_widget(b.FitBlock(pos=(300, 250)))
 				Button:
 					text: 'Predict'
 					on_press: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))

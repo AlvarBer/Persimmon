@@ -1,5 +1,6 @@
 from .block import Block
 from .svmblock import SVMBlock
+from .fitblock import FitBlock
 from .dictblock import DictBlock
 from .printblock import PrintBlock
 from .csvinblock import CSVInBlock
