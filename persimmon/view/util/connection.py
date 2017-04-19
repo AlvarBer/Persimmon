@@ -50,6 +50,7 @@ class Connection(Widget):
                                 width=1.5)
             self.end.fbind('pos', self.circle_bind)
             self.end.fbind('pos', self.line_bind)
+        self.warned = False
 
     def finish_connection(self, pin):
         """ This functions finishes a connection that has only start or end and
@@ -66,13 +67,31 @@ class Connection(Widget):
                                         size=self.start.size)
             self.rebind_pin(self.start, pin)
 
-    def follow_cursor(self, newpos):
+    def follow_cursor(self, newpos, blackboard):
         """ This functions makes sure the current end being dragged follows the
             cursor """
         if self.forward:
             self.lin.points = self.lin.points[:2] + [*newpos]
+            fixed_edge = self.start
+            moving_edge = self.end
         else:
             self.lin.points = [*newpos] + self.lin.points[2:]
+            fixed_edge = self.end
+            moving_edge = self.start
+        if self.warned:
+            if (blackboard.in_block(*newpos) and
+                blackboard.in_block(*newpos).in_pin(*newpos) and not
+                fixed_edge.typesafe(blackboard.in_block(*newpos).in_pin(*newpos))):
+                    return
+            self.unwarn()
+        else:
+            if (blackboard.in_block(*newpos) and
+                blackboard.in_block(*newpos).in_pin(*newpos) and (not
+                fixed_edge.typesafe(blackboard.in_block(*newpos).in_pin(*newpos) or
+                fixed_edge.block == blackboard.in_block(*newpos)))):
+                self.warn()
+
+
 
     def delete_connection(self, parent):
         """ This function deletes both ends (if they exist) and the connection
@@ -142,13 +161,17 @@ class Connection(Widget):
         else:
             print('No line associated with pin')
 
-    """
-    def warning(self):
-        if self.color != (0.5, 0.5, 0.5):
-            print('Redrawing')
-            self.canvas.before.remove(self.lin)
-            with self.canvas.before:
-                Color(1, 0, 0)
-                self.lin = Line(points=self.lin.points, width=1.1)
+    def warn(self):
+        self.warned = True
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(1, 0, 0)
+            self.lin = Line(points=self.lin.points, width=2)
 
-    """
+    def unwarn(self):
+        self.warned = False
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(*self.color)
+            self.lin = Line(points=self.lin.points, width=2)
+

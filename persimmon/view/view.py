@@ -71,9 +71,7 @@ class BlackBoard(ScatterLayout):
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
-            touch.ud['cur_line'].follow_cursor(touch.pos)
-            if self.in_block(*touch.pos):
-                pass
+            touch.ud['cur_line'].follow_cursor(touch.pos, self)
             return True
         else:
             return super().on_touch_move(touch)
