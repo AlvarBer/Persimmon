@@ -37,7 +37,8 @@ class Connection(Widget):
                 Color(*self.color)
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
-                self.lin = Line(points=self.start.center + self.start.center)
+                self.lin = Line(points=self.start.center + self.start.center,
+                                width=1.5)
             self.start.fbind('pos', self.circle_bind)
             self.start.fbind('pos', self.line_bind)
         else:
@@ -45,7 +46,8 @@ class Connection(Widget):
             with self.canvas.before:
                 Color(*self.color)
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
-                self.lin = Line(points=self.end.center + self.end.center)
+                self.lin = Line(points=self.end.center + self.end.center,
+                                width=1.5)
             self.end.fbind('pos', self.circle_bind)
             self.end.fbind('pos', self.line_bind)
 
