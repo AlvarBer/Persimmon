@@ -6,7 +6,6 @@ class OutputPin(Pin):
     destinations = ListProperty()
 
     def on_touch_down(self, touch):
-        #print('on touch down')
         if self.collide_point(*touch.pos) and touch.button == 'left':
             print('Creating connection')
             touch.ud['cur_line'] = Connection(end=self,
@@ -22,7 +21,7 @@ class OutputPin(Pin):
         #print('on touch up')
         if ('cur_line' in touch.ud.keys() and touch.button == 'left' and
                 self.collide_point(*touch.pos)):
-            if self.typesafe(touch.ud['cur_line'].start):
+            if touch.ud['cur_line'].start and self.typesafe(touch.ud['cur_line'].start):
                 print('Establishing connection')
                 touch.ud['cur_line'].finish_connection(self)
                 self.destinations.append(touch.ud['cur_line'])
@@ -37,3 +36,5 @@ class OutputPin(Pin):
         if connection in self.destinations:
             self.destinations.remove(connection)
         
+    def typesafe(self, other):
+        return super().typesafe(other)

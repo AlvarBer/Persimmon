@@ -30,10 +30,8 @@ class Pin(CircularButton):
         pass
 
     def typesafe(self, other):
-        if other == None: # Really should not happen...
-            return False
-        elif ((self._type == Type.ANY or other._type == Type.ANY) and
-                self.block != other.block):
+        if ((self._type == Type.ANY or other._type == Type.ANY) and
+                self.block != other.block and self.__class__ != other.__class__):
             return True  # Anything is possible with ANY
         else:
-            return self._type == other._type and self.block != other.block
+            return self._type == other._type and self.block != other.block and self.__class__ != other.__class__

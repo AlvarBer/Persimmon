@@ -69,29 +69,22 @@ class Connection(Widget):
 
     def follow_cursor(self, newpos, blackboard):
         """ This functions makes sure the current end being dragged follows the
-            cursor """
+            cursor. It also checks for type safety and changes the line color
+            if needed."""
         if self.forward:
             self.lin.points = self.lin.points[:2] + [*newpos]
             fixed_edge = self.start
-            moving_edge = self.end
         else:
             self.lin.points = [*newpos] + self.lin.points[2:]
             fixed_edge = self.end
-            moving_edge = self.start
-        if self.warned:
-            if (blackboard.in_block(*newpos) and
-                blackboard.in_block(*newpos).in_pin(*newpos) and not
-                fixed_edge.typesafe(blackboard.in_block(*newpos).in_pin(*newpos))):
-                    return
+        if (self.warned and (not blackboard.in_block(*newpos) or
+            not blackboard.in_block(*newpos).in_pin(*newpos) or
+            blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
             self.unwarn()
-        else:
-            if (blackboard.in_block(*newpos) and
-                blackboard.in_block(*newpos).in_pin(*newpos) and (not
-                fixed_edge.typesafe(blackboard.in_block(*newpos).in_pin(*newpos) or
-                fixed_edge.block == blackboard.in_block(*newpos)))):
-                self.warn()
-
-
+        elif (blackboard.in_block(*newpos) and
+              blackboard.in_block(*newpos).in_pin(*newpos) and
+              (not blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
+            self.warn()
 
     def delete_connection(self, parent):
         """ This function deletes both ends (if they exist) and the connection

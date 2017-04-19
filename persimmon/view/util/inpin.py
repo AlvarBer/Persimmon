@@ -20,7 +20,7 @@ class InputPin(Pin):
     def on_touch_up(self, touch):
         if ('cur_line' in touch.ud.keys() and touch.button == 'left' and
                 self.collide_point(*touch.pos)):
-            if self.typesafe(touch.ud['cur_line'].end):
+            if touch.ud['cur_line'].end and self.typesafe(touch.ud['cur_line'].end):
                 print('Establishing connection')
                 touch.ud['cur_line'].finish_connection(self)
                 self.origin = touch.ud['cur_line']
