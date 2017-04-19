@@ -17,7 +17,7 @@ class Block(DragBehavior, FloatLayout):
     output_pins = ListProperty()
     t = ObjectProperty(Type)
     b = ObjectProperty(BlockType)
-
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if self.inputs:
@@ -28,8 +28,16 @@ class Block(DragBehavior, FloatLayout):
             for pin in self.outputs.children:
                 self.output_pins.append(pin)
                 pin.block = self
-        self.tainted = False
         self.tainted_msg = ''
+        self._tainted = False
+        
+    @property
+    def tainted(self):
+        return self._tainted
+    
+    @tainted.setter
+    def tainted(self, value):
+        self._tainted = value
 
     def in_pin(self, x, y):
         for pin in self.input_pins + self.output_pins:
