@@ -127,6 +127,7 @@ class BlackBoard(ScatterLayout):
                         string += '{} <- {}\n'.format(block.block_label,
                                                       destination.start.block.block_label)
 
+        self.warning.title = 'Block Relations'
         self.warning.message = string
         self.warning.open()
 
@@ -169,6 +170,7 @@ class BlackBoard(ScatterLayout):
     def process(self):
         tainted, tainted_msg = self.check_taint()
         if tainted:
+            self.warning.title = 'Warning'
             self.warning.message = tainted_msg
             self.warning.open()
         else:
