@@ -10,10 +10,13 @@ Builder.load_file('view/blocks/dictblock.kv')
 class DictBlock(Block):
     dict_out = ObjectProperty()
     string = StringProperty()
+    tinput = ObjectProperty()
 
     def function(self):
         try:
-            self.dict_out.val = eval(self.string)
+            string = eval(self.tinput.text)
+            if type(string) == dict:
+                self.dict_out.val = string
         except Exception:
             self.dict_out.val = {}
 

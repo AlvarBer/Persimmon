@@ -177,12 +177,12 @@ results from the output pins.
 This goes against the previously stated "pins represent relationships, not
 state", in fact an alternative implementation was created in which the
 function returned a tuple of results, and it's the compiler job to now
-associate the output pins to each of the elements on the tuple. This was done
-using the same current mechanism, saving into a dictionary, the difference
-being that while currently the values appear on the output pins and have to be
-moved into the dictionary (or otherwise a reference to the pin itself must be
-kept on the dictionary) on this case the values were fed directly to the
-algorithm.
+associate the output pins to each of the elements on the tuple.
+This was done using the same current mechanism, saving into a dictionary, the
+difference being that while currently the values appear on the output pins and
+have to be moved into the dictionary (or otherwise a reference to the pin
+itself must be kept on the dictionary) on this case the values were fed
+directly to the algorithm.
 However this proved limiting, as code became more complex since more checks have
 to be done, there was no obvious advantage and side-effects did not disappeared
 but merely were harder to do.

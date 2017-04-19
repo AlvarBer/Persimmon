@@ -3,7 +3,7 @@ from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
 
-from persimmon.view.util import Type
+from persimmon.view.util import Type, BlockType
 
 
 Builder.load_file('view/blocks/block.kv')
@@ -16,6 +16,7 @@ class Block(DragBehavior, FloatLayout):
     input_pins = ListProperty()
     output_pins = ListProperty()
     t = ObjectProperty(Type)
+    b = ObjectProperty(BlockType)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -56,3 +57,4 @@ class Block(DragBehavior, FloatLayout):
         else:
             result = super().on_touch_up(touch)
         return result
+

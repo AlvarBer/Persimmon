@@ -14,6 +14,5 @@ class Notification(Popup):
     
     def on_message(self, instance, value):
         if self.n_label:
-            print(self.n_label.size)
-            print(self.size)
+            pass
 

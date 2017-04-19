@@ -1,6 +1,6 @@
 <GridSearchBlock>:
 	block_label: 'Grid Search'
-	block_color: 0.5, 0.5, 0.5
+	block_color: root.b.MODEL_SELECTION.value
 	data_in: data_in
 	est_in: est_in
 	params_in: params_in
@@ -24,7 +24,7 @@
 			id: params_in
 			x: root.x + 5
 			y: root.y + 5
-			#color: 0, 0, 0
+			_type: root.t.STATE
 	Widget:
 		id: outputs
 		OutputPin:
