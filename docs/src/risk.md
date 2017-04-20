@@ -26,7 +26,7 @@ design of the project, particularly the interface.
 Prevention & Mitigation
 -----------------------
 Using [@boehm1991software] let's create a table of risks ordered by impact and
-risk factor, all risk on the table are probable.
+risk factor. Take into account all risks presented on the table are probable.
 
 | Risk Factor  |     Low Impact     |     Medium Impact    |    High Impact   |
 |:------------ |:------------------:|:--------------------:|:----------------:|

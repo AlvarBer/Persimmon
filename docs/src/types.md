@@ -7,9 +7,8 @@ the building of incorrect pipelines can be avoiding altogether.
 
 Gradual Typing
 --------------
-Python allows for gradual typing since
-[PEP 484](https://www.python.org/dev/peps/pep-0484/), meaning that function
-parameters can be specified and tools such as mypy will check for possible
+Python allows for gradual typing since 2014 [@pep484], meaning that function
+parameters can be specified and tools such as `mypy` will check for possible
 type errors, if some parameter or function type is not specified the tool
 will simply ignore the associated checks.
 
@@ -20,13 +19,13 @@ checking for dynamic block connections.
 
 Nevertheless this is a useful tool for improving the code quality, specially
 for the backend code, because it is much pure that the frontend.
-It is also an inspiration to look at Persimmon type system.
+It is also a reference for Persimmon type system.
 
 
 Write Time
 ----------
 On the previous section runtime type checking was mentioned, this is because
-on the python side the type checks have to be done at runtime due to blocks
+on the Python side the type checks have to be done at runtime due to blocks
 being spawned and connected dynamically.
 But from the visual language perspective the checks are done even before
 compile time (on the literature referred as write time).
@@ -94,4 +93,23 @@ matrices and almost any array type that implements `__get__` in a manner Numpy
 understands, but there is no actual interface that can be used to know which
 objects will run without crashing unless the code is executed.
 
-<!-- Explain the type safety as it is implemented -->
+![Type hierarchy](images/type_hierarchy.pdf)
+
+Because of this types had to be invented, sometimes they correspond to
+underlying duck typing based interfaces but sometimes they do not have a direct
+equivalent on Python.
+Types on Persimmon follow a simply tree structure, and checks whether a
+connection is safe on the notion of the types having a is-consistent-with
+relation, this is based on [@pep483].
+A is-consistent-with notion extends the more typically used is-subtype-of
+relation used in type theory, with $Any$ representing the notion of a type that
+is-consistent-with every type (meaning that it is not a subtype of other types
+but all types are consistent with any and vice versa).
+Persimmon also adds to this the notion that the blocks of the respective edges
+of a connection must be different, one of the pins must be an `InputPin` and
+the other an `OutputPin`, and the `InputPin` must have no connection already.
+
+This are all the rules used for checking if a connection is safe, it is a very
+primitive type system, with further improvements ranging with the ability to
+define arbitrary subtypes and even type classes.
+

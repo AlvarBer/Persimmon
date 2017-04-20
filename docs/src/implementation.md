@@ -1,13 +1,16 @@
 Implementation
 ==============
 
-The system is implemented in python, using the `Kivy` framework for the
-frontend and multiple scientific tools such as `Numpy`, `Scipy`, `Pandas` and
-most important `scikit-learn` for the backend.
+On this chapter the implementation of the system is detailed, explained what
+was done in each iteration.
+After the iterations Persimmon intermediate representation is explained.
+Finally some interesting technical problems along the solution are detailed.
 
 
 First Iteration
 ---------------
+![Implementation of the first interface](images/interface.png)
+
 For the first iteration the priority was to get a proof of concept in order to
 see where the difficulties can appear, with a few simple classifiers and
 cross-validation techniques. As such a button-based interface with very limited
@@ -26,10 +29,8 @@ regressors and clustering have some incompatibilities.
 
 Apart from the temporary interface the backend had to be built. Since the
 workflow was fixed the backend simply received the node as arguments and
-executed those, menaing the previously explained execution algorithm was not
+executed those, meaning the previously explained execution algorithm was not
 needed for this iteration.
-
-![Implementation of the first interface](images/interface.png)
 
 
 Second Iteration
@@ -52,6 +53,16 @@ particular function tools such as `Numba`[^Numba] or `Cython` could be used.
 
 Third Iteration
 ---------------
+For the third and final iteration the focus was on improving the visual aspect,
+adding helpful aids to the user experience.
+The main addition being adding a notification systems that gives feedback to
+the user about the outcome of their actions and the type systems that prevents
+creating malformed pipelines.
+Other minor improvements to the system were the addition of a warning when
+the intended connection is not possible, by changing the color line to red, and
+a warning showing up when a block has only some of their inputs connected.
+
+![Third iteration interface showing a warning](images/iter3.png)
 
 
 Model View Controller
@@ -117,7 +128,8 @@ This two cases can be handled by different classes, pin on the first case and
 connection for the last.
 Moving and finishing the connection use the same code for both.
 
-<!-- Add connection diagram -->
+![Connections between elements](images/logical.pdf)
+
 Without getting too deep into implementation details, ends cannot just be
 removed, there are visual binds that have to be unbinded and removed from the
 canvas, and when a connection is destroyed (this only happens inside
@@ -128,8 +140,6 @@ connections of the pins themselves.
 For this reason connection has high-level functions that do the unbind, rebind
 and deletion of ends, as long as the necessary elements are passed (dependency
 injection pattern).
-
-![Connections between elements](images/logical.pdf)
 
 
 Intermediate Representation
@@ -187,11 +197,29 @@ However this proved limiting, as code became more complex since more checks have
 to be done, there was no obvious advantage and side-effects did not disappeared
 but merely were harder to do.
 
-<!-- Talk about function composition -->
+With this kind of language it is possible to create arbitrary functions as a
+composition of functions, all the inputs are either omitted if the are
+connected through the blocks, else they are promoted to the output of the new
+function. This works as long as side effects blocks do not depend on each
+other, this only happens when having both *"entry"* and *"exit"* blocks.
 
 Binary Distribution
 -------------------
-<!-- Talk about CI, PyInstaller, alternatives, etc -->
+The interpretative nature of Python does not make creating an executable binary
+easy, particularly `cPython` the standard implementation and reference provides
+no tooling to create an executable binary.
+
+For this task `PyInstaller` was chosen, the process of creating a binary is
+mostly automated, given a script it tries to read the imports and include them,
+finally it embeds a small interpreter to run this code.
+The problem with this approach is that Python allows for alternative ways of
+importing, it also breaks resource loading at execution time (since it has to
+create a temporary folder). This results in manually specifying hidden
+dependencies and non python files (on this case mostly `kv` files).
+
+Unfortunately this process has to be done on a windows system, and as such
+cannot be done on the CI[^CI] server, to see how Persimmon utilizes CI check
+the appendix on how this document was made.
 
 [^blackboard]: Blackboard is how the canvas where the blocks and connections
     are lay down.
@@ -202,3 +230,6 @@ Binary Distribution
 [^Map]: A Map is Haskell is called a dictionary in Python and Hashtable in other
     languages. It represents a data structure in which keys are used to
     retrieve values in a very efficient manner (on hashmap $\mathcal{O}(1)$).
+[^CI]: Continuous Integration is a term that refers to the idea of testing,
+    building, generating documentation and even deploying automatically through
+    a commit on the version control system.

@@ -38,6 +38,7 @@ Persimmon also uses pandas [@pandas] for input and output handling.
 Others papers related to the pitfalls of machine learning that proved useful
 when analyzing workflows were [@hughes1968mean], [@pitfalls].
 
+
 On Dataflow Programming
 -----------------------
 After reviewing dataflow seminal paper [@bell], and [@sousa2012dataflow] it was
@@ -112,8 +113,6 @@ unlike most ml that is written on either `R` or `Python` [@datasciencelang],
 and running custom code is very limited, as scrips are treated as black boxes.
 This in turns severely handicaps the extensibility of the given primitives in
 any meaningful way.
-
-![Weka Graphical User Interface](images/weka.jpeg)
 
 Weka [@weka] is a popular machine learning suite, written in `Java` and
 developed at the University of Waikato.

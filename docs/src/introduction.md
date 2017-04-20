@@ -40,7 +40,6 @@ In order to accomplish this the project tackles the following topics,
     This results in parallel programs by default, closer to the functional
     paradigm than imperative programming and the Von Neumann architecture, as
     mentioned in functional programming seminal paper [@backus1978can].
- <!-- Motherfucking backus had over 3000 citations -->
 
 * Visual Programming. The natural fit for a dataflow representation is a visual
     interface, as we can present the graph visually [@shu1988visual].
@@ -145,7 +144,25 @@ The project is not concerned with the following:
 
 Project Structure
 -----------------
-<!-- Do this when finished -->
+The project structure follows closely the development timeline of the system.
+Firstly the literature review is introduced.
+On the following chapter the project milestones are explained, including a
+gantt diagram.
+Following is the risk analysis table as well as the development methodology.
+
+The implementation chapter explains the iterative process on each of the
+iterations of the project, some interesting technical problems, and the
+immediate representation of Persimmon.
+
+After this the important concept of workflows is explained, and the interface
+design, including the sketches or the color palette.
+The type checking sections introduces a lot of theory from functional
+programming and type theory.
+The final section before the post-mortem explains the evaluation process and
+results.
+On the final post mortem sections the conclusions of the project are laid down,
+as well a recap of what went wrong, what went right, what was achieved, and
+the possible further improvements.
 
 [^skl]: Scikit-learn is a python library that aims to bring machine learning to
     a more general public, by providing a high-level API that allows the ease of
