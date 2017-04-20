@@ -12,7 +12,7 @@ class OutputPin(Pin):
                                               color=self.color)
             self.destinations.append(touch.ud['cur_line'])
             # Add to blackboard
-            self.block.parent.parent.add_widget(touch.ud['cur_line'])
+            self.block.parent.parent.parent.add_widget(touch.ud['cur_line'])
             return True
         else:
             return False

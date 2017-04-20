@@ -176,6 +176,7 @@ class BlackBoard(ScatterLayout):
         else:
             execute_graph(self.to_ir())
 
+    # TODO: Merge this check with block tainted property
     def check_taint(self):
         for block in self.blocks.children:
             if block.inputs:
