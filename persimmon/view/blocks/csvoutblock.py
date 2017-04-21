@@ -3,6 +3,8 @@ from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
+import numpy as np
+import pandas as pd
 
 
 Builder.load_file('view/blocks/csvoutblock.kv')
@@ -23,7 +25,9 @@ class CSVOutBlock(Block):
 
 
     def function(self):
-        self.in_1.val.to_csv(path_or_buf=self.path)
+        if type(self.in_1.val) == np.ndarray:
+            self.in_1.val = pd.DataFrame(self.in_1.val)
+        self.in_1.val.to_csv(path_or_buf=self.path, index=False)
 
     def on_path(self, instance, value):
         if value != '':
