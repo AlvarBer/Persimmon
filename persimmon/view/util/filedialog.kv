@@ -1,24 +1,25 @@
 <FileDialog>: # A file chooser dialog (Popup)
 	# This is the file selected by the user, this is what we care about
-	file_chosen: file_chooser.selection and file_chooser.selection[0] or ''
+	#file_chosen: file_chooser.selection and file_chooser.selection[0] or ''
+	file_chosen: tinput.text
 	load_button: load_button
 	file_chooser: file_chooser
 	tinput: tinput
+	#tinput: tinput
 	BoxLayout:
 		orientation: 'vertical'
 		FileChooserIconView:
 			id: file_chooser
 			on_selection: root.toggle_load_button(self.selection)
 			on_submit: root.dismiss()
-			on_entry_added: root.oea(*args)
-			on_subentry_to_entry: root.oste(*args)
+			on_entry_added: root.changed_dir(*args)
 		TextInput:
 			id: tinput
-			#text: root.file_chosen
+			text: root.file_chosen
 			size_hint_y: None
 			height: '30dp'
 			multiline: False
-			on_text_validate: root.toggle_load_button(None)
+			#on_text_validate: root.toggle_load_button(None)
 		BoxLayout:
 			orientation: 'horizontal'
 			size_hint_y: None

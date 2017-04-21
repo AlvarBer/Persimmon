@@ -10,7 +10,7 @@ Builder.load_file('view/util/filedialog.kv')
 class FileDialog(Popup):
     """File Dialogs is a popup that gets a file"""
     file_chooser = ObjectProperty()
-    tinput = ObjectProperty()
+    #tinput = ObjectProperty()
     load_button = ObjectProperty()
     file_chosen = StringProperty()
 
@@ -24,15 +24,15 @@ class FileDialog(Popup):
 
     def toggle_load_button(self, selection):
         if selection:
-            self.file_chosen = self.file_chooser.selection[0]
+            #self.file_chosen = self.file_chooser.selection[0]
             self.tinput.text = self.file_chooser.selection[0]
             self.load_button.disabled = False
         elif self.tinput.text:
-            self.file_chosen = self.tinput.text
             self.load_button.disabled = False
         else:
             self.load_button.disabled = True
     
-    def oea(self, file_chooser, entry, _):
+    def changed_dir(self, file_chooser, entry, _):
+        #self.file_chosen = file_chooser.path
         self.tinput.text = file_chooser.path
 
