@@ -25,8 +25,7 @@ from persimmon.view.util import (CircularButton, InputPin, OutputPin,
                                  Notification)
 
 from collections import deque
-from persimmon.backend import (IR, InputEntry, OutputEntry, BlockEntry,
-                               execute_graph)
+import persimmon.backend as backend
 from kivy.lang import Builder
 
 
@@ -49,24 +48,7 @@ class BlackBoard(ScatterLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.warning = Notification(title='Warning')
-
-    """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        csv_in = CSVInBlock(pos=(15, 400))
-        self.blocks.add_widget(csv_in)
-        svm = SVMBlock(pos=(30, 310))
-        self.blocks.add_widget(svm)
-        rf = RandomForestBlock(pos=(30, 215))
-        self.blocks.add_widget(rf)
-        ten_fold = TenFoldBlock(pos=(15, 125))
-        self.blocks.add_widget(ten_fold)
-        cross_val = CrossValidationBlock(pos=(300, 250))
-        self.blocks.add_widget(cross_val)
-        csv_out = CSVOutBlock(pos=(575, 250))
-        self.blocks.add_widget(csv_out)
-    """
+        self.warning = Notification(title='')
 
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
@@ -140,17 +122,22 @@ class BlackBoard(ScatterLayout):
         for block in self.blocks.children:
             block_hash = id(block)
             block_inputs, block_outputs = [], []
+            avoid = False
             if block.inputs:
+                print('irring fit')
                 for pin in block.inputs.children:
+                    print('block fit has {} children'.format(len(block.inputs.children)))
                     pin_hash = id(pin)
                     block_inputs.append(pin_hash)
                     if pin.origin:
                         other = id(pin.origin.end)
                     else:
-                        other = None  # This means we are not connected
-                    ir_inputs[pin_hash] = InputEntry(origin=other, pin=pin,
-                                                     block=block_hash)
-            if block.outputs:
+                        avoid = True
+                        break  # This means we are not connected
+                    ir_inputs[pin_hash] = backend.InputEntry(origin=other,
+                                                             pin=pin,
+                                                             block=block_hash)
+            if block.outputs and not avoid:
                 for pin in block.outputs.children:
                     pin_hash = id(pin)
                     block_outputs.append(pin_hash)
@@ -158,14 +145,15 @@ class BlackBoard(ScatterLayout):
                     if pin.destinations:
                         for d in pin.destinations:
                             dest.append(id(d.start))
-                    ir_outputs[pin_hash] = OutputEntry(destinations=dest,
+                    ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
                                                        pin=pin,
                                                        block=block_hash)
-            ir_blocks[block_hash] = BlockEntry(inputs=block_inputs,
-                                               function=block.function,
-                                               outputs=block_outputs)
-
-        return IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
+            if not avoid:
+                ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
+                                                        function=block.function,
+                                                          outputs=block_outputs)
+        self.outputs_hash = ir_outputs
+        return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
     def process(self):
         tainted, tainted_msg = self.check_taint()
@@ -174,7 +162,7 @@ class BlackBoard(ScatterLayout):
             self.warning.message = tainted_msg
             self.warning.open()
         else:
-            execute_graph(self.to_ir())
+            backend.execute_graph(self.to_ir())
 
     # TODO: Merge this check with block tainted property
     def check_taint(self):
@@ -187,6 +175,15 @@ class BlackBoard(ScatterLayout):
             if block.tainted:
                 return True, block.tainted_msg
         return False, ''
+
+    def block_executed(self, block_hash):
+        block = list(self.outputs_hash.keys()).index(block_hash)
+        print(block)
+        if block.outputs:
+            for out_pin in block.outputs.children:
+                for connection in block.outputs.destinations:
+                    connection.pulse
+                    Clock.schedule_once(lambda _: connection.stop_pulse, 5)
 
 if __name__ == '__main__':
     ViewApp().run()

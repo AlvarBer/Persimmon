@@ -6,9 +6,6 @@ from collections import deque, namedtuple
 from enum import Enum
 
 
-class Test(Enum):
-    NIL = 0
-
 # backend types
 InputEntry = namedtuple('InputEntry', ['origin', 'pin', 'block'])
 BlockEntry = namedtuple('BlockEntry', ['inputs', 'function', 'outputs'])
@@ -26,25 +23,22 @@ def execute_graph(ir: IR):
     print('Execution done!')
 
 def explore_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}) -> (deque, {int: OutputEntry}):
-    #print('Executing block {}'.format(current))
     current_block = ir.blocks[current]
-    for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
-        origin = in_pin.origin
-        if origin:
+    try:
+        for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
+            origin = in_pin.origin
             if origin not in seen:
                 dependency = ir.outputs[origin].block
                 if dependency in queue:
                     queue.remove(dependency)
                 queue, seen = explore_graph(dependency, ir, queue, seen)
-            if seen[origin] is not Test.NIL:
-                in_pin.pin.val = seen[origin]
-                continue
-        seen[current] = None
-        seen = taint_block(current_block, seen)
-        return queue, seen
+            in_pin.pin.val = seen[origin]
+    except KeyError as e:
+        print('current block inputs {} | all inputs {}'.format(current_block.inputs,
+                                                               list(ir.inputs.keys())))
+        raise
 
     current_block.function()
-    seen[current] = Test.NIL
 
     for out_id in current_block.outputs:
         seen[out_id] = ir.outputs[out_id].pin.val
@@ -53,8 +47,35 @@ def explore_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}) 
                 queue.append(future_block)
     return queue, seen
 
-def taint_block(block, seen):
-    for out_id in block.outputs:
-        seen[out_id] = Test.NIL  # Tainted
-    return seen
+def execute_pulse_graph(ir: IR, blackboard):
+    queue = deque()
+    seen = {}  # Saves seen output pins and blocks
+    for block in ir.blocks:
+        if block not in seen:
+            queue.append(block)
+            while queue:
+                queque, seen = explore_pulse_graph(queue.popleft(), ir, queue,
+                                                   seen, blackboard)
+
+
+def explore_pulse_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}, blackboard):
+    current_block = ir.blocks[current]
+    for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
+        origin = in_pin.origin
+        if origin not in seen:
+            dependency = ir.outputs[origin].block
+            if dependency in queue:
+                queue.remove(dependency)
+            queue, seen = explore_pulse_graph(dependency, ir, queue, seen, blackboard)
+        in_pin.pin.val = seen[origin]
+
+    current_block.function()
+    blackboard.block_executed(current)
+
+    for out_id in current_block.outputs:
+        seen[out_id] = ir.outputs[out_id].pin.val
+        for future_block in [ir.inputs[x].block for x in ir.outputs[out_id].destinations]:
+            if future_block not in queue:
+                queue.append(future_block)
+    return queue, seen
 
