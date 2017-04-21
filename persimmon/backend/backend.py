@@ -24,19 +24,14 @@ def execute_graph(ir: IR):
 
 def explore_graph(current: int, ir: IR, queue: deque, seen: {int: OutputEntry}) -> (deque, {int: OutputEntry}):
     current_block = ir.blocks[current]
-    try:
-        for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
-            origin = in_pin.origin
-            if origin not in seen:
-                dependency = ir.outputs[origin].block
-                if dependency in queue:
-                    queue.remove(dependency)
-                queue, seen = explore_graph(dependency, ir, queue, seen)
-            in_pin.pin.val = seen[origin]
-    except KeyError as e:
-        print('current block inputs {} | all inputs {}'.format(current_block.inputs,
-                                                               list(ir.inputs.keys())))
-        raise
+    for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
+        origin = in_pin.origin
+        if origin not in seen:
+            dependency = ir.outputs[origin].block
+            if dependency in queue:
+                queue.remove(dependency)
+            queue, seen = explore_graph(dependency, ir, queue, seen)
+        in_pin.pin.val = seen[origin]
 
     current_block.function()
 

@@ -17,10 +17,8 @@ from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier
 from kivy.core.window import Window
 from functools import partial
 
-from persimmon.view.blocks import (SVMBlock, TenFoldBlock, CSVInBlock,
-                                   CSVOutBlock, CrossValidationBlock,
-                                   RandomForestBlock, GridSearchBlock,
-                                   PredictBlock)
+#import persimmon.view.blocks as blocks
+from persimmon.view import blocks
 from persimmon.view.util import (CircularButton, InputPin, OutputPin,
                                  Notification)
 
@@ -124,9 +122,7 @@ class BlackBoard(ScatterLayout):
             block_inputs, block_outputs = [], []
             avoid = False
             if block.inputs:
-                print('irring fit')
                 for pin in block.inputs.children:
-                    print('block fit has {} children'.format(len(block.inputs.children)))
                     pin_hash = id(pin)
                     block_inputs.append(pin_hash)
                     if pin.origin:
@@ -184,6 +180,15 @@ class BlackBoard(ScatterLayout):
                 for connection in block.outputs.destinations:
                     connection.pulse
                     Clock.schedule_once(lambda _: connection.stop_pulse, 5)
+
+    def spawnprint(self):
+        if not any(map(lambda b: b.__class__ == blocks.PrintBlock,
+                       self.blocks.children)):
+            self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
+        else:
+            self.warning.title = 'Warning'
+            self.warning.message = 'Only one print block allowed!'
+            self.warning.open()
 
 if __name__ == '__main__':
     ViewApp().run()

@@ -65,7 +65,7 @@ FloatLayout:
 					on_release: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
 				Button:
 					text: 'Print'
-					on_release: blackboard.blocks.add_widget(b.PrintBlock(pos=(300, 250)))
+					on_release: blackboard.spawnprint()
 		TabbedPanelItem:
 			text: 'Classificators'
 			BoxLayout:
