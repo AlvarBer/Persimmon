@@ -17,7 +17,6 @@ from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier
 from kivy.core.window import Window
 from functools import partial
 
-#import persimmon.view.blocks as blocks
 from persimmon.view import blocks
 from persimmon.view.util import (CircularButton, InputPin, OutputPin,
                                  Notification)
@@ -42,11 +41,10 @@ class ViewApp(App):
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
-    warning = ObjectProperty()
+    popup = ObjectProperty(Notification(title=''))
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.warning = Notification(title='')
 
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
@@ -107,9 +105,9 @@ class BlackBoard(ScatterLayout):
                         string += '{} <- {}\n'.format(block.block_label,
                                                       destination.start.block.block_label)
 
-        self.warning.title = 'Block Relations'
-        self.warning.message = string
-        self.warning.open()
+        self.popup.title = 'Block Relations'
+        self.popup.message = string
+        self.popup.open()
 
     def to_ir(self):
         """ Transforms the relations between blocks into an intermediate
@@ -154,9 +152,9 @@ class BlackBoard(ScatterLayout):
     def process(self):
         tainted, tainted_msg = self.check_taint()
         if tainted:
-            self.warning.title = 'Warning'
-            self.warning.message = tainted_msg
-            self.warning.open()
+            self.popup.title = 'Warning'
+            self.popup.message = tainted_msg
+            self.popup.open()
         else:
             backend.execute_graph(self.to_ir())
 
@@ -186,9 +184,9 @@ class BlackBoard(ScatterLayout):
                        self.blocks.children)):
             self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
         else:
-            self.warning.title = 'Warning'
-            self.warning.message = 'Only one print block allowed!'
-            self.warning.open()
+            self.popup.title = 'Warning'
+            self.popup.message = 'Only one print block allowed!'
+            self.popup.open()
 
 if __name__ == '__main__':
     ViewApp().run()

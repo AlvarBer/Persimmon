@@ -34,18 +34,6 @@ FloatLayout:
 		size: '100dp', '100dp'
 		pos: 300, 0
 		on_release: blackboard.see_ir()
-	Button:
-		text: 'Pulsate'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 400, 0
-		on_release: blackboard.content.children[0].pulse()
-	Button:
-		text: 'Stop pulse'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 500, 0
-		on_release: blackboard.content.children[0].stop_pulse()
 	TabbedPanel:
 		pos_hint: {'top': 1}
 		size_hint_y: None

@@ -16,8 +16,7 @@ class GridSearchBlock(Block):
     score_out = ObjectProperty()
 
     def function(self):
-        results = GridSearchCV(self.est_in.val, self.params_in.val,
-                               n_jobs=-1)
+        results = GridSearchCV(self.est_in.val, self.params_in.val)
         results.fit(self.data_in.val.iloc[:, :-1],
                     self.data_in.val.iloc[:, -1])
         self.est_out.val = results.best_estimator_

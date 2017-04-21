@@ -11,6 +11,6 @@ class PrintBlock(Block):
     in_1 = ObjectProperty()
 
     def function(self):
-        self.parent.parent.parent.warning.title = 'Print results'
-        self.parent.parent.parent.warning.message = str(self.in_1.val)
-        self.parent.parent.parent.warning.open()
+        self.parent.parent.parent.popup.title = 'Print results'
+        self.parent.parent.parent.popup.message = str(self.in_1.val)
+        self.parent.parent.parent.popup.open()

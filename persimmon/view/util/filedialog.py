@@ -6,6 +6,7 @@ import kivy.uix.filechooser
 
 Builder.load_file('view/util/filedialog.kv')
 
+# TODO: firx for write csv
 class FileDialog(Popup):
     """File Dialogs is a popup that gets a file"""
     file_chooser = ObjectProperty()
