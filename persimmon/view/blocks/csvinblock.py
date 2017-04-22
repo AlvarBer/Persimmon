@@ -27,8 +27,7 @@ class CSVInBlock(Block):
         self.out_1.val = pd.read_csv(self.file_chosen, header=0)
 
     def on_file_chosen(self, instance, value):
-        if value != '':
+        if value.endswith('.csv'):
             self.tainted = False
         else:
             self.tainted = True
-

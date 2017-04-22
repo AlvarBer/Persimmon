@@ -7,28 +7,27 @@ BlockEntry = namedtuple('BlockEntry', ['inputs', 'function', 'outputs'])
 OutputEntry = namedtuple('OutputEntry', ['destinations', 'pin', 'block'])
 IR = namedtuple('IR', ['blocks', 'inputs', 'outputs'])
 
-def execute_graph(ir: IR):
-    queue = deque()
-    seen = {}  # Saves seen output pins and blocks
-    unexplored = set(ir.blocks.keys())
+def execute_graph(ir: IR, blackboard):
+    unexplored = set(ir.blocks.keys())  # All blocks are unexplored at start
+    seen = {}  # All output pins along their respectives values
     while unexplored:
-        unexplored, seen = explore_graph(unexplored.pop(), ir, unexplored, seen) 
+        unexplored, seen = execute_block(unexplored.pop(), ir, blackboard, unexplored, seen)
+    print('Done executing')
 
-def explore_graph(current: int, ir: IR, unexplored: set, seen: {int: OutputEntry}) -> (deque, {int: OutputEntry}):
-    #print('executing block {}'.format(current))
+def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin
         if origin not in seen:
             dependency = ir.outputs[origin].block
             unexplored.remove(dependency)
-            unexplored, seen = explore_graph(dependency, ir, unexplored, seen)
+            unexplored, seen = execute_block(dependency, ir, blackboard, unexplored, seen)
         in_pin.pin.val = seen[origin]
 
     current_block.function()
+    blackboard.on_block_executed(current)
 
     for out_id in current_block.outputs:
         seen[out_id] = ir.outputs[out_id].pin.val
-    #print('Done executing {}'.format(current))
     return unexplored, seen
 

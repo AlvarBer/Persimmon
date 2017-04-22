@@ -30,7 +30,7 @@ class CSVOutBlock(Block):
         self.in_1.val.to_csv(path_or_buf=self.path, index=False)
 
     def on_path(self, instance, value):
-        if value != '':
+        if value.endswith('.csv'):
             self.tainted = False
         else:
             self.tainted = True

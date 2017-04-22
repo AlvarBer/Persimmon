@@ -24,6 +24,8 @@ from persimmon.view.util import (CircularButton, InputPin, OutputPin,
 from collections import deque
 import persimmon.backend as backend
 from kivy.lang import Builder
+from kivy.clock import Clock
+import threading
 
 
 Config.read('config.ini')
@@ -146,7 +148,7 @@ class BlackBoard(ScatterLayout):
                 ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
                                                         function=block.function,
                                                           outputs=block_outputs)
-        self.outputs_hash = ir_outputs
+        self.block_hashes = ir_blocks
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
     def process(self):
@@ -156,7 +158,8 @@ class BlackBoard(ScatterLayout):
             self.popup.message = tainted_msg
             self.popup.open()
         else:
-            backend.execute_graph(self.to_ir())
+            threading.Thread(target=backend.execute_graph,
+                             args=(self.to_ir(), self)).start()
 
     # TODO: Merge this check with block tainted property
     def check_taint(self):
@@ -170,14 +173,14 @@ class BlackBoard(ScatterLayout):
                 return True, block.tainted_msg
         return False, ''
 
-    def block_executed(self, block_hash):
-        block = list(self.outputs_hash.keys()).index(block_hash)
-        print(block)
+    def on_block_executed(self, block_hash):
+        block_idx = list(map(id, self.blocks.children)).index(block_hash)
+        block = self.blocks.children[block_idx]
         if block.outputs:
             for out_pin in block.outputs.children:
-                for connection in block.outputs.destinations:
-                    connection.pulse
-                    Clock.schedule_once(lambda _: connection.stop_pulse, 5)
+                for connection in out_pin.destinations:
+                    connection.pulse()
+                    Clock.schedule_once(lambda _: connection.stop_pulse(), 2)
 
     def spawnprint(self):
         if not any(map(lambda b: b.__class__ == blocks.PrintBlock,

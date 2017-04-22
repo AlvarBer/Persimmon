@@ -55,7 +55,7 @@ class Connection(Widget):
             self.end.fbind('pos', self.circle_bind)
             self.end.fbind('pos', self.line_bind)
         self.warned = False
-        self.it = False
+        self.it = None
 
     def finish_connection(self, pin):
         """ This functions finishes a connection that has only start or end and
@@ -201,10 +201,9 @@ class Connection(Widget):
             yield
             yield False
 
-
     def _width_gen(self):
         """ Infinity oscillating generator (between 2 and 4) """
         val = 0
         while True:
-            yield np.sin(val) + 3
-            val += pi / 10
+            yield 2 * np.sin(val) + 4
+            val += pi / 20
