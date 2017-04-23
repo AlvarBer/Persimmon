@@ -17,7 +17,7 @@ new python code, however they run outside the python execution (i.e. they run
 on the non-existent python compile time) and Persimmon needs run time type
 checking for dynamic block connections.
 
-Nevertheless this is a useful tool for improving the code quality, specially
+Nevertheless, this is a useful tool for improving the code quality, specially
 for the backend code, because it is much pure that the frontend.
 It is also a reference for Persimmon type system.
 
@@ -51,18 +51,18 @@ they?
     functional programming in Python [@biancuzzi2009masterminds].
     On the other hand Persimmon is functional, as there is no asignment, nor
     statements, there is only functions.
-* Dynamic or Static. Static types refers to the notion of the language using
+* Dynamic or Static. Static types refer to the notion of the language using
     the type information to check for type safety on compilation time/before
     runtime. The only close thing Python has to this is type hinting, but
     it is still a relative young addition to the language, most of the
-    existings codebases have not been annotated yet, and the community debates
-    whether it is necesary or not.
+    existing codebases have not been annotated yet, and the community debates
+    whether it is necessary or not.
     Persimmon on the other hand checks the type safety of the relations on
     write time, meaning before execution.
     Dynamic types is the oposite concept, where type information is used at
     run time, this can be useful for concepts such as dynamic dispatch.
 * Strong or Weak. This refer to the notion of the language coercing the types
-    or certain expresions without the explicit command of the programmer.
+    or certain expressions without the explicit command of the programmer.
     On some languages this is done only where the type conversion is always
     safe (most common example is converting an integer to a float) and it is
     known as *upcasting*.
@@ -72,9 +72,9 @@ they?
     meaning that expressions and statements are evaluated as soon as
     encountered.
     It is also possible to have a non-strict evaluation, meaning that
-    expressions are evaluated on a latter time.
+    expressions are evaluated at a latter time.
     When exactly depends on the exact strategy, optimistic evaluation for
-    example tries to run statements early only if they are are fast, if they
+    example tries to run statements early only if they are fast, if they
     fail to complete before a certain time they are pushed to a later time
     [@ennals2003optimistic].
     In fact the extreme version of non-strictness is lazy evaluation, that
@@ -88,14 +88,14 @@ pipeline.
 However the actual types of the python code underlying functions and parameters
 do not support this, as duck typing makes interfaces not defined on explicit
 manners but on the methods used by the underlying code.
-For example most algorithms accept Numpy arrays, panda dataframes, Scipy sparse
+For example, most algorithms accept Numpy arrays, panda dataframes, Scipy sparse
 matrices and almost any array type that implements `__get__` in a manner Numpy
 understands, but there is no actual interface that can be used to know which
 objects will run without crashing unless the code is executed.
 
 ![Type hierarchy](images/type_hierarchy.pdf)
 
-Because of this types had to be invented, sometimes they correspond to
+Because of this, types had to be invented, sometimes they correspond to
 underlying duck typing based interfaces but sometimes they do not have a direct
 equivalent on Python.
 Types on Persimmon follow a simply tree structure, and checks whether a
@@ -109,7 +109,7 @@ Persimmon also adds to this the notion that the blocks of the respective edges
 of a connection must be different, one of the pins must be an `InputPin` and
 the other an `OutputPin`, and the `InputPin` must have no connection already.
 
-This are all the rules used for checking if a connection is safe, it is a very
+These are all the rules used for checking if a connection is safe, it is a very
 primitive type system, with further improvements ranging with the ability to
 define arbitrary subtypes and even type classes.
 
@@ -136,18 +136,21 @@ data Outputs = Outputs {destinations :: [Id], block :: Id}
 data IR = IR {inputs :: Map Id Inputs, blocks :: Map Id Blocks,
               outputs :: Map Id Outputs}
 ~~~
+\begin{figure}
+\caption{IR definition on Haskell}
+\end{figure}
 
-As we can see on the Haskell definition the intermediation representation is
-just three Maps[^Map], one for blocks, one for input pins and one for output pins.
-But the maps do not contains pins themselves, merely unique hashes (Int on
+As we seen on figure 8.2 the intermediation representation is just three
+Maps[^Map], one for blocks, one for input pins and one for output pins.
+But the maps do not contain pins themselves, merely unique hashes (Int on
 this case).
 This reflects the fact that pins model only relationships, not state.
 The only non-hash value on `IR` are the blocks functions.
-This functions are indeed impure, but earlier on the literature review it was
-established that dataflow programming was mainly side-effect free, so why do
-they involve side effects?.
+These functions are indeed impure[^impure], but earlier on the literature
+review it was established that dataflow programming was mainly side-effect
+free, so why do they involve side effects[^side-effects]?.
 
-There are actually first two reasons, first on the actual python programs this
+There are two reasons, first on the actual python programs this
 types do not exist, at least not on an enforceable way, so when translating
 them to Haskell the `function` field represents the "worst case", that is to
 say only a few functions will actually end up producing side-effects.
@@ -159,19 +162,26 @@ results from the output pins.
 
 This goes against the previously stated "pins represent relationships, not
 state", in fact an alternative implementation was created in which the
-function returned a tuple of results, and it's the compiler job to now
+function returned a tuple of results, and it is the compiler job to now
 associate the output pins to each of the elements on the tuple.
 This was done using the same current mechanism, saving into a dictionary, the
 difference being that while currently the values appear on the output pins and
 have to be moved into the dictionary (or otherwise a reference to the pin
 itself must be kept on the dictionary) on this case the values were fed
 directly to the algorithm.
-However this proved limiting, as code became more complex since more checks have
-to be done, there was no obvious advantage and side-effects did not disappeared
-but merely were harder to do.
+However, this proved limiting, as code became more complex since more checks
+have to be done, there was no obvious advantage and side-effects did not
+disappeared but merely were harder to do.
 
 With this kind of language it is possible to create arbitrary functions as a
-composition of functions, all the inputs are either omitted if the are
+composition of functions, all the inputs are either omitted if they are
 connected through the blocks, else they are promoted to the output of the new
-function. This works as long as side effects blocks do not depend on each
-other, this only happens when having both *"entry"* and *"exit"* blocks.
+function.
+This works as long as side effects blocks do not depend on each other, this
+only happens when having both *"entry"* and *"exit"* blocks.
+
+
+[^impure]: The term purity here refers to the absence of side effects on a
+    function, so a impure function is a function that performs side effects,
+[^side-effects]: Value manipulations other than the arguments passed and the
+    returned value.

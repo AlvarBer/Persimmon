@@ -12,12 +12,12 @@ Description
 Data Science has seen exponential growth in the market on recent years, with
 some predictions stating that one million data scientists will be needed by
 2018 [@onemillion].
-Bubble or not data scientists find themselves on a golden age, for the Harvard
-Business Review it is the sexiest job of the 21st century [@sexy].
+Data scientists find themselves on a golden age, for the Harvard Business
+Review it is the sexiest job of the 21st century [@sexy].
 Despite all the hype, there is a shortage of skilled data scientists, the field
 is inherently multidisciplinary, as coding, statistics and domain knowledge are
 required, making the path to mastery long and complex, leading to the so
-called Unicorn hunts [@unicorn, @hunt].
+called Unicorn hunts [@unicorn] and [@hunt].
 
 Tools such as scikit-learn[^skl], Weka or Tableau provide a very high
 level access to some of the required tools data scientists require, easing the

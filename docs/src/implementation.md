@@ -4,7 +4,7 @@ Implementation
 On this chapter the implementation of the system is detailed, explained what
 was done in each iteration.
 After the iterations Persimmon intermediate representation is explained.
-Finally some of the most complex technical problems along their respective
+Finally, some of the most complex technical problems along their respective
 solutions are detailed.
 
 
@@ -12,7 +12,7 @@ First Iteration
 ---------------
 ![Implementation of the first interface](images/interface.png)
 
-For the first iteration the priority was to get a proof of concept in order to
+For the first iteration, the priority was to get a proof of concept in order to
 see where the difficulties can appear, with a few simple classifiers and
 cross-validation techniques. As such a button-based interface with very limited
 workflow creation was chosen.
@@ -25,8 +25,8 @@ Trees, but gives good results in wide variety of problems.
 All these classifiers have few parameters on their respective sklearn
 implementations, and for this prototype the interface did not allow modifying
 any of them, as the it would have cluttered and it was not a necessary feature.
-Also all of them are classifiers, as it simplifies the interface, since
-regressors and clustering have some incompatibilities.
+Also, all of them are classifiers, as it simplifies the interface, since
+regression and clustering have some incompatibilities.
 
 Apart from the temporary interface the backend had to be built. Since the
 workflow was fixed the backend simply received the node as arguments and
@@ -36,7 +36,7 @@ needed for this iteration.
 
 Second Iteration
 ----------------
-For the second interface the drag and drop feel was the main priority.
+For the second iteration the drag and drop feel was the main priority.
 As such after developing the tab panel draggable boxes were developed, these
 boxes needed to be connected through pins.
 The logic behind the pins and the blocks is quite heavy, as there is a tight
@@ -54,7 +54,7 @@ particular function tools such as `Numba`[^Numba] or `Cython` could be used.
 
 Third Iteration
 ---------------
-For the third and final iteration the focus was on improving the visual aspect,
+For the third and final iteration, the focus was on improving the visual aspect,
 adding helpful aids to the user experience.
 The main addition being adding a notification systems that gives feedback to
 the user about the outcome of their actions and the type systems that prevents
@@ -69,7 +69,7 @@ a warning showing up when a block has only some of their inputs connected.
 Model View Controller
 ---------------------
 Since the beginning of development separation of logic and presentation has
-been a priority. For this matter the Model View Controller[^MVC] pattern has
+been a priority. For this reason, the Model View Controller[^MVC] pattern has
 been applied, separating Model (represented by the subpackage backend), View
 (represented by the `.py` files on view subpackage) and Controller
 (corresponding to the `.kv` files on view subpackage).
@@ -79,7 +79,7 @@ the current kivy framework for another one by just changed the view, no
 modifications to the backend needed.
 
 In order to avoid repetition extensive use of classes coupled with reusable
-custom kivy Widgets was used. This for example meant that each individual pin
+custom kivy Widgets were used. This for example meant that each individual pin
 on each block is a class, this proved useful for defining matching pins in
 different blocks (like when connection a pin that sends data to a pin that
 receives it).
@@ -89,7 +89,7 @@ For more information about internal package distribution check appendix A.
 
 Making a Connection
 -------------------
-One of the most complex part of the system is starting, reconnecting and
+One of the most complex parts of the system is starting, reconnecting and
 deleting a connection between blocks, it involves several actors, asynchronous
 callbacks and a very strong coupling between all elements.
 
@@ -99,7 +99,7 @@ In order to understand how connections are made it is necessary to understand
 how `Kivy` handles input.
 At surface level `Kivy` follows the traditional event-based input management,
 with the event propagating downwards from the root.
-However while traditionally inputs events are only passed down to components
+However, while traditionally inputs events are only passed down to components
 that are on the event position `Kivy` passes the events to almost all children
 by default, this is done because in phones (one of `Kivy` targets is Android)
 gestures tend to start outside the actual widget they intend to affect.
@@ -109,7 +109,7 @@ when a key is is pressed, `on_touch_move` that is notified when the touch is
 moved, i.e. a finger moves across the screen, or on this cases when the mouse
 moves, and `on_touch_up` that is fired when the touch is released.
 
-Lets represent the possible actions as use cases, the outer \* represents
+Let's represent the possible actions as use cases, the outer \* represents
 `on_touch_down`, - represents `on_touch_move`, and the inner \* `on_touch_up`:
 
 * (On pin) Start a connection.
@@ -123,9 +123,9 @@ Logic is split in two big cases, creating a connection and modifying an
 existing one.
 Creating a connection involves creating one end of the connection, both
 visually and logically and preparing the line that will follow the cursor.
-On the other hand modifying a connection means removing the end that is being
+On the other hand, modifying a connection means removing the end that is being
 touched.
-This two cases can be handled by different classes, pin on the first case and
+These two cases can be handled by different classes, pin on the first case and
 connection for the last.
 Moving and finishing the connection use the same code for both.
 
@@ -138,13 +138,14 @@ canvas, and when a connection is destroyed (this only happens inside
 depending if the connection is destroyed because the pin violates type safety
 or there is no pin under the cursor respectively) it has to unbind the logical
 connections of the pins themselves.
-For this reason connection has high-level functions that do the unbind, rebind
+For this reason, connection has high-level functions that do the unbind, rebind
 and deletion of ends, as long as the necessary elements are passed (dependency
 injection pattern).
 
 This is the reconnecting logic, notice how the reconnecting is *forward* or
 *backwards* depending on which edge the touch has happened, of course if neither
 has been touched the touch event is not handled.
+
 
 ~~~python
 def on_touch_down(self, touch):
@@ -169,6 +170,9 @@ def on_touch_down(self, touch):
     else:
         return False
 ~~~
+\begin{figure}
+\caption{Connection modification handling}
+\end{figure}
 
 Visualizing the Data Flow
 -------------------------
@@ -186,7 +190,7 @@ But the frontend does not receive the block, only the hash, since that is all
 the backend has, and it has to compare with all block hashes to find the actual
 block.
 
-After this the backend has to make the outgoing connections of that block
+After this, the backend has to make the outgoing connections of that block
 pulse, meaning for example changing the value of the width of the line between
 certain values, a function that works well for this is the sin function.
 The tricky part is that each time the function is called it has to remember the
@@ -198,7 +202,7 @@ generator (also known as semi-coroutines).
 But what happens when coroutine needs to be stopped from being called? Kivy
 has a mechanism where if the scheduled function returns `False` it will stop
 calling, by default our coroutine does not return any meaningful value, but
-we can put a final `yield False` that will stop the calls.
+it is possible to yield a final `False` that will stop the calls.
 But how is that yield triggered? The proper solution solution is using
 a full coroutine (either a generator-based one of the newer asyncio ones), but
 then concurrency issues appears, such that since the coroutine is being called
@@ -256,9 +260,9 @@ importing, it also breaks resource loading at execution time (since it has to
 create a temporary folder). This results in manually specifying hidden
 dependencies and non python files (on this case mostly `kv` files).
 
-Unfortunately this process has to be done on a windows system, and as such
+Unfortunately, this process has to be done on a windows system, and as such
 cannot be done on the CI[^CI] server, to see how Persimmon utilizes CI check
-the appendix on how this document was made.
+the appendix B.
 
 
 [^blackboard]: Blackboard is where the blocks and connections reside.

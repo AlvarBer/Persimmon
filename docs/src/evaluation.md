@@ -19,9 +19,9 @@ Mining and Machine Learning is saved, as well as any additional feedback about
 the system.
 
 
-Proposed tasks
+Proposed Tasks
 --------------
-The evaluation is composed by three different closed tasks.
+The evaluation consists of by three different closed tasks.
 The task are defined as to gradually introduce more complex concepts, following
 the seen workflows on the workflow chapter and also being introduced to the
 concepts of reconnecting and complex block that require more actions than just
@@ -32,7 +32,7 @@ connecting.
     terms. Using the iris dataset they perform a cross validation evaluation
     of their chosen classificator.
 * Second task is modifying the previous workflow to create a more complex
-    worflow thatfits and predicts using an estimators and two sources of files.
+    worflow thati fits and predicts using an estimator and two sources of files.
     It is only slightly more complex than the previous one, but it introduces
     the concept of re-cabling to the participants.
 * Third task and final task. This one involves adding hyper-parameter tunning,

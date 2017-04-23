@@ -1,7 +1,7 @@
 Interface Design
 ================
 
-The main way users interact with the system is trough the visual interface, and
+The main way users interact with the system is through the visual interface, and
 as such is very important that all the information and operations available are
 easily accessible on an intuitive manner, removing the need for extensive
 training with the software.
@@ -10,9 +10,9 @@ Sketches
 --------
 ![Sketch of the first interface](images/sketch_1.png)
 
-On the first interface there was a focus on getting a prototype done as soon as
-possible.
-For this reason the interface had to be easy to implement and easy to use, with
+On the first interface, there was a focus on getting a prototype done as soon
+as possible.
+For this reason, the interface had to be easy to implement and easy to use, with
 the few navigations steps required to perform all possible actions as to allow
 for quick debugging.
 This meant sacrificing flexibility in favour of usability, because the
@@ -23,20 +23,20 @@ shapes or any other kind of visual aid.
 
 ![Sketch of the second interface](images/sketch_2.png)
 
-For the second iteration however the extensibility had to be present, meaning
+For the second iteration, however, the extensibility had to be present, meaning
 the old interface was not reusable for the new functionality.
 The block based interface gives a lot more of control to the final user, still
 some underlying mechanisms such as optional parameters or saving into file were
 not present.
 
-Finally on the third iteration the proposed improvements to the interface were:
+Finally, on the third iteration the proposed improvements to the interface were:
 
 * Adding a smart bubble[^bubble] that shows the blocks that make sense to spawn
     according to the connection.
 * Optional parameters.
 * Hide/Toggle parameters.
 * Data transfer visualization, meaning that the connection between two blocks
-    starts signaling when data from one is moved onto the other.
+    starts signalling when data from one is moved onto the other.
 * Type safety indicator while dragging a connection, such as turning the
     connection cable to a bright red to signal that if the cursor is unpressed
     at that location a connection will not form.
@@ -49,7 +49,7 @@ Colour Palette
 --------------
 One of the most important parts of the system where colour played a vital role
 was connections, symbolizing types with colours.
-The relations goes as far as each types has a colour associated with it on
+The relations go as far as each types has a colour associated with it on
 code, meaning that pins are not coloured, their type is specified and their
 colour is derived from the type.
 

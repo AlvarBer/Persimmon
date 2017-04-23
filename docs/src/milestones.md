@@ -39,9 +39,9 @@ in other words the ability to translate a python source file to the Persimmon
 visual representation.
 
 
-Gantt Diagram
--------------
-With the settled milestones a Gantt diagram of the project development can be
+Gantt Chart
+-----------
+With the defined milestones a Gantt chart of the project development was
 drawn.
 
 <!-- Improve Gantt Diagram according to previous feedback?. -->
@@ -57,18 +57,19 @@ complete planning of every development detail at the start of development, such
 as on Waterfall [@petersen2009waterfall], instead there are continuous
 iterations, faster and smaller than traditional development iterations that
 allow for more opportunity to react and adapt to change [@beck2001manifesto].
-This iterations last two weeks and are called sprints, and a board is used to
+These iterations last two weeks and are called sprints, and a board is used to
 keep track of all current and future tasks.
 
-On a traditional Scrum methodology the product owner puts uses cases (*items*)
+On a traditional Scrum methodology, the product owner puts uses cases (*items*)
 into the product backlog.
 Each sprint the scrum master and the development team have a meeting called
-*Sprint Planning event* where items the current sprint items from the product
-backlog to be done are decided and broken down into tasks to be done.
+*Sprint Planning event* [@schwaber2002agile], where items the current sprint
+items from the product backlog to be done are decided and broken down into
+tasks to be done.
 Items can also be pushed back into the backlog if they are not achievable or
 have a lower priority.
 
-However this methodology does not really fit the development of the project,
+However, this methodology does not really fit the development of this project,
 since there is no team, there is no need for superfluous and unnecessary
 processes.
 There is no retrospective after each sprint and there is no specific weight or
@@ -81,7 +82,7 @@ checklists on the tasks.
 
 If a task is not fully completed it can be moved back onto the product backlog.
 
-The planning board can be found at [trello](https://trello.com/b/JmG3xy0U/persimmon).
+The planning board can be found at [https://trello.com/b/JmG3xy0U/persimmon]
 
 Source Code
 -----------
@@ -113,7 +114,7 @@ Continuous Integration runs on travis CI, more on that on the Appendix How was
 this document made?
 
 [https://github.com/AlvarBer/Persimmon]: https://github.com/AlvarBer/Persimmon
+[https://trello.com/b/JmG3xy0U/persimmon]: https://trello.com/b/JmG3xy0U/persimmon
 [^kaggle]: [Kaggle.com](https://www.kaggle.com/)
 [^trello]: trello is a software for having a digital board where tracks can be
-    pinned.
 
