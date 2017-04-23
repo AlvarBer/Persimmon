@@ -4,7 +4,8 @@ Implementation
 On this chapter the implementation of the system is detailed, explained what
 was done in each iteration.
 After the iterations Persimmon intermediate representation is explained.
-Finally some interesting technical problems along the solution are detailed.
+Finally some of the most complex technical problems along their respective
+solutions are detailed.
 
 
 First Iteration
@@ -80,7 +81,7 @@ modifications to the backend needed.
 In order to avoid repetition extensive use of classes coupled with reusable
 custom kivy Widgets was used. This for example meant that each individual pin
 on each block is a class, this proved useful for defining matching pins in
-different blocks (Like when connection a pin that sends data to a pin that
+different blocks (like when connection a pin that sends data to a pin that
 receives it).
 
 For more information about internal package distribution check appendix A.
@@ -141,67 +142,105 @@ For this reason connection has high-level functions that do the unbind, rebind
 and deletion of ends, as long as the necessary elements are passed (dependency
 injection pattern).
 
+This is the reconnecting logic, notice how the reconnecting is *forward* or
+*backwards* depending on which edge the touch has happened, of course if neither
+has been touched the touch event is not handled.
 
-Intermediate Representation
----------------------------
-The visual blocks represent a visual-dataflow language, however the backend
-uses a simpler representation of the relations between the blocks, this in turn
-helps decoupling backend and frontend.
-
-The frontend blocks are translated on function `to_ir`, which merely performs
-trivial transformations to achieve the desired intermediate representation
-desired and runs on $\mathcal{O}(n)$ with n being the number of pins.
-
-Let's represent the types on a more strongly typed language than Python.
-
-~~~haskell
-type Id = Int -- The hash is an integer
-data Inputs = Inputs {origin :: Id, block :: Id}
-data Blocks = Blocks {inputs :: [Id], function :: IO a -> IO a,
-                      outputs :: [Id]}
-data Outputs = Outputs {destinations :: [Id], block :: Id}
-data IR = IR {inputs :: Map Id Inputs, blocks :: Map Id Blocks,
-              outputs :: Map Id Outputs}
+~~~python
+def on_touch_down(self, touch):
+    """ On touch down on connection means we are modifying an already
+        existing connection, not creating a new one. """
+    if self.start.collide_point(*touch.pos):
+        self.forward = False
+        self.unbind_pin(self.start)
+        self.uncircle_pin(self.start)
+        self.start.on_connection_delete(self)
+        touch.ud['cur_line'] = self
+        self.start = None
+        return True
+    elif self.end.collide_point(*touch.pos):
+        self.forward = True
+        self.unbind_pin(self.end)
+        self.uncircle_pin(self.end)
+        self.end.on_connection_delete(self)
+        touch.ud['cur_line'] = self
+        self.end = None
+        return True
+    else:
+        return False
 ~~~
 
-As we can see on the Haskell definition the intermediation representation is
-just three Maps[^Map], one for blocks, one for input pins and one for output pins.
-But the maps do not contains pins themselves, merely unique hashes (Int on
-this case).
-This reflects the fact that pins model only relationships, not state.
-The only non-hash value on `IR` are the blocks functions.
-This functions are indeed impure, but earlier on the literature review it was
-established that dataflow programming was mainly side-effect free, so why do
-they involve side effects?.
+Visualizing the Data Flow
+-------------------------
+One of the latest features that made it into Persimmon is the visualization
+of the data flowing through the cables between blocks, this was an interesting
+technical problem, since it involving relaying data back from the backend into
+the frontend (previously the communication between front and backend was
+unidirectional).
+But in order to preserve the decoupling between both the backend IR had to
+remain untouched.
+For this reason it was decided that the backend has an event where it announces
+it has finished executing a block and the frontend has to subscribe to it.
 
-There are actually first two reasons, first on the actual python programs this
-types do not exist, at least not on an enforceable way, so when translating
-them to Haskell the `function` field represents the "worst case", that is to
-say only a few functions will actually end up producing side-effects.
-The second and more important reason is that blocks actually execute
-themselves, meaning the block function does not has parameters, it relays on
-getting the values from the pins values and sets the values of the output
-values, leaving us with the work of setting those input pins and retrieving
-results from the output pins.
+But the frontend does not receive the block, only the hash, since that is all
+the backend has, and it has to compare with all block hashes to find the actual
+block.
 
-This goes against the previously stated "pins represent relationships, not
-state", in fact an alternative implementation was created in which the
-function returned a tuple of results, and it's the compiler job to now
-associate the output pins to each of the elements on the tuple.
-This was done using the same current mechanism, saving into a dictionary, the
-difference being that while currently the values appear on the output pins and
-have to be moved into the dictionary (or otherwise a reference to the pin
-itself must be kept on the dictionary) on this case the values were fed
-directly to the algorithm.
-However this proved limiting, as code became more complex since more checks have
-to be done, there was no obvious advantage and side-effects did not disappeared
-but merely were harder to do.
+After this the backend has to make the outgoing connections of that block
+pulse, meaning for example changing the value of the width of the line between
+certain values, a function that works well for this is the sin function.
+The tricky part is that each time the function is called it has to remember the
+previous value in order to grow or decrease the width accordingly, this cannot
+be done on a regular function since using `sleep` would freeze the entire
+application, and the best way to maintain state between executions is using a
+generator (also known as semi-coroutines).
 
-With this kind of language it is possible to create arbitrary functions as a
-composition of functions, all the inputs are either omitted if the are
-connected through the blocks, else they are promoted to the output of the new
-function. This works as long as side effects blocks do not depend on each
-other, this only happens when having both *"entry"* and *"exit"* blocks.
+But what happens when coroutine needs to be stopped from being called? Kivy
+has a mechanism where if the scheduled function returns `False` it will stop
+calling, by default our coroutine does not return any meaningful value, but
+we can put a final `yield False` that will stop the calls.
+But how is that yield triggered? The proper solution solution is using
+a full coroutine (either a generator-based one of the newer asyncio ones), but
+then concurrency issues appears, such that since the coroutine is being called
+20 times per second if the coroutine is called while it is executing the
+scheduled interval it will ignore the second call.
+
+The solutions comes from executions, similar to a fast interrupt in hardware it
+is possible to throw a execution on a coroutine that (maybe) is running, this
+also mean that the throwing hijacks the current execution, leading to two
+different returns needed, one for the interrupt execution and another for the
+previous running execution (if it was running, if not it will be on the next
+scheduled call).
+
+With the throw solution there is no need for a full coroutine anymore, and a
+generator can be used again.
+
+~~~python
+def pulse(self):
+    self.it = self._change_width()  # Create iterator
+    Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
+
+def stop_pulse(self):
+    self.it.throw(StopIteration)  # Hijacking execution
+
+def _change_width(self):
+    try:
+        for value in self._width_gen():
+            self.lin.width = value
+            yield
+    except StopIteration:
+        self.lin.width = 2  # Return width back to default
+        yield  # This yield is for the hijacking execution
+        yield False  # And this for the regular execution
+
+def _width_gen(self):
+    """ Infinity oscillating generator (between 2 and 6) """
+    val = 0
+    while True:
+        yield 2 * np.sin(val) + 4
+        val += pi / 20
+~~~
+
 
 Binary Distribution
 -------------------
@@ -221,8 +260,8 @@ Unfortunately this process has to be done on a windows system, and as such
 cannot be done on the CI[^CI] server, to see how Persimmon utilizes CI check
 the appendix on how this document was made.
 
-[^blackboard]: Blackboard is how the canvas where the blocks and connections
-    are lay down.
+
+[^blackboard]: Blackboard is where the blocks and connections reside.
 [^MVC]: Model View Controller is a software pattern.
 [^Numba]: Numba is a python library that allows the compilation and jitting of
     functions into both the CPU and the GPU

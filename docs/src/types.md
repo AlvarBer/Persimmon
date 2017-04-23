@@ -113,3 +113,65 @@ This are all the rules used for checking if a connection is safe, it is a very
 primitive type system, with further improvements ranging with the ability to
 define arbitrary subtypes and even type classes.
 
+
+Intermediate Representation
+---------------------------
+The visual blocks represent a visual-dataflow language, however the backend
+uses a simpler representation of the relations between the blocks, this in turn
+helps decoupling backend and frontend.
+
+The frontend blocks are translated on function `to_ir`, which aparts from
+translating the blocks it avoids considering orphaned blocks to achieve the
+desired intermediate representation. Runs on $\mathcal{O}(n)$ with n being the
+number of pins.
+
+Let's represent the types on a more strongly typed language than Python.
+
+~~~haskell
+type Id = Int -- The hash is an integer
+data Inputs = Inputs {origin :: Id, block :: Id}
+data Blocks = Blocks {inputs :: [Id], function :: IO a -> IO a,
+                      outputs :: [Id]}
+data Outputs = Outputs {destinations :: [Id], block :: Id}
+data IR = IR {inputs :: Map Id Inputs, blocks :: Map Id Blocks,
+              outputs :: Map Id Outputs}
+~~~
+
+As we can see on the Haskell definition the intermediation representation is
+just three Maps[^Map], one for blocks, one for input pins and one for output pins.
+But the maps do not contains pins themselves, merely unique hashes (Int on
+this case).
+This reflects the fact that pins model only relationships, not state.
+The only non-hash value on `IR` are the blocks functions.
+This functions are indeed impure, but earlier on the literature review it was
+established that dataflow programming was mainly side-effect free, so why do
+they involve side effects?.
+
+There are actually first two reasons, first on the actual python programs this
+types do not exist, at least not on an enforceable way, so when translating
+them to Haskell the `function` field represents the "worst case", that is to
+say only a few functions will actually end up producing side-effects.
+The second and more important reason is that blocks actually execute
+themselves, meaning the block function does not has parameters, it relays on
+getting the values from the pins values and sets the values of the output
+values, leaving us with the work of setting those input pins and retrieving
+results from the output pins.
+
+This goes against the previously stated "pins represent relationships, not
+state", in fact an alternative implementation was created in which the
+function returned a tuple of results, and it's the compiler job to now
+associate the output pins to each of the elements on the tuple.
+This was done using the same current mechanism, saving into a dictionary, the
+difference being that while currently the values appear on the output pins and
+have to be moved into the dictionary (or otherwise a reference to the pin
+itself must be kept on the dictionary) on this case the values were fed
+directly to the algorithm.
+However this proved limiting, as code became more complex since more checks have
+to be done, there was no obvious advantage and side-effects did not disappeared
+but merely were harder to do.
+
+With this kind of language it is possible to create arbitrary functions as a
+composition of functions, all the inputs are either omitted if the are
+connected through the blocks, else they are promoted to the output of the new
+function. This works as long as side effects blocks do not depend on each
+other, this only happens when having both *"entry"* and *"exit"* blocks.

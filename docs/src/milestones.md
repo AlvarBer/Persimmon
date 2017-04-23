@@ -83,7 +83,36 @@ If a task is not fully completed it can be moved back onto the product backlog.
 
 The planning board can be found at [trello](https://trello.com/b/JmG3xy0U/persimmon).
 
+Source Code
+-----------
+The source code for this project is hosted on
+[https://github.com/AlvarBer/Persimmon], the organization of the code follows
+the feature branch workflow [@featworkflow], it can be described in terms of
+its branches.
 
+Master branch.
+
+:   The master is the main branch, meaning that it is the default on the remote
+    web interface, and the only branch where deployments happen, there is no
+    actual development apart from hotfixes, insetead it merges commits from
+    dev, forming a release on each merge.
+
+Dev branch.
+
+:   The dev branch represents the most recent commits, commits are made usually
+    direct to this branch. Test are run when commits from this branch are pushed
+    to the repo, but not deployment.
+
+Feature-specific branches
+
+:   Sometimes feature specific branches are done in order to test whether the
+    feature is feasible or not. This branches are usually short lived, and
+    if it is decides to merge that code it must be to dev.
+
+Continuous Integration runs on travis CI, more on that on the Appendix How was
+this document made?
+
+[https://github.com/AlvarBer/Persimmon]: https://github.com/AlvarBer/Persimmon
 [^kaggle]: [Kaggle.com](https://www.kaggle.com/)
 [^trello]: trello is a software for having a digital board where tracks can be
     pinned.

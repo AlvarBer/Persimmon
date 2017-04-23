@@ -142,12 +142,12 @@ class BlackBoard(ScatterLayout):
                         for d in pin.destinations:
                             dest.append(id(d.start))
                     ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
-                                                       pin=pin,
-                                                       block=block_hash)
+                                                               pin=pin,
+                                                               block=block_hash)
             if not avoid:
                 ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
-                                                        function=block.function,
-                                                          outputs=block_outputs)
+                                                           function=block.function,
+                                                           outputs=block_outputs)
         self.block_hashes = ir_blocks
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
