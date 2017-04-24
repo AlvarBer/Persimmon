@@ -1,43 +1,117 @@
 #:kivy 1.9
+#:import b persimmon.view.blocks
 
 
 FloatLayout:
 	BlackBoard:
-		id: bb
+		id: blackboard
 		pos: 0, 0
 		size: 32*30, 32*30
 		do_rotation: False
+		do_scale: False
+		do_translation: False
 		auto_bring_to_front: False
 		canvas.before:
 			Rectangle:
 				pos: 0, 0
 				size: self.size
 				texture: app.background
-	TabbedPanel:
-		pos_hint: {'top': 1}
-		size_hint_y: None
-		height: '100dp'
-		tab_width: '200dp'
-		do_default_tab: False
-		TabbedPanelItem:
-			text: 'Input/Output'
-			Label:
-				text: '.csv'
-		TabbedPanelItem:
-			text: 'Estimators'
-			Label:
-				text: 'Estimators'
-		TabbedPanelItem:
-			text: 'Cross Validation'
-			Label:
-				text: 'K-Folds'
-
-
-<BlackBoard>:
 	Button:
 		text: 'Execute'
 		size_hint: None, None
 		size: '100dp', '100dp'
 		pos: 0, 0
-		on_press: root.process()
+		on_release: blackboard.process()
+	Button:
+		text: 'See Relations'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 200, 0
+		on_release: blackboard.see_relations()
+	Button:
+		text: 'See IR'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 300, 0
+		on_release: blackboard.see_ir()
+	TabbedPanel:
+		pos_hint: {'top': 1}
+		size_hint_y: None
+		height: '100dp'
+		tab_width: '125dp'
+		do_default_tab: False
+		TabbedPanelItem:
+			text: 'Input/Output'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Read .csv'
+					on_release: blackboard.blocks.add_widget(b.CSVInBlock(pos=(300, 250)))
+				Button:
+					text: 'Write .csv'
+					on_release: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
+				Button:
+					text: 'Print'
+					on_release: blackboard.spawnprint()
+		TabbedPanelItem:
+			text: 'Classificators'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Random Forest'
+					on_release: blackboard.blocks.add_widget(b.RandomForestBlock(pos=(300, 250)))
+				Button:
+					text: 'SVM'
+					on_release: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
+				Button:
+					text: 'KNN'
+				Button:
+					text: 'SGD'
+		TabbedPanelItem:
+			text: 'Fit & Predict'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Fit'
+					on_release: blackboard.blocks.add_widget(b.FitBlock(pos=(300, 250)))
+				Button:
+					text: 'Predict'
+					on_release: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Model Selection'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Cross Validation Score'
+					on_release: blackboard.blocks.add_widget(b.CrossValidationBlock(pos=(300, 250)))
+				Button:
+					text: 'Grid Search'
+					on_release: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Cross Validators'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'K-Folds'
+					on_release: blackboard.blocks.add_widget(b.TenFoldBlock(pos=(300, 250)))
+				Button:
+					text: 'Time Series Split'
+		TabbedPanelItem:
+			text: 'State'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Dictionary'
+					on_release: blackboard.blocks.add_widget(b.DictBlock(pos=(300, 250)))
 
+
+<Blackboard>:
+	blocks: blocks
+	Widget:
+		id: blocks

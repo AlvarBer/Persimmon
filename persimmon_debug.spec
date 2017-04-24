@@ -3,15 +3,25 @@
 from kivy.deps import sdl2, glew
 from PyInstaller.utils.hooks import collect_submodules
 
+from glob import glob
+from os.path import dirname
+import pathlib
+
+kv_files = glob('**/*.kv', recursive=True) 
+
+non_python_files = []
+for file in kv_files:
+	non_python_files.append((file,
+	       str(pathlib.Path(*pathlib.Path(dirname(file)).parts[1:]))))
+non_python_files.append(('persimmon/connections.png', '.'))
 
 block_cipher = None
 
 a = Analysis(['persimmon\\__main__.py'],
-             pathex=['C:\\Users\\Mortadelegle\\Code\\Persimmon\\persimmon'],
+             pathex=['C:\\Users\\Mortadelegle\\code\\persimmon\\persimmon'],
              binaries=None,
-             datas=[('persimmon/view/test.kv', 'persimmon/view')],
-
-             hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['kivy.uix.filechooser', 'win32timezone'],
+             datas=non_python_files,
+	     hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['win32timezone'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],

@@ -1,0 +1,20 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\definecolor{anycolor}{rgb}{0.9,0.9,0.9}
+\definecolor{dcolor}{rgb}{0.667,0.224,0.224}
+\definecolor{classcolor}{rgb}{0.667,0.424,0.224}
+\definecolor{cvcolor}{rgb}{0.133,0.4,0.4}
+\definecolor{stcolor}{rgb}{0.667,0.667,0.224}
+
+\begin{document}
+  \begin{tikzpicture}
+    \node [draw, fill=dcolor, minimum size = 35pt] (d) at (0, 0) {$Dataframe$};
+    \node [draw, fill=classcolor, right = of d, minimum size = 35pt] (c) {$Classificator$}; 
+    \node [draw, fill=cvcolor, right = of c, minimum size = 35pt] (cv) {$Cross Validator$};
+    \node [draw, fill=stcolor, right = of cv, minimum size = 35pt] (st) {$State$};
+    \node [draw, fill=anycolor, left = of d, minimum size = 35pt] {$Any$};
+  \end{tikzpicture}
+\end{document}

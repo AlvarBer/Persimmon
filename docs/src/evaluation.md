@@ -1,45 +1,44 @@
 Evaluation
 ==========
 
-On this chapter the evaluation process and how the survey was designed is
-explained.
+From the conception of the project it was intended to be tested by
+participants, evaluating the usability of the prototype.
+This chapter explains that evaluation process, how the survey was designed, and
+the analysis of the results.
+
 
 Method
 ------
-Based on in place recollection, mainly based on a questionnaire, plus some
-additional information that is harvested by the system (mainly timings).
+The method for conducting the evaluation is mainly based on conducting a series
+of closed tasks and giving feedback on each of them.
 
-The questionnaire selected is the System Usability Scale.
+The questionnaire selected is the Single Ease Question [@sauro201210], that
+ask how difficult the task was on a seven point scale.
+Along that information the participant knowledge and familiarity with Data
+Mining and Machine Learning is saved, as well as any additional feedback about
+the system.
 
 
-Proposed tasks
+Proposed Tasks
 --------------
-The evaluation is composed by three different closed tasks.
+The evaluation consists of by three different closed tasks.
+The task are defined as to gradually introduce more complex concepts, following
+the seen workflows on the workflow chapter and also being introduced to the
+concepts of reconnecting and complex block that require more actions than just
+connecting.
 
 * First task is the creation of a simple workflow, the objective of
     this task being to introduce Persimmon to the participants in the simplest
-    terms.
-    - First the participants have to load the iris file, using the csv input
-        block and navigating the filesystem to get the file `iris.csv`.
-    - Then they have to spawn the SVM block and connect the previous input
-        block to this block, they do not need to change any of the parameters
-        of the block.
-    - After the SMV block has been placed a cross validation block has to be
-        spawned and connected to the result of the SVM block.
-    - Finally the result of the cross validation has to be connected to a
-        print output block.
+    terms. Using the iris dataset they perform a cross validation evaluation
+    of their chosen classificator.
 * Second task is modifying the previous workflow to create a more complex
-    worflow. It is only slightly more complex than the previous one, but it
-    introduces the concept of re-cabling to the participants.
-    - Add a prediction block.
-    - Save to file.
+    worflow thati fits and predicts using an estimator and two sources of files.
+    It is only slightly more complex than the previous one, but it introduces
+    the concept of re-cabling to the participants.
 * Third task and final task. This one involves adding hyper-parameter tunning,
     which in turns means providing a dictionary with desired parameters.
-<!--
-    - Create an entirely new workflow, either by putting it on the same
-        blackboard or on a new one.
--->
-    - Use `gridsearch` for hyper-parameter tunning.
-    - Use print output block again to return best hyper-parameters.
 
+
+Evaluation Results
+------------------
 <!-- Actual evaluation -->

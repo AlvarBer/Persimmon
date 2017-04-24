@@ -1,8 +1,13 @@
 from .block import Block
 from .svmblock import SVMBlock
+from .fitblock import FitBlock
+from .dictblock import DictBlock
+from .printblock import PrintBlock
 from .csvinblock import CSVInBlock
 from .csvoutblock import CSVOutBlock
 from .tenfoldblock import TenFoldBlock
+from .predictblock import PredictBlock
+from .gridsearchblock import GridSearchBlock
 from .randomforestblock import RandomForestBlock
 from .crossvalidationblock import CrossValidationBlock
 

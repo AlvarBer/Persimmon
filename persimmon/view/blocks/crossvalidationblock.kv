@@ -1,33 +1,34 @@
 <CrossValidationBlock>:
 	block_label: 'Cross Validation'
-	block_color: .176, .533, .176
+	block_color: root.b.MODEL_SELECTION.value
 	inputs: inputs
 	outputs: outputs
 	data_input: data_input
 	estimator_input: estimator_input
 	cross_val_input: cross_val_input
-	output: output
+	cross_out: cross_out
 	Widget:
 		id: inputs
 		InputPin:
 			id: data_input
 			x: root.x + 5
 			y: root.y + root.height - 15
-			color: .667, .224, .224
+			_type: root.t.DATAFRAME
 		InputPin:
 			id: estimator_input
 			x: root.x + 5
 			y: root.y + root.height / 2 - 5
-			color: .667, .424, .224
+			_type: root.t.CLASSIFICATOR
 		InputPin:
 			id: cross_val_input
 			x: root.x + 5
 			y: root.y + 5
-			color: .133, .40, .40
+			_type: root.t.CROSS_VALIDATOR
 	Widget:
 		id: outputs
 		OutputPin:
-			id: output
+			id: cross_out
 			x: root.x + root.width - 15
 			y: root.y + root.height / 2
+			_type: root.t.ANY
 

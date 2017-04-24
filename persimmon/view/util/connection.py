@@ -3,6 +3,10 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.graphics import Color, Ellipse, Line
 from functools import partial
+from kivy.clock import Clock
+from time import sleep
+import numpy as np
+from math import pi
 
 
 """
@@ -34,22 +38,24 @@ class Connection(Widget):
         if self.start:
             self.forward = True
             with self.canvas.before:
-                Color(0.9, 0.9, 0.9)
+                Color(*self.color)
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
-                Color(*self.color)
-                self.lin = Line(points=self.start.center + self.start.center)
+                self.lin = Line(points=self.start.center + self.start.center,
+                                width=1.5)
             self.start.fbind('pos', self.circle_bind)
             self.start.fbind('pos', self.line_bind)
         else:
             self.forward = False
             with self.canvas.before:
-                Color(0.1, 0.1, 0.1)
-                self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
                 Color(*self.color)
-                self.lin = Line(points=self.end.center + self.end.center)
+                self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
+                self.lin = Line(points=self.end.center + self.end.center,
+                                width=1.5)
             self.end.fbind('pos', self.circle_bind)
             self.end.fbind('pos', self.line_bind)
+        self.warned = False
+        self.it = None
 
     def finish_connection(self, pin):
         """ This functions finishes a connection that has only start or end and
@@ -57,24 +63,33 @@ class Connection(Widget):
         if self.forward:
             self.end = pin
             with self.canvas.before:
-                Color(0.1, 0.1, 0.1)
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
             self.rebind_pin(self.end, pin)
         else:
             self.start = pin
             with self.canvas.before:
-                Color(0.9, 0.9, 0.9)
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
             self.rebind_pin(self.start, pin)
 
-    def follow_cursor(self, newpos):
+    def follow_cursor(self, newpos, blackboard):
         """ This functions makes sure the current end being dragged follows the
-            cursor """
+            cursor. It also checks for type safety and changes the line color
+            if needed."""
         if self.forward:
             self.lin.points = self.lin.points[:2] + [*newpos]
+            fixed_edge = self.start
         else:
             self.lin.points = [*newpos] + self.lin.points[2:]
+            fixed_edge = self.end
+        if (self.warned and (not blackboard.in_block(*newpos) or
+            not blackboard.in_block(*newpos).in_pin(*newpos) or
+            blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
+            self.unwarn()
+        elif (blackboard.in_block(*newpos) and
+              blackboard.in_block(*newpos).in_pin(*newpos) and
+              (not blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
+            self.warn()
 
     def delete_connection(self, parent):
         """ This function deletes both ends (if they exist) and the connection
@@ -94,6 +109,7 @@ class Connection(Widget):
             self.uncircle_pin(self.start)
             self.start.on_connection_delete(self)
             touch.ud['cur_line'] = self
+            self.start = None
             return True
         elif self.end.collide_point(*touch.pos):
             self.forward = True
@@ -101,6 +117,7 @@ class Connection(Widget):
             self.uncircle_pin(self.end)
             self.end.on_connection_delete(self)
             touch.ud['cur_line'] = self
+            self.end = None
             return True
         else:
             return False
@@ -112,7 +129,6 @@ class Connection(Widget):
         old = new
         old.fbind('pos', self.circle_bind)
         old.fbind('pos', self.line_bind)
-
 
     def unbind_pin(self, finish):
         finish.funbind('pos', self.circle_bind)
@@ -142,13 +158,52 @@ class Connection(Widget):
         else:
             print('No line associated with pin')
 
-    """
-    def warning(self):
-        if self.color != (0.5, 0.5, 0.5):
-            print('Redrawing')
-            self.canvas.before.remove(self.lin)
-            with self.canvas.before:
-                Color(1, 0, 0)
-                self.lin = Line(points=self.lin.points, width=1.1)
+    def warn(self):
+        self.warned = True
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(1, 0, 0)
+            self.lin = Line(points=self.lin.points, width=2)
 
-    """
+    def unwarn(self):
+        self.warned = False
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(*self.color)
+            self.lin = Line(points=self.lin.points, width=1.5)
+
+    def pulse(self):
+        self.it = self._change_width()
+        Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
+
+    def stop_pulse(self):
+        self.it.throw(StopIteration)
+
+    def _change_width(self):
+        """ Ok, so let me explain what is going on, this generator/coroutine
+            changes the width of the line continuosly using the width_gen
+            generator. We use it by calling it 20 times per second. The tricky
+            part is stopping the scheduled calls. The way to tell Kivy to stop
+            calling is to return a False value, and to do that we need to call
+            this coroutine itself, which maybe execting or not at that moment.
+
+            That is where throw comes in, allowing for exceptions to be thrown
+            on during the execution, hijacking the current execution (like a
+            fast interruption), we need to return from this exception, in which
+            we do not care about the value, and then return False on the
+            regular execution in order to stop the calls."""
+        try:
+            for value in self._width_gen():
+                self.lin.width = value
+                yield
+        except StopIteration:
+            self.lin.width = 2
+            yield
+            yield False
+
+    def _width_gen(self):
+        """ Infinity oscillating generator (between 2 and 4) """
+        val = 0
+        while True:
+            yield 2 * np.sin(val) + 4
+            val += pi / 20
