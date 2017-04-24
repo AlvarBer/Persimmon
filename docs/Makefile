@@ -5,7 +5,7 @@ MARKDOWN := introduction.md literature.md workflow.md milestones.md \
 MARKDOWN_COMPLUTENSE := introduction.md focus.md literature.md \
 	workflow.md milestones.md risk.md interface.md implementation.md \
 	types.md analysis.md postmortem.md
-APPENDICES := packages.md how.md  # Appendix after bibliography
+APPENDICES := packages.md how.md eval_form.md # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
@@ -30,9 +30,21 @@ $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex \
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
 		--metadata date:"$(shell date +%Y/%m/%d)" \
 		--metadata sansfont:"Helvetica Neue LT Com" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
+
+hertfordshire: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex \
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o pandoc_herts.pdf
+
 
 complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
@@ -43,16 +55,6 @@ complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOG
 		--metadata sansfont:"Helvetica Neue LT Com" --metadata keywords:"Serious Learning","Visual Programming","Dataflow Programming" \
 		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLUTENSE) \
 		--include-after-body $(APPENDIX) -o $(PDF)
-
-twocol: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
-	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --highlight-style breezedark \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata sansfont:"Helvetica Neue LT Com" -H table.tex \
-		--metadata classoption:'twocolumn' \
-		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o test.pdf
-
 
 # For standalone images
 images/%.pdf: graphs/%.tex

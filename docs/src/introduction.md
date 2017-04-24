@@ -3,8 +3,9 @@ Introduction
 
 On this chapter Persimmon is introduced, along its main objectives and
 motivations.
-There is also a section about things that are close but outside the scope of
-the project, and an overview of the project structure.
+It also includes a section about topics that are related but beyond the scope
+of this project.
+Finally, it includes an overviewof the project report structure.
 
 
 Description
@@ -111,18 +112,58 @@ overcome the difficulties of learning the algorithms themselves.
 
 Objectives
 ----------
+Research:
+
+:   On terms of research this project touches on a multitude of topics, from
+    the theoretical aspects inherent to creating what is essentially a domain
+    specific language to the relevant current commercial solutions available.
+    All of this requires a compilation and reading of scientific sources.
+
+Requirements:
+
+:   The system is defined on the requirements fixated at the start of the
+    project, it is necesary to provide both a good description of each, as well
+    as some kind of development plan connecting them all.
+    A good risk analysis can also prevent failures in a multitude of areas
+    such as time management or technical debt.
+
+Design:
+
+:   The system has to be designed in accordance to those requirements, both
+    in terms of making it easy to progress through the milestones as well as
+    producing a usable software at each stage.
+
+Implementation:
+
+:   There are some **non-functional requirements**, such as the project running
+    on the desktop platform, being able to pack it into a executable (to make
+    evaluation easier for participants), have a framerate good enough for
+    pleasant use (minimum 30 FPS), or support multithreading (as to not block
+    the main/UI thread from running when executing the backend),
+
+Testing:
+
+:   The software needs to be testable, as to allow for the automation of
+    testing on the source repository, caching bugs faster in the process.
+
+Evaluation:
+
+:   The software will be evaluated by participants that belong to the intended
+    audience of the system, a form must be prepared detailing the task they
+    will have to perform, as well as how their data will be treated.
+
 Learning:
 
-:   It helps both with the programming barrier, easing the learning curve of
-    Machine Learning as it allows the learner to focus on the connections,
-    intuitions and mathematical basis and not on the implementation details
-    and the quirks of the concrete language.
+:   The software will help both with the programming barrier, easing the
+    learning curve of Machine Learning as to allow the learner to focus on the
+    connections, intuitions and mathematical basis of the algorithms and not on
+    the implementation details and the quirks of the language.
 
 Faster exploratory work:
 
 :    By providing an easy to use, drag and drop interface the user can try a
      plethora of different estimators and adjusting the hyper-parameters as
-     they see fit without writing a single line of code.
+     they see fit faster, and without writing a single line of code.
 
 
 What the project is not

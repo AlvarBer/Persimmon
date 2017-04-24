@@ -1,11 +1,19 @@
 
 ---
-author: Álvaro Bermejo García
-title: Persimmon
-subtitle: A visual programming interface for scikit-learn
+author: |
+    Á. Bermejo
+    Supervised by Mariana Lilley
+title: |
+    University of Hertfordshire
+    School of Computer Science
+    Modular BSc Honours in Computer Science
+    6COM105	- Artificial Intelligence Project
+subtitle: |
+    Final Report
+    April 2017
+    Persimmon
 #date: 2017-03-01
 documentclass: scrreprt
-#sansfont: Helvetica Neue LT Com
 colorlinks: True
 lof: True
 papersize: A4
@@ -13,14 +21,20 @@ fontsize: 12pt
 mainlang: English
 keywords:
     - Machine Learning
+    - Data Mining
     - Visual Programming
     - Dataflow Programming
-abstract: > 
+    - Functional Programming
+abstract: >
     Persimmon is a visual programming interface that leverages scikit-learn to
-    provide a drag and drop interface for developing Machine Learning and 
+    provide a drag and drop interface for developing Machine Learning and
     Data Mining pipelines. It is based on the dataflow programming principles,
     giving the user a functional visual language with a type safety system that
     checks connections at write time, non-strict evaluation, task
-    parallelization, and execution visualization.
+    parallelization, and execution visualization. It has been evaluated by
+    participants on a extensive three-tasks form, overall receiving good
+    reviews, and praised by the use of colors to indicate types, consistent
+    design, easy to navigate and shallow learning curve.
+thanks: me
 ---
 
