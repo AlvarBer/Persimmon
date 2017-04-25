@@ -2,11 +2,11 @@ Postmortem
 ==========
 
 After the evaluation it is time to make a retrospective, and look what has
-been achieved and what not.
+been achieved and what has not.
 
 On the introduction several objectives were mentioned, let's revisit those.
 
-* Research. There was a literature review on all the fields covered by the
+* Research. Background research was conducted on fields covered by the
 system. It was particularly interesting learning about the dataflow paradigm,
 because it is a niche I was not familiar with.
 It was also great looking at the available commercial solutions, they prove
@@ -49,7 +49,7 @@ During this use I realized another possible improvement, caching operations,
 with this the results of pipelines are not recalculated unless something
 changes upstream, this provides the closest thing to a visual REPL[^REPL].
 
-All the mayor milestones were reached but the compilation feature, this is
+All the major milestones were reached except the compilation feature, this is
 because deciding the order in which blocks get translated means settling
 the current evaluation strategy, while leaving undecided means that some
 interesting such as optimistic evaluation can be implemented on the feature,

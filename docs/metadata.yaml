@@ -32,9 +32,8 @@ abstract: >
     giving the user a functional visual language with a type safety system that
     checks connections at write time, non-strict evaluation, task
     parallelization, and execution visualization. It has been evaluated by
-    participants on a extensive three-tasks form, overall receiving good
-    reviews, and praised by the use of colors to indicate types, consistent
+    participants on a three-task form, overall receiving good
+    reviews, being praised by the use of colors to indicate types, consistent
     design, easy to navigate and shallow learning curve.
-thanks: me
 ---
 

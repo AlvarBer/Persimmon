@@ -71,7 +71,7 @@ The tasks standard deviation were quite uniform, with $\sigma$ equal to 1, 1.15
 and 0 for tasks one, two and three respectively.
 This indicates that the population largely agrees, with no visible outliers.
 
-While this are good indicators that the interface of the system succeeded on
+While these are good indicators that the interface of the system succeeded on
 its intentions, the most important data from the evaluation is perhaps the free
 form questions, where participants unanimously agreed on the need for the
 ability to delete blocks.
@@ -79,7 +79,7 @@ ability to delete blocks.
 Another complain is the placements of the blocks, by default they all spawn
 at the same point, that can result in blocks stacking on top of each other,
 
-The blocks participants struggled with the most is those including file
+The blocks participants struggled with the most are those including file
 dialogs, citing how the path does not reset on cancel, sometimes responding
 to single click and sometimes not responding at all, and the need for a way
 to show the current selected file without clicking on the file dialog.
@@ -95,6 +95,6 @@ interface, the wide selection of ml algorithms and test options, the use of
 colors to indicate types, consistent design, easy to navigate and shallow
 learning curve.
 
-The error handling and the resilience of the application was mentioned, as well
-as the simple installation process without the need for dependencies
+The error handling and the resilience of the application were mentioned, as
+well as the simple installation process without the need for dependencies
 installation.
