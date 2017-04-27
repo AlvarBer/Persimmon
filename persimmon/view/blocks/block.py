@@ -88,3 +88,12 @@ class Block(DragBehavior, FloatLayout):
 
     def bind_border(self, block, new_pos):
         self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
+
+    def is_orphan(self):
+        for in_pin in self.input_pins:
+            if in_pin.origin:
+                return False
+        for out_pin in self.output_pins:
+            if out_pin.destinations:
+                return False
+        return True

@@ -163,7 +163,7 @@ class Connection(Widget):
         self.canvas.before.remove(self.lin)
         with self.canvas.before:
             Color(1, 0, 0)
-            self.lin = Line(points=self.lin.points, width=2)
+            self.lin = Line(points=self.lin.points, width=3)
 
     def unwarn(self):
         self.warned = False
@@ -174,9 +174,12 @@ class Connection(Widget):
 
     def pulse(self):
         self.it = self._change_width()
-        Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
+        next(self.it)
+        self.ev = Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
 
     def stop_pulse(self):
+        #self.ev.cancel()
+        #self.lin.width = 2
         self.it.throw(StopIteration)
 
     def _change_width(self):

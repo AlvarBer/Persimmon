@@ -24,7 +24,7 @@ from persimmon.view.util import (CircularButton, InputPin, OutputPin,
 from collections import deque
 import persimmon.backend as backend
 from kivy.lang import Builder
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 import threading
 
 
@@ -118,6 +118,8 @@ class BlackBoard(ScatterLayout):
         ir_inputs = {}
         ir_outputs = {}
         for block in self.blocks.children:
+            if block.is_orphan():
+                continue
             block_hash = id(block)
             block_inputs, block_outputs = [], []
             avoid = False
@@ -149,7 +151,6 @@ class BlackBoard(ScatterLayout):
                                                            function=block.function,
                                                            outputs=block_outputs)
         self.block_hashes = ir_blocks
-        print('Blocks ', ir_blocks)
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
     def process(self):
@@ -176,6 +177,7 @@ class BlackBoard(ScatterLayout):
                 return True, block.tainted_msg
         return False, ''
 
+    @mainthread
     def on_block_executed(self, block_hash):
         block_idx = list(map(id, self.blocks.children)).index(block_hash)
         block = self.blocks.children[block_idx]
@@ -184,11 +186,9 @@ class BlackBoard(ScatterLayout):
             for out_pin in block.outputs.children:
                 for connection in out_pin.destinations:
                     connection.pulse()
-                    #Clock.schedule_once(lambda _: connection.stop_pulse(), 2)
         if block.inputs:
-            for in_pin in block.inputs.children:
-                for connection in in_pin.origin:
-                    connection.stop_pulse()
+            for connection in map(lambda x: x.origin, block.inputs.children):
+                connection.stop_pulse()
 
     def spawnprint(self):
         if not any(map(lambda b: b.__class__ == blocks.PrintBlock,

@@ -15,6 +15,7 @@ def execute_graph(ir: IR, blackboard):
     print('Done executing')
 
 def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
+    print('Executing {}'.format(current))
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin
