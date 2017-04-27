@@ -175,11 +175,9 @@ class Connection(Widget):
     def pulse(self):
         self.it = self._change_width()
         next(self.it)
-        self.ev = Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
+        Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
 
     def stop_pulse(self):
-        #self.ev.cancel()
-        #self.lin.width = 2
         self.it.throw(StopIteration)
 
     def _change_width(self):

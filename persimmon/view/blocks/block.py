@@ -30,14 +30,14 @@ class Block(DragBehavior, FloatLayout):
             for pin in self.outputs.children:
                 self.output_pins.append(pin)
                 pin.block = self
-        self.tainted_msg = ''
+        self.tainted_msg = 'Block {} has unconnected inputs'.format(self.block_label)
         self._tainted = False
         self.kindled = None
         self.border_texture = Image(source='tex4.png').texture
 
     @property
     def tainted(self):
-        return self._tainted
+        return any(in_pin.origin == None for in_pin in self.input_pins) and not self.is_orphan()# and self._tainted
 
     @tainted.setter
     def tainted(self, value):

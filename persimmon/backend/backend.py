@@ -1,5 +1,8 @@
 from collections import deque, namedtuple
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 # backend types
 InputEntry = namedtuple('InputEntry', ['origin', 'pin', 'block'])
@@ -12,10 +15,9 @@ def execute_graph(ir: IR, blackboard):
     seen = {}  # All output pins along their respectives values
     while unexplored:
         unexplored, seen = execute_block(unexplored.pop(), ir, blackboard, unexplored, seen)
-    print('Done executing')
+    logger.info('Done executing')
 
 def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
-    print('Executing {}'.format(current))
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin

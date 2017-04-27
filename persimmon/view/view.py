@@ -168,11 +168,6 @@ class BlackBoard(ScatterLayout):
     # TODO: Merge this check with block tainted property
     def check_taint(self):
         for block in self.blocks.children:
-            if block.inputs:
-                orphaned = [x.origin == None for x in block.inputs.children]
-                if not all(orphaned) and any(orphaned):
-                    return True, 'Block "{}" has unconnected inputs!'.format(
-                                    block.block_label)
             if block.tainted:
                 return True, block.tainted_msg
         return False, ''
