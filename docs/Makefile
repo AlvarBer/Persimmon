@@ -34,6 +34,25 @@ $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 		--metadata sansfont:"Helvetica Neue LT Com" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
+hertfordshire: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex \
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) -o persimmon_herts.pdf
+
+hertfordshire_apx: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA) $(APPENDIX)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex --include-after-body $(APPENDIX) \
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		$(METADATA) $(MARKDOWN) -o persimmon_herts.pdf
+
+
 complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \

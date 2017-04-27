@@ -2,6 +2,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
+from kivy.graphics import BorderImage, Color
+from kivy.uix.image import Image
 
 from persimmon.view.util import Type, BlockType
 
@@ -30,6 +32,8 @@ class Block(DragBehavior, FloatLayout):
                 pin.block = self
         self.tainted_msg = ''
         self._tainted = False
+        self.kindled = None
+        self.border_texture = Image(source='tex4.png').texture
 
     @property
     def tainted(self):
@@ -66,3 +70,21 @@ class Block(DragBehavior, FloatLayout):
             result = super().on_touch_up(touch)
         return result
 
+    def kindle(self):
+        """ Praise the sun \[T]/ """
+        with self.canvas.before:
+            Color(1, 1, 1)
+            self.kindled = BorderImage(pos=(self.x - 5, self.y - 5),
+                                       size=(self.width + 10,
+                                             self.height + 10),
+                                       texture=self.border_texture)
+            self.fbind('pos', self.bind_border)
+
+    def unkindle(self):
+        if self.kindled:
+            self.canvas.before.remove(self.kindled)
+            self.funbind('pos', self.bind_border)
+            self.kindled = None
+
+    def bind_border(self, block, new_pos):
+        self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5

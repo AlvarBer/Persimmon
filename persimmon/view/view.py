@@ -13,7 +13,7 @@ from kivy.properties import (ObjectProperty, NumericProperty, StringProperty,
                              ListProperty)
 # Miscelaneous
 from kivy.config import Config
-from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier
+from kivy.graphics import BorderImage, Color
 from kivy.core.window import Window
 from functools import partial
 
@@ -34,7 +34,7 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
-        self.background = Image(source='connections.png').texture
+        self.background = Image(source='connections2.png').texture
         self.background.wrap = 'repeat'
         self.background.uvsize = 30, 30
         #self.background.uvsize = (Window.width / self.background.width,
@@ -149,6 +149,7 @@ class BlackBoard(ScatterLayout):
                                                            function=block.function,
                                                            outputs=block_outputs)
         self.block_hashes = ir_blocks
+        print('Blocks ', ir_blocks)
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
     def process(self):
@@ -158,6 +159,8 @@ class BlackBoard(ScatterLayout):
             self.popup.message = tainted_msg
             self.popup.open()
         else:
+            for block in self.blocks.children:
+                block.unkindle()
             threading.Thread(target=backend.execute_graph,
                              args=(self.to_ir(), self)).start()
 
@@ -176,11 +179,16 @@ class BlackBoard(ScatterLayout):
     def on_block_executed(self, block_hash):
         block_idx = list(map(id, self.blocks.children)).index(block_hash)
         block = self.blocks.children[block_idx]
+        block.kindle()
         if block.outputs:
             for out_pin in block.outputs.children:
                 for connection in out_pin.destinations:
                     connection.pulse()
-                    Clock.schedule_once(lambda _: connection.stop_pulse(), 2)
+                    #Clock.schedule_once(lambda _: connection.stop_pulse(), 2)
+        if block.inputs:
+            for in_pin in block.inputs.children:
+                for connection in in_pin.origin:
+                    connection.stop_pulse()
 
     def spawnprint(self):
         if not any(map(lambda b: b.__class__ == blocks.PrintBlock,
