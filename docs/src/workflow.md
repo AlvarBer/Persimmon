@@ -61,7 +61,7 @@ interface being limited on the number of blocks, as not to allow the graphs to
 become inscrutable, and as mentioned on the introduction this also allows
 making assumptions about the interface which reduce the complexity such as
 not needing an explicit flow line, more on the explicit flow line can be read
-in the implementation chapter.
+in the [implementation chapter](#implementation).
 
 
 [^plc]: Programable Logic Controllers are industrial digital computers used for
