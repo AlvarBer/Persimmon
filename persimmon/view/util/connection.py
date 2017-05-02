@@ -178,7 +178,10 @@ class Connection(Widget):
         Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
 
     def stop_pulse(self):
-        self.it.throw(StopIteration)
+        if not self.it:
+            print('Connection {} -> {} failed'.format(id(self.start.block), id(self.end.block)))
+        else:
+            self.it.throw(StopIteration)
 
     def _change_width(self):
         """ Ok, so let me explain what is going on, this generator/coroutine

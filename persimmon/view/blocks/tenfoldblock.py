@@ -13,4 +13,4 @@ class TenFoldBlock(Block):
     out_1 = ObjectProperty()
 
     def function(self):
-        self.out_1.val = KFold(n_splits=10)
+        self.out_1.val = KFold()

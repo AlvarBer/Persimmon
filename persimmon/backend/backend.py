@@ -1,4 +1,5 @@
 from collections import deque, namedtuple
+import threading
 import logging
 
 
@@ -11,13 +12,23 @@ OutputEntry = namedtuple('OutputEntry', ['destinations', 'pin', 'block'])
 IR = namedtuple('IR', ['blocks', 'inputs', 'outputs'])
 
 def execute_graph(ir: IR, blackboard):
+    threading.Thread(target=execute_graph_parallel,
+                     args=(ir, blackboard)).start()
+
+def execute_graph_parallel(ir: IR, blackboard):
+    """ Execution algorithm, introduces all blocks on a set, when a block is
+    executed it is taken out of the set until the set is empty. """
     unexplored = set(ir.blocks.keys())  # All blocks are unexplored at start
     seen = {}  # All output pins along their respectives values
     while unexplored:
-        unexplored, seen = execute_block(unexplored.pop(), ir, blackboard, unexplored, seen)
-    logger.info('Done executing')
+        unexplored, seen = execute_block(unexplored.pop(), ir, blackboard,
+                                         unexplored, seen)
+    logger.info('Execution done')
 
 def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
+    """ Execute a block, if any dependency is not yet executed we
+    recurse into it first. """
+    logger.info('executing block {}'.format(current))
     current_block = ir.blocks[current]
     for in_pin in map(lambda x: ir.inputs[x], current_block.inputs):
         origin = in_pin.origin
@@ -29,6 +40,7 @@ def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -
 
     current_block.function()
     blackboard.on_block_executed(current)
+    logger.info('block {} executed'.format(current))
 
     for out_id in current_block.outputs:
         seen[out_id] = ir.outputs[out_id].pin.val
