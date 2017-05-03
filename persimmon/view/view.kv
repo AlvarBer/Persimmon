@@ -31,12 +31,15 @@ FloatLayout:
 			blackboard.popup.title = 'Relations'
 			blackboard.popup.message = blackboard.get_relations();
 			blackboard.popup.open()
-	#Button:
-		#text: 'See IR'
-		#size_hint: None, None
-		#size: '100dp', '100dp'
-		#pos: 300, 0
-		#on_release: blackboard.see_ir()
+	Button:
+		text: 'See IR'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 300, 0
+		on_release:
+			blackboard.popup.title = 'IR'
+			blackboard.popup.message = str(blackboard.to_ir())
+			blackboard.popup.open()
 	TabbedPanel:
 		pos_hint: {'top': 1}
 		size_hint_y: None
@@ -73,7 +76,7 @@ FloatLayout:
 					on_release: blackboard.blocks.add_widget(b.KNNBlock(pos=(300, 250)))
 				Button:
 					text: 'SGD'
-					#on_release: blackboard.blocks.add_widget(b.SGDBlock(pos=(300, 250)))
+					on_release: blackboard.blocks.add_widget(b.SGDBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Fit & Predict'
 			BoxLayout:

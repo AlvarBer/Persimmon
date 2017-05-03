@@ -15,7 +15,8 @@ class DictBlock(Block):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tainted = True
-        self.tainted_msg = 'Dictionary not inputed on block {}!'.format(self.block_label)
+        self.tainted_msg = ('Dictionary not inputed on block {}!'
+                            .format(self.title))
 
     # TODO: Perform this check at unfocus time
     @Block.tainted.getter
@@ -26,12 +27,13 @@ class DictBlock(Block):
                 self.tainted = False
             else:
                 self.tainted = True
-                self.tainted_msg = 'Block {} requires a dictionary, not a {}!'.format(
-                                        self.block_label, type(string).__name__)
+                self.tainted_msg = ('Block {} requires a dictionary, not a {}!'
+                                    .format(self.title,
+                                            type(string).__name__))
         except Exception:
                 self.tainted = True
-                self.tainted_msg = 'Invalid input on block {}'.format(
-                                        self.block_label)
+                self.tainted_msg = ('Invalid input on block {}'
+                                    .format(self.title))
         return self._tainted
 
     def function(self):

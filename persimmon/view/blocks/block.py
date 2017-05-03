@@ -15,7 +15,7 @@ Builder.load_file('view/blocks/block.kv')
 
 class Block(DragBehavior, FloatLayout):
     block_color = ListProperty([1, 1, 1])
-    block_label = StringProperty('label')
+    title = StringProperty()
     inputs = ObjectProperty()
     outputs = ObjectProperty()
     input_pins = ListProperty()
@@ -33,7 +33,7 @@ class Block(DragBehavior, FloatLayout):
             for pin in self.outputs.children:
                 self.output_pins.append(pin)
                 pin.block = self
-        self.tainted_msg = 'Block {} has unconnected inputs'.format(self.block_label)
+        self.tainted_msg = 'Block {} has unconnected inputs'.format(self.title)
         self._tainted = False
         self.kindled = None
         self.border_texture = Image(source='tex4.png').texture

@@ -60,23 +60,17 @@ class BlackBoard(ScatterLayout):
             backend.execute_graph(self.to_ir(), self)
 
     def get_relations(self) -> str:
-        """ Gets the relations between the cables as strings. """
-        relations = ''
-        for block in self.blocks.children:
-            for in_pin in block.input_pins:
-                if in_pin.origin:
-                    relations += '{} -> {}\n'.format(block.block_label,
-                                                     pin.origin.end.block.block_label)
-            ['{} <- {}'.format(block.block_label, destination.start.block.block_label)
+        """ Gets the relations between pins as a string. """
+        # generator expressions are cool
+        ins = ('{} -> {}\n'.format(block.title, in_pin.origin.end.block.title)
+               for block in self.blocks.children
+               for in_pin in block.input_pins if in_pin.origin)
+        outs = ('{} <- {}\n'.format(block.title, destination.start.block.title)
+                for block in self.blocks.children
                 for out_pin in block.output_pins
-                for destination in out_pin.destinations]
-            """
-            for out_pin in block.output_pins:
-                for destination in out_pin.destinations:
-                    relations += '{} <- {}\n'.format(block.block_label,
-                                                     destination.start.block.block_label)
-            """
-        return relations
+                for destination in out_pin.destinations)
+
+        return ''.join(ins) + ''.join(outs)
 
     def to_ir(self) -> backend.IR:
         """ Transforms the relations between blocks into an intermediate
@@ -176,7 +170,7 @@ class BlackBoard(ScatterLayout):
         if self.collide_point(x, y):
             return True
 
-    def in_block(self, x, y):
+    def in_block(self, x: float, y: float) -> Optional[Block]:
         """ Check if a position hits a block. """
         for block in self.blocks.children:
             if block.collide_point(x, y):

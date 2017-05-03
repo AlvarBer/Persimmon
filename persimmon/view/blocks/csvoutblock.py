@@ -21,7 +21,7 @@ class CSVOutBlock(Block):
         # Let's bind two together
         self.file_dialog.bind(file_chosen=self.setter('path'))
         self.tainted = True
-        self.tainted_msg = 'File not chosen in block {}!'.format(self.block_label)
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.title)
 
 
     def function(self):
