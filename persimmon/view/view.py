@@ -22,6 +22,8 @@ from kivy.uix.scatterlayout import ScatterLayout
 from functools import partial
 from collections import deque
 import logging
+from typing import Optional
+from persimmon.view.blocks import Block
 
 
 logger = logging.getLogger(__name__)
@@ -31,7 +33,7 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
-        self.background = Image(source='connections2.png').texture
+        self.background = Image(source='connections.png').texture
         self.background.wrap = 'repeat'
         self.background.uvsize = 30, 30
         #self.background.uvsize = (Window.width / self.background.width,

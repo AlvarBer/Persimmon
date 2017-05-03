@@ -36,7 +36,7 @@ class Block(DragBehavior, FloatLayout):
         self.tainted_msg = 'Block {} has unconnected inputs'.format(self.title)
         self._tainted = False
         self.kindled = None
-        self.border_texture = Image(source='tex4.png').texture
+        self.border_texture = Image(source='border.png').texture
 
     @property
     def tainted(self):
