@@ -14,7 +14,6 @@ IR = namedtuple('IR', ['blocks', 'inputs', 'outputs'])
 def execute_graph(ir: IR, blackboard):
     threading.Thread(target=execute_graph_parallel,
                      args=(ir, blackboard)).start()
-    logger.info('Execution done')
 
 def execute_graph_parallel(ir: IR, blackboard):
     """ Execution algorithm, introduces all blocks on a set, when a block is
@@ -24,6 +23,7 @@ def execute_graph_parallel(ir: IR, blackboard):
     while unexplored:
         unexplored, seen = execute_block(unexplored.pop(), ir, blackboard,
                                          unexplored, seen)
+    logger.info('Execution done')
 
 def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
     """ Execute a block, if any dependency is not yet executed we

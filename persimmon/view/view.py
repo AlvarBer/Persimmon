@@ -19,7 +19,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatterlayout import ScatterLayout
 # Others
-from functools import partial
+from functools import partial, reduce
 from collections import deque
 import logging
 from typing import Optional
@@ -48,14 +48,17 @@ class BlackBoard(ScatterLayout):
         """ Tries to execute the graph, if some block is tainted it prevents
         the execution, if not it starts running the backend. """
         logger.debug('Checking taint')
-        tainted, tainted_msg = self.check_taint()
-        if tainted:
+        # Check if any block is tainted
+        if any(map(lambda block: block.tainted, self.blocks.children)):
+            # Get tainted block
+            tainted_block = reduce(lambda l, r: l if l.tainted else r,
+                                   self.blocks.children)
             logger.debug('Some block is tainted')
             self.popup.title = 'Warning'
-            self.popup.message = tainted_msg
+            self.popup.message = tainted_block.tainted_msg
             self.popup.open()
         else:
-            logger.debug('Not block is tainted')
+            logger.debug('No block is tainted')
             for block in self.blocks.children:
                 if block.kindled:
                     block.unkindle()
@@ -106,14 +109,6 @@ class BlackBoard(ScatterLayout):
                                                        outputs=block_outputs)
         self.block_hashes = ir_blocks
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
-
-    def check_taint(self) -> (bool, str):
-        """ Checks the tainted property on all blocks, returning True and
-        the message if some is tainted. """
-        for block in self.blocks.children:
-            if block.tainted:
-                return True, block.tainted_msg
-        return False, ''
 
     #@mainthread Concurrency bug?
     def on_block_executed(self, block_hash: int):
