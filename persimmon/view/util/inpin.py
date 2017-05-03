@@ -1,13 +1,16 @@
 from persimmon.view.util import Pin, Connection
 from kivy.properties import ObjectProperty
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 class InputPin(Pin):
     origin = ObjectProperty(allownone=True)
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and touch.button == 'left':
-            print('Creating connection')
+            logger.info('Creating connection')
             touch.ud['cur_line'] = Connection(start=self,
                                               color=self.color)
             self.origin = touch.ud['cur_line']
@@ -21,11 +24,11 @@ class InputPin(Pin):
         if ('cur_line' in touch.ud.keys() and touch.button == 'left' and
                 self.collide_point(*touch.pos)):
             if touch.ud['cur_line'].end and self.typesafe(touch.ud['cur_line'].end):
-                print('Establishing connection')
+                logger.info('Establishing connection')
                 touch.ud['cur_line'].finish_connection(self)
                 self.origin = touch.ud['cur_line']
             else:
-                print('Deleting connection')
+                logger.info('Deleting connection')
                 touch.ud['cur_line'].delete_connection(self.block.parent.parent)
             return True
         else:

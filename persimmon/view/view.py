@@ -40,78 +40,74 @@ class ViewApp(App):
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
-    popup = ObjectProperty(Notification(title=''))
+    popup = ObjectProperty(Notification())
 
     def execute_graph(self):
         """ Tries to execute the graph, if some block is tainted it prevents
         the execution, if not it starts running the backend. """
+        logger.debug('Checking taint')
         tainted, tainted_msg = self.check_taint()
         if tainted:
+            logger.debug('Some block is tainted')
             self.popup.title = 'Warning'
             self.popup.message = tainted_msg
             self.popup.open()
         else:
+            logger.debug('Not block is tainted')
             for block in self.blocks.children:
-                block.unkindle()
+                if block.kindled:
+                    block.unkindle()
             backend.execute_graph(self.to_ir(), self)
 
-    def see_relations(self):
-        string = ''
+    def get_relations(self) -> str:
+        """ Gets the relations between the cables as strings. """
+        relations = ''
         for block in self.blocks.children:
-            if block.inputs:
-                for pin in block.inputs.children:
-                    if pin.origin:
-                        string += '{} -> {}\n'.format(block.block_label,
-                                                      pin.origin.end.block.block_label)
-            if block.outputs:
-                for pin in block.outputs.children:
-                    for destination in pin.destinations:
-                        string += '{} <- {}\n'.format(block.block_label,
-                                                      destination.start.block.block_label)
+            for in_pin in block.input_pins:
+                if in_pin.origin:
+                    relations += '{} -> {}\n'.format(block.block_label,
+                                                     pin.origin.end.block.block_label)
+            ['{} <- {}'.format(block.block_label, destination.start.block.block_label)
+                for out_pin in block.output_pins
+                for destination in out_pin.destinations]
+            """
+            for out_pin in block.output_pins:
+                for destination in out_pin.destinations:
+                    relations += '{} <- {}\n'.format(block.block_label,
+                                                     destination.start.block.block_label)
+            """
+        return relations
 
-        self.popup.title = 'Block Relations'
-        self.popup.message = string
-        self.popup.open()
-
-    def to_ir(self):
+    def to_ir(self) -> backend.IR:
         """ Transforms the relations between blocks into an intermediate
             representation in O(n), n being the number of pins. """
         ir_blocks = {}
         ir_inputs = {}
         ir_outputs = {}
+        logger.debug('Transforming to IR')
         for block in self.blocks.children:
-            if block.is_orphan():
+            if block.is_orphan():  # Ignore orphaned blocks
                 continue
             block_hash = id(block)
             block_inputs, block_outputs = [], []
             avoid = False
-            if block.inputs:
-                for pin in block.inputs.children:
-                    pin_hash = id(pin)
-                    block_inputs.append(pin_hash)
-                    if pin.origin:
-                        other = id(pin.origin.end)
-                    else:
-                        avoid = True
-                        break  # This means we are not connected
-                    ir_inputs[pin_hash] = backend.InputEntry(origin=other,
-                                                             pin=pin,
-                                                             block=block_hash)
-            if block.outputs and not avoid:
-                for pin in block.outputs.children:
-                    pin_hash = id(pin)
-                    block_outputs.append(pin_hash)
-                    dest = []
-                    if pin.destinations:
-                        for d in pin.destinations:
-                            dest.append(id(d.start))
-                    ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
-                                                               pin=pin,
-                                                               block=block_hash)
-            if not avoid:
-                ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
-                                                           function=block.function,
-                                                           outputs=block_outputs)
+            for in_pin in block.input_pins:
+                pin_hash = id(in_pin)
+                block_inputs.append(pin_hash)
+                other = id(in_pin.origin.end)  # Always origin
+                ir_inputs[pin_hash] = backend.InputEntry(origin=other,
+                                                         pin=in_pin,
+                                                         block=block_hash)
+            for out_pin in block.output_pins:
+                pin_hash = id(out_pin)
+                block_outputs.append(pin_hash)
+                dest = list(map(id, out_pin.destinations))
+                ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
+                                                           pin=out_pin,
+                                                           block=block_hash)
+            ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
+                                                       function=block.function,
+                                                       outputs=block_outputs)
         self.block_hashes = ir_blocks
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
@@ -130,7 +126,7 @@ class BlackBoard(ScatterLayout):
         block_idx = list(map(id, self.blocks.children)).index(block_hash)
         block = self.blocks.children[block_idx]
         block.kindle()
-        logger.info('Kindling block {}'.format(block.__class__.__name__))
+        logger.debug('Kindling block {}'.format(block.__class__.__name__))
 
         # Python list comprehensions can be nested forwards, but also backwards
         # http://rhodesmill.org/brandon/2009/nested-comprehensions/
@@ -172,7 +168,7 @@ class BlackBoard(ScatterLayout):
 
         # if no connection was made
         if 'cur_line' in touch.ud.keys() and touch.button == 'left':
-            logging.info('Connection was not finished')
+            logger.info('Connection was not finished')
             touch.ud['cur_line'].delete_connection(self)
             return True
 

@@ -1,11 +1,14 @@
+# Persimmon stuff
+from persimmon.view.util import Type, BlockType, Pin
+# kivy stuff
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import BorderImage, Color
 from kivy.uix.image import Image
-
-from persimmon.view.util import Type, BlockType
+# Types are fun
+from typing import Optional
 
 
 Builder.load_file('view/blocks/block.kv')
@@ -43,7 +46,9 @@ class Block(DragBehavior, FloatLayout):
     def tainted(self, value):
         self._tainted = value
 
-    def in_pin(self, x, y):
+    def in_pin(self, x: float, y: float) -> Optional[Pin]:
+        """ Checks if a position collides with any of the pins in the block.
+        """
         for pin in self.input_pins + self.output_pins:
             if pin.collide_point(x, y):
                 return pin
@@ -81,12 +86,16 @@ class Block(DragBehavior, FloatLayout):
             self.fbind('pos', self.bind_border)
 
     def unkindle(self):
+        """ Reverts the border image. """
         if self.kindled:
             self.canvas.before.remove(self.kindled)
             self.funbind('pos', self.bind_border)
             self.kindled = None
+        else:
+            logger.warning('Called unkindle on a block not kindled')
 
     def bind_border(self, block, new_pos):
+        """ Bind border to position. """
         self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
 
     def is_orphan(self):
