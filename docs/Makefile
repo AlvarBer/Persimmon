@@ -1,4 +1,4 @@
-PDF := persimmon.pdf  # PDF Main Target
+PDF := persimmon.pdf  # PDF Default Target
 MARKDOWN := introduction.md literature.md workflow.md milestones.md \
 	risk.md interface.md implementation.md types.md \
 	evaluation.md postmortem.md  # Markdown files
@@ -30,28 +30,40 @@ $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex \
 		--metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata sansfont:"Helvetica Neue LT Com" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
-hertfordshire: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+hertfordshire: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex  \
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata institution:"University of Hertfordshire" \
+		--metadata school:"School of Computer Science" \
+		--metadata degree:"Modular BSc Honours in Computer Science" \
+		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
+		--metadata date:"$(shell date +%Y/%m/%d)" \
+		--metadata supervisor:"Dr.Mariana Lilley" \
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) \
+		-o persimmon_herts.pdf
+
+hertfordshire_print: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
 		--include-in-header question.tex \
 		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
 		--metadata sansfont:"Helvetica Neue LT Com" \
-		$(METADATA) $(MARKDOWN) -o persimmon_herts.pdf
-
-hertfordshire_apx: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA) $(APPENDIX)
-	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --highlight-style breezedark \
-		--include-in-header question.tex --include-after-body $(APPENDIX) \
-		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
-		--metadata sansfont:"Helvetica Neue LT Com" \
-		$(METADATA) $(MARKDOWN) -o persimmon_herts.pdf
-
+		--metadata institution:"University of Hertfordshire" \
+		--metadata school:"School of Computer Science" \
+		--metadata degree:"Modular BSc Honours in Computer Science" \
+		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
+		--metadata date:"$(shell date +%Y/%m/%d)" \
+		--metadata supervisor:"Dr.Mariana Lilley" \
+		$(METADATA) $(MARKDOWN) -o persimmon_herts_print.pdf
 
 complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \

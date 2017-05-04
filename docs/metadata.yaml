@@ -2,10 +2,8 @@
 ---
 author: Álvaro Bermejo García
 title: Persimmon
-subtitle: A visual programming interface for scikit-learn
-#date: 2017-03-01
+subtitle: A visual dataflow language for scikit-learn
 documentclass: scrreprt
-#sansfont: Helvetica Neue LT Com
 colorlinks: True
 lof: True
 papersize: A4
