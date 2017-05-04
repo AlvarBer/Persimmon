@@ -191,59 +191,6 @@ $for(header-includes)$
 $endfor$
 
 $if(title)$
-  \renewcommand\maketitle{%
-    \begin{titlepage}
-      \centering
-      $if(institution)$
-        {\scshape\Large $institution$ \par}
-      $else$
-        \null
-      $endif$
-      \vspace{0.25cm}
-      $if(school)$
-        {\scshape\large $school$ \par}
-      $else$
-        \null
-      $endif$
-      \vspace{1cm}
-      $if(degree)$
-        {\bfseries\large $degree$ \par}
-      $else$
-        \null
-      $endif$
-      \vspace{1.5cm}
-      $if(degreecode)$
-        {\itshape\large $degreecode$ \par}
-      $else$
-        \null
-      $endif$
-      \vspace{2cm}
-      %$if(date)$
-        %{\large \@date \par}%
-      %$endif$
-      \null
-      \vfill
-      %{\LARGE \@title \par}%
-      \null
-      \vfill
-      %{\large
-      %  \lineskip .5em%
-      %  \begin{tabular}[t]{c}%
-      %    \@author
-      %  \end{tabular}\par}%
-      \null
-      \vspace{0.25cm}
-      $if(supervisor)$
-        { Supervised by $supervisor$ \par}
-      $else$
-        \null
-      $endif$
-      \vfill
-    \end{titlepage}
-  }
-$endif$
-
-%$if(title)$
 %  $if(titlepic)$
 %    \usepackage{titlepic}
 %    \titlepic{\includegraphics[width=\textwidth]{$titlepic$}}
@@ -251,25 +198,22 @@ $endif$
 %  \title{$title$$if(thanks)$\thanks{$thanks$}$endif$$if(subtitle)$%
 %    \subtitle{$subtitle$}$endif$$if(institute)$\institute{$institute$}%
 %    $endif$}
-%   %Let's make titles better
-%  \newfontfamily{\titlefont}
-%   [UprightFont = {* 43 Light Extended},
-%    BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
-%  \usepackage{titling}
-%  \renewcommand{\maketitlehooka}{\sffamily}
-%$endif$
-%$if(subtitle)$
-%  \providecommand{\subtitle}[1]{}
-%  \subtitle{$subtitle$}
-%$endif$
-%$if(author)$
-%  \author{$for(author)$$author$$sep$ \and $endfor$}
-%$endif$
-%$if(institute)$
-%  \providecommand{\institute}[1]{}
-%  \institute{$for(institute)$$institute$$sep$ \and $endfor$}
-%$endif$
-%\date{$date$}
+  \title{$title$}
+$endif$
+$if(subtitle)$
+  \providecommand{\subtitle}[1]{}
+  \subtitle{$subtitle$}
+$endif$
+$if(author)$
+  \author{$for(author)$$author$$sep$ \and $endfor$}
+$endif$
+$if(institute)$
+  \providecommand{\institute}[1]{}
+  \institute{$for(institute)$$institute$$sep$ \and $endfor$}
+$endif$
+$if(date)$
+  \date{$date$}
+$endif$
 
 % Make sections great again
 \usepackage{titlesec}
@@ -277,45 +221,86 @@ $endif$
 \titleformat*{\section}{\sffamily\LARGE\bfseries}
 \titleformat*{\subsection}{\sffamily\Large\bfseries}
 \titleformat*{\subsubsection}{\sffamily\large\bfseries}
-\titleformat*{\paragraph}{\sffamily\large\bfseries}
-\titleformat*{\subparagraph}{\sffamily\large\bfseries}
 
-\renewenvironment{abstract}{%
+% Better abstract
+\renewenvironment{abstract}{
     \clearpage\small
     \null\vfil
-    \begin{center}%
+    \begin{center}
         {\bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
-    \end{center}%
+    \end{center}
     \quotation
 }
 
-\begin{document}
-  %$if(title)$
-   % \maketitle
-  %$endif$
-  %\begin{titlepage}
-  %\end{titlepage}
+% Title page
+\makeatletter
+\renewcommand\maketitle{
   \begin{titlepage}
     \centering
-    {\scshape\Large University of hertfordshire \par}
+    $if(institute)$
+      {\scshape\Large $institute$ \par}
+      %{\scshape\Large \@institute \par}
+    $else$
+      \null
+    $endif$
     \vspace{0.25cm}
-    {\scshape\large School of Computer Science \par}
+    $if(school)$
+      {\scshape\large $school$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{1cm}
-    {\large\bfseries Modular BSc Honours in Computer Science \par}
+    $if(degree)$
+      {\bfseries\large $degree$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{1.5cm}
-    {\large\itshape 6COM1054 - Artificial Intelligence Project \par}
+    $if(degreecode)$
+      {\itshape\large $degreecode$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{2cm}
-    {\large Final Report\par}
-    {\large \today\par}
+    $if(date)$
+      {\large \@date \par}
+    $else$
+      \null
+    $endif$
     \vfill
-    {\scshape\Large Persimmon: A visual dataflow language for machine learning pipelines \par}
+    {\scshape\Large \@title \par}
+    $if(subtitle)$
+      {\scshape\Large \@subtitle \par}
+    $else$
+      \null
+    $endif$
     \vfill
-    { Á. Bermejo \par}
+    $if(author)$
+      {\@author \par}
+    $else$
+      \null
+    $endif$
     \vspace{0.25cm}
-    { Supervised by Dr.Mariana Lilley \par}
+    $if(supervisor)$
+      {Supervised by $supervisor$\par}
+    $else$
+      \null
+    $endif$
+    $if(cosupervisor)$
+      {Cosupervised by $cosupervisor$\par}
+    $else$
+      \null
+    $endif$
     \vfill
   \end{titlepage}
+}
+\makeatother
 
+
+\begin{document}
+  $if(title)$
+    \maketitle
+  $endif$
   $if(abstract)$
     \begin{abstract}
       $abstract$

@@ -2,7 +2,8 @@
 ---
 author: Álvaro Bermejo García
 title: Persimmon
-subtitle: A visual dataflow language for scikit-learn
+subtitle: A visual dataflow language for machine learning
+date: \today
 documentclass: scrreprt
 colorlinks: True
 lof: True

@@ -2,7 +2,7 @@ PDF := persimmon.pdf  # PDF Default Target
 MARKDOWN := introduction.md literature.md workflow.md milestones.md \
 	risk.md interface.md implementation.md types.md \
 	evaluation.md postmortem.md  # Markdown files
-MARKDOWN_COMPLUTENSE := introduction.md focus.md literature.md \
+MARKDOWN_COMPLU := introduction.md focus.md literature.md \
 	workflow.md milestones.md risk.md interface.md implementation.md \
 	types.md analysis.md postmortem.md
 APPENDICES := packages.md how.md eval_form.md # Appendix after bibliography
@@ -13,7 +13,7 @@ TEMPLATE := template.tex  # LaTeX template for producing PDF
 
 # Add src prefix to markdown files
 MARKDOWN := $(addprefix src/, $(MARKDOWN))
-MARKDOWN_COMPLUTENSE := $(addprefix src/, $(MARKDOWN_COMPLUTENSE))
+MARKDOWN_COMPLU := $(addprefix src/, $(MARKDOWN_COMPLU))
 APPENDICES := $(addprefix src/, $(APPENDICES))
 
 GRAPHS := $(wildcard graphs/*.tex)  # Latex diagrams
@@ -26,54 +26,60 @@ APPENDIX := appendix.tex
 
 all: $(PDF)
 
+# Default pdf, no information about university, no extra complutense chapters,
+# no cool font
 $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
 		--include-in-header question.tex \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
 
-hertfordshire: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
-	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --highlight-style breezedark \
-		--include-in-header question.tex  \
-		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
-		--metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata institution:"University of Hertfordshire" \
-		--metadata school:"School of Computer Science" \
-		--metadata degree:"Modular BSc Honours in Computer Science" \
-		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata supervisor:"Dr.Mariana Lilley" \
-		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) \
-		-o persimmon_herts.pdf
-
-hertfordshire_print: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+# Hertfordshire digital submission
+herts: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
 		--include-in-header question.tex \
 		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
 		--metadata sansfont:"Helvetica Neue LT Com" \
-		--metadata institution:"University of Hertfordshire" \
+		--metadata institute:"University of Hertfordshire" \
 		--metadata school:"School of Computer Science" \
 		--metadata degree:"Modular BSc Honours in Computer Science" \
 		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
 		--metadata supervisor:"Dr.Mariana Lilley" \
-		$(METADATA) $(MARKDOWN) -o persimmon_herts_print.pdf
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) \
+		-o persimmon_herts.pdf
 
-complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+# Hertfordshire print submission
+herts_print: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
-		--metadata title:"A scikit-learn visual programming interface" \
-		--metadata date:"Director:Manuel Freire Moran, Codirector: Pablo Moreno Ger" \
-		--metadata sansfont:"Helvetica Neue LT Com" --metadata keywords:"Serious Learning","Visual Programming","Dataflow Programming" \
-		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLUTENSE) \
-		--include-after-body $(APPENDIX) -o $(PDF)
+		--metadata geometry:top=2.5cm,left=4cm,right=2.5cm,bottom=2.5cm \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata institute:"University of Hertfordshire" \
+		--metadata school:"School of Computer Science" \
+		--metadata degree:"Modular BSc Honours in Computer Science" \
+		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
+		--metadata supervisor:"Dr.Mariana Lilley" \
+		$(METADATA) $(MARKDOWN) -o persimmon_herts_print.pdf
+
+# Complutense digital submission
+complu: $(MARKDOWN_COMPLU) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
+	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
+		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
+		--top-level-division chapter --highlight-style breezedark \
+		--include-in-header question.tex \
+		--metadata sansfont:"Helvetica Neue LT Com" \
+		--metadata institute:"Universidad Complutense" \
+		--metadata school:"Facultad de Informática" \
+		--metadata degree:"Computer Engineering" \
+		--metadata degreecode:"Tecnología Específica de Computación" \
+		--metadata supervisor:"Manuel Freire Moran" \
+		--metadata cosupervisor:"Pablo Moreno Ger" \
+		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLU) \
+		--include-after-body $(APPENDIX) -o persimmon_complu.pdf
 
 # For standalone images
 images/%.pdf: graphs/%.tex
