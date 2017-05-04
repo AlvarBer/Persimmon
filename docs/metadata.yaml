@@ -11,14 +11,19 @@ fontsize: 12pt
 mainlang: English
 keywords:
     - Machine Learning
+    - Data Mining
     - Visual Programming
     - Dataflow Programming
-abstract: > 
+    - Functional Programming
+abstract: >
     Persimmon is a visual programming interface that leverages scikit-learn to
-    provide a drag and drop interface for developing Machine Learning and 
+    provide a drag and drop interface for developing Machine Learning and
     Data Mining pipelines. It is based on the dataflow programming principles,
     giving the user a functional visual language with a type safety system that
     checks connections at write time, non-strict evaluation, task
-    parallelization, and execution visualization.
+    parallelization, and execution visualization. It has been evaluated by
+    participants on a three-task form, overall receiving good
+    reviews, being praised by the use of colors to indicate types, consistent
+    design, easy to navigate and shallow learning curve.
 ---
 

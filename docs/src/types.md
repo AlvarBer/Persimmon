@@ -96,22 +96,22 @@ objects will run without crashing unless the code is executed.
 ![Type hierarchy](images/type_hierarchy.pdf)
 
 Because of this, types had to be invented, sometimes they correspond to
-underlying duck typing based interfaces but sometimes they do not have a direct
-equivalent on Python.
-Types on Persimmon follow a simply tree structure, and checks whether a
+underlying duck typing based interfaces, but sometimes they do not have a
+direct equivalent on Python.
+Types on Persimmon follow a simple tree structure, checking whether a
 connection is safe on the notion of the types having a is-consistent-with
-relation, this is based on [@pep483].
+relation, this is based on @pep483.
 A is-consistent-with notion extends the more typically used is-subtype-of
 relation used in type theory, with $Any$ representing the notion of a type that
 is-consistent-with every type (meaning that it is not a subtype of other types
 but all types are consistent with any and vice versa).
-Persimmon also adds to this the notion that the blocks of the respective edges
-of a connection must be different, one of the pins must be an `InputPin` and
-the other an `OutputPin`, and the `InputPin` must have no connection already.
+Adding to this blocks of the respective edges of a connection must be
+different, one of the pins must be an `InputPin` and the other an `OutputPin`,
+and the `InputPin` must have no connection already.
 
-These are all the rules used for checking if a connection is safe, it is a very
-primitive type system, with further improvements ranging with the ability to
-define arbitrary subtypes and even type classes.
+These are all the rules used for checking if a connection is safe, it is a
+primitive type system, with further improvements ranging from the ability to
+define arbitrary subtypes to type classes.
 
 
 Intermediate Representation

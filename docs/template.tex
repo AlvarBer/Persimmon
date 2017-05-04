@@ -290,9 +290,32 @@ $endif$
 }
 
 \begin{document}
-  $if(title)$
-    \maketitle
-  $endif$
+  %$if(title)$
+   % \maketitle
+  %$endif$
+  %\begin{titlepage}
+  %\end{titlepage}
+  \begin{titlepage}
+    \centering
+    {\scshape\Large University of hertfordshire \par}
+    \vspace{0.25cm}
+    {\scshape\large School of Computer Science \par}
+    \vspace{1cm}
+    {\large\bfseries Modular BSc Honours in Computer Science \par}
+    \vspace{1.5cm}
+    {\large\itshape 6COM1054 - Artificial Intelligence Project \par}
+    \vspace{2cm}
+    {\large Final Report\par}
+    {\large \today\par}
+    \vfill
+    {\scshape\Large Persimmon: A visual dataflow language for machine learning pipelines \par}
+    \vfill
+    { Á. Bermejo \par}
+    \vspace{0.25cm}
+    { Supervised by Dr.Mariana Lilley \par}
+    \vfill
+  \end{titlepage}
+
   $if(abstract)$
     \begin{abstract}
       $abstract$

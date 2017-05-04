@@ -8,9 +8,10 @@ On Machine Learning
 -------------------
 Although the project aims to provide a very high-level tool for machine
 learning without needing to get too deep into the algorithms, it is necessary to
-understand the library that is used for performing the actual ML.
+understand the library that is used for performing the actual machine learning
+(from here onwards referred as ml).
 
-While from the conception of the project `python` was set as the main language
+While from the conception of the project `python` was set as the main language,
 a comparison between ml libraries was done in order to evaluate scikit-learn
 against the competitors.
 There comparison over different solutions [@mlcomparison], but
@@ -31,9 +32,9 @@ starts).
 And finally, cluster-oriented computing frameworks like Spark or Hadoop are
 usually in compiled languages like `Java` or `C++` for performance reasons.
 
-The main paper of sklearn is [@scikitlearn], scikit-learn is based on Numpy (a
-n-dimensions array for `Python` [@numpy]) and scipy (a scientific computing
-framework [@scipy]).
+Persimmon main tool is scikit-learn [@scikitlearn], scikit-learn (also known as
+sklearn) is based on Numpy (a n-dimensional array for `Python` [@numpy]) and
+scipy (a scientific computing framework [@scipy]).
 Persimmon also uses pandas [@pandas] for input and output handling.
 
 Others papers related to the pitfalls of machine learning that proved useful
@@ -43,7 +44,7 @@ when analyzing workflows were [@hughes1968mean], [@pitfalls].
 On Dataflow Programming
 -----------------------
 After reviewing dataflow seminal paper @bell, and @sousa2012dataflow it was
-clear then fundamental step to have a working system was to write a compilation
+clear the fundamental step to have a working system was writing a compilation
 algorithm from the visual representation to `python code`.
 
 There are different ways to implement dataflow programming compilers, for now

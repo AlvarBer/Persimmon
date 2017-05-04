@@ -5,7 +5,7 @@ MARKDOWN := introduction.md literature.md workflow.md milestones.md \
 MARKDOWN_COMPLUTENSE := introduction.md focus.md literature.md \
 	workflow.md milestones.md risk.md interface.md implementation.md \
 	types.md analysis.md postmortem.md
-APPENDICES := packages.md how.md  # Appendix after bibliography
+APPENDICES := packages.md how.md eval_form.md # Appendix after bibliography
 METADATA := metadata.yaml  # Metadata files (Author, Date, Title, etc..)
 BIBLIOGRAPHY := persimmon.bib  # BibLaTeX bibliography
 CSL := emerald-harvard.csl  # CSL file used for citations
@@ -75,16 +75,6 @@ complutense: $(MARKDOWN_COMPLUTENSE) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOG
 		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLUTENSE) \
 		--include-after-body $(APPENDIX) -o $(PDF)
 
-twocol: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
-	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
-		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--top-level-division chapter --highlight-style breezedark \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
-		--metadata sansfont:"Helvetica Neue LT Com" -H table.tex \
-		--metadata classoption:'twocolumn' \
-		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o test.pdf
-
-
 # For standalone images
 images/%.pdf: graphs/%.tex
 	xelatex $< > /dev/null
@@ -110,5 +100,5 @@ $(APPENDIX_TRAVIS): $(APPENDICES)
 
 
 clean:
-	rm -f images/*.pdf $(PDF) *.log *.aux appendix*
+	rm -f images/*.pdf *.pdf *.log *.aux appendix*
 
