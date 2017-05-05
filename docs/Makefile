@@ -87,6 +87,7 @@ images/%.pdf: graphs/%.tex
 	@mv $*.pdf images/
 	@rm -f $*.log $*.aux
 
+# Appendices
 $(APPENDIX): $(APPENDICES)
 	pandoc --smart --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@
 
@@ -96,8 +97,8 @@ APPENDIX_TRAVIS := appendix_travis.tex
 travis: $(MARKDOWN) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
 	pandoc --smart --standalone --latex-engine xelatex --template $(TEMPLATE) \
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
-		--chapters --highlight-style breezedark \
-		--metadata date:"$(shell date +%Y/%m/%d)" \
+		--chapters --highlight-style espresso \
+		--include-in-header question.tex \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX_TRAVIS) \
 		-o $(PDF)
 

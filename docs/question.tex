@@ -1,0 +1,44 @@
+\def\question#1\par#2\par{\hbox to \hsize
+{\vbox{\hsize=0.72\hsize #1\dotfill}\quad#2\hfil}\medskip\goodbreak}
+
+\newdimen\scalewidth
+\scalewidth=0.3\hsize
+
+\def\xfamiliar{\xscalee{not familiar at all}{very familiar}}
+\def\xagree{\xscalee{strongly disagree}{agree completely}}
+\def\boxes{\fiveboxes{}{}{}{}{}\ignorespaces}
+\def\xscale#1#2{%
+    \setbox0=\hbox{\boxes}%
+    \setbox1=\hbox to \wd0{\small\strut\hfill #2 $\to$}%
+    \setbox2=\hbox to \wd0{\small\strut $\gets$ #1 \hfill}%
+    \vbox{\vbox to 0pt{\vss\box1\box2\kern2pt}\vbox{\box0}}}
+
+\def\xdifficulty{\xscalee{very difficult}{very easy}}
+\def\xscalee#1#2{%
+    \setbox0=\hbox{\boxees}%
+    \setbox1=\hbox to \wd0{\small\strut\hfill #2 $\to$}%
+    \setbox2=\hbox to \wd0{\small\strut $\gets$ #1 \hfill}%
+    \vbox{\vbox to 0pt{\vss\box1\box2\kern2pt}\vbox{\box0}}}
+\def\boxees{\sevenboxes{}{}{}{}{}{}{}\ignorespaces}
+
+\def\boxit#1{\hbox{\lower0.7ex\vbox{\hrule\hbox{\vrule\kern1pt
+    \vbox{\kern1pt\hbox to 1.4em
+    {\small\strut\hfil #1\hfil}\kern1pt}\kern1pt\vrule}\hrule}}}
+
+\def\fiveboxes#1#2#3#4#5{\hbox to\scalewidth
+    {\boxit{#1}\hfil\boxit{#2}\hfil\boxit{#3}\hfil%
+     \boxit{#4}\hfil\boxit{#5}}}
+
+\def\sevenboxes#1#2#3#4#5#6#7{\hbox to\scalewidth
+    {\boxit{#1}\hfil\boxit{#2}\hfil\boxit{#3}\hfil%
+     \boxit{#4}\hfil\boxit{#5}\hfil\boxit{#6}\hfil\boxit{#7}}}
+
+\def\freequestion#1\par{#1\par\nobreak
+    \begingroup\nobreak
+    \advance\leftskip by 2pc
+    \hrule width 0pt height 1.7\baselineskip\hrulefill
+    \hrule width 0pt height 1.7\baselineskip\hrulefill
+    \par
+    \medskip
+    \endgroup
+    }
