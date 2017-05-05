@@ -10,6 +10,8 @@ setup(name='persimmon',
       download_url='https://github.com/AlvarBer/Persimmon/archive/v0.7-beta.tar.gz',
       license='MIT',
       packages=find_packages(),
-      install_requires=['Kivy', 'scikit-learn', 'pandas', 'numpy',
-                        'scipy', 'coloredlogs']
+      include_package_data=True,
+      setup_requires=['Cython'],
+      install_requires=['Cython', 'Kivy', 'scipy', 'scikit-learn', 'pandas',
+                        'coloredlogs'],
       zip_safe=False)

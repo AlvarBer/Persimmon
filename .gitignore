@@ -28,3 +28,6 @@ dist/
 
 # CSV Files
 *.csv
+
+# virtualenv
+env
