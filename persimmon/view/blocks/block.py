@@ -41,8 +41,13 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
 
     @property
     def tainted(self):
-        return (any(in_pin.origin == None for in_pin in self.input_pins) and
-                not self.is_orphan())# and self._tainted
+        # TODO: Check for orphanhood is not necessary
+        return (self._tainted or (not self.is_orphan() and
+                any(in_pin.origin == None for in_pin in self.input_pins)))
+
+    @tainted.setter
+    def tainted(self, value):
+        self._tainted = value
 
     def is_orphan(self) -> bool:
         """ Tells if a block is orphan, i.e. whether it has any connection """

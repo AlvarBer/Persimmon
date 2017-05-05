@@ -21,7 +21,7 @@ class CSVOutBlock(Block):
                                       size_hint=(0.8, 0.8))
         # Let's bind two together
         self.file_dialog.bind(file_chosen=self.setter('path'))
-        #self.tainted = True
+        self.tainted = True
         self.tainted_msg = 'File not chosen in block {}!'.format(self.title)
 
     def function(self):
@@ -29,6 +29,6 @@ class CSVOutBlock(Block):
             self.in_1.val = pd.DataFrame(self.in_1.val)
         self.in_1.val.to_csv(path_or_buf=self.path, index=False)
 
-    @Block.tainted.getter
-    def tainted(self):
-        return super().tainted or not self.file_chosen.endswith('.csv')
+    def on_path(self, instance, value):
+        self.tainted = not value.endswith('.csv')
+
