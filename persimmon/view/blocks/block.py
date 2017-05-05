@@ -1,5 +1,5 @@
 # Persimmon stuff
-from persimmon.view.util import Type, BlockType, Pin
+from persimmon.view.util import Type, BlockType, Pin, AbstractWidget
 # kivy stuff
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
@@ -9,17 +9,10 @@ from kivy.graphics import BorderImage, Color
 from kivy.uix.image import Image
 # Types are fun
 from typing import Optional
-# Metaclasses are even more fun
-from abc import ABCMeta, abstractmethod
-from kivy.uix.widget import WidgetMetaclass
+from abc import abstractmethod
 
 
 Builder.load_file('view/blocks/block.kv')
-
-class AbstractWidget(ABCMeta, WidgetMetaclass):
-    """ Necessary because python meta classes do not support multiple
-    inheritance. """
-    pass
 
 class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])

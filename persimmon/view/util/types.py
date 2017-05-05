@@ -1,5 +1,12 @@
 from enum import Enum
+from abc import ABCMeta
+from kivy.uix.widget import WidgetMetaclass
 
+
+class AbstractWidget(ABCMeta, WidgetMetaclass):
+    """ Necessary because python meta classes do not support multiple
+    inheritance. """
+    pass
 
 class Type(Enum):
     ANY = 0.9, 0.9, 0.9

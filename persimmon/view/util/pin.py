@@ -3,12 +3,13 @@ from persimmon.view.util import CircularButton, Connection
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
-from persimmon.view.util import Type
+from persimmon.view.util import Type, AbstractWidget
+from abc import abstractmethod
 
 
 Builder.load_file('view/util/pin.kv')
 
-class Pin(CircularButton):
+class Pin(CircularButton, metaclass=AbstractWidget):
     val = ObjectProperty(None, force_dispatch=True)
     block = ObjectProperty()
     ellipse = ObjectProperty()
@@ -19,15 +20,18 @@ class Pin(CircularButton):
         """ If the kv lang was a bit smarted this would not be needed
         """
         self.color = value.value
-
+    
+    @abstractmethod
     def on_touch_down(self, touch):
-       pass 
-
+        raise NotImplementedError
+    
+    @abstractmethod
     def on_touch_up(self, touch):
-        pass
-
+        raise NotImplementedError
+    
+    @abstractmethod
     def on_connection_delete(self, connection):
-        pass
+        raise NotImplementedError
 
     def typesafe(self, other):
         if ((self._type == Type.ANY or other._type == Type.ANY) and
