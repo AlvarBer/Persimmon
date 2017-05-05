@@ -24,6 +24,7 @@ from collections import deque
 import logging
 from typing import Optional
 from persimmon.view.blocks import Block
+from itertools import chain
 
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class BlackBoard(ScatterLayout):
                 for out_pin in block.output_pins
                 for destination in out_pin.destinations)
 
-        return ''.join(ins) + ''.join(outs)
+        return ''.join(chain(ins, outs))
 
     def to_ir(self) -> backend.IR:
         """ Transforms the relations between blocks into an intermediate

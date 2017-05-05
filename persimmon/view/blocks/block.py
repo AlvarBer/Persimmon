@@ -9,11 +9,19 @@ from kivy.graphics import BorderImage, Color
 from kivy.uix.image import Image
 # Types are fun
 from typing import Optional
+# Metaclasses are even more fun
+from abc import ABCMeta, abstractmethod
+from kivy.uix.widget import WidgetMetaclass
 
 
 Builder.load_file('view/blocks/block.kv')
 
-class Block(DragBehavior, FloatLayout):
+class AbstractWidget(ABCMeta, WidgetMetaclass):
+    """ Necessary because python meta classes do not support multiple
+    inheritance. """
+    pass
+
+class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])
     title = StringProperty()
     inputs = ObjectProperty()
@@ -40,11 +48,18 @@ class Block(DragBehavior, FloatLayout):
 
     @property
     def tainted(self):
-        return any(in_pin.origin == None for in_pin in self.input_pins) and not self.is_orphan()# and self._tainted
+        return (any(in_pin.origin == None for in_pin in self.input_pins) and
+                not self.is_orphan())# and self._tainted
 
-    @tainted.setter
-    def tainted(self, value):
-        self._tainted = value
+    def is_orphan(self) -> bool:
+        """ Tells if a block is orphan, i.e. whether it has any connection """
+        for in_pin in self.input_pins:
+            if in_pin.origin:
+                return False
+        for out_pin in self.output_pins:
+            if out_pin.destinations:
+                return False
+        return True
 
     def in_pin(self, x: float, y: float) -> Optional[Pin]:
         """ Checks if a position collides with any of the pins in the block.
@@ -54,12 +69,11 @@ class Block(DragBehavior, FloatLayout):
                 return pin
         return None
 
+    @abstractmethod
     def function(self):
         pass
 
-    def pin_relative_position(self, pin):
-        return pin.center
-
+    # Kivy touch events override
     def on_touch_down(self, touch):
         pin = self.in_pin(*touch.pos)
         if pin:  # if touch is on pin let them handle
@@ -83,26 +97,18 @@ class Block(DragBehavior, FloatLayout):
                                        size=(self.width + 10,
                                              self.height + 10),
                                        texture=self.border_texture)
-            self.fbind('pos', self.bind_border)
+            self.fbind('pos', self._bind_border)
 
     def unkindle(self):
         """ Reverts the border image. """
         if self.kindled:
             self.canvas.before.remove(self.kindled)
-            self.funbind('pos', self.bind_border)
+            self.funbind('pos', self._bind_border)
             self.kindled = None
         else:
             logger.warning('Called unkindle on a block not kindled')
 
-    def bind_border(self, block, new_pos):
+    # Auxiliary functions
+    def _bind_border(self, block, new_pos):
         """ Bind border to position. """
         self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
-
-    def is_orphan(self):
-        for in_pin in self.input_pins:
-            if in_pin.origin:
-                return False
-        for out_pin in self.output_pins:
-            if out_pin.destinations:
-                return False
-        return True
