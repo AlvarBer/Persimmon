@@ -30,10 +30,10 @@ class Pin(CircularButton, metaclass=AbstractWidget):
         raise NotImplementedError
     
     @abstractmethod
-    def on_connection_delete(self, connection):
+    def on_connection_delete(self, connection: Connection):
         raise NotImplementedError
 
-    def typesafe(self, other):
+    def typesafe(self, other: 'Pin') -> bool:
         if ((self._type == Type.ANY or other._type == Type.ANY) and
                 self.block != other.block and self.__class__ != other.__class__):
             return True  # Anything is possible with ANY

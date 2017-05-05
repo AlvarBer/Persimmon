@@ -20,7 +20,7 @@ class CSVInBlock(Block):
                                       size_hint=(0.8, 0.8))
         # This binds two properties together
         self.file_dialog.bind(file_chosen=self.setter('file_chosen'))
-        self._tainted = True
+        #self._tainted = True
         self.tainted_msg = 'File not chosen in block {}!'.format(self.title)
 
     def function(self):
@@ -29,4 +29,3 @@ class CSVInBlock(Block):
     @Block.tainted.getter
     def tainted(self):
         return super().tainted or not self.file_chosen.endswith('.csv')
-

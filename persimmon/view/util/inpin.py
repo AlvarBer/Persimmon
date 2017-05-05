@@ -34,8 +34,8 @@ class InputPin(Pin):
         else:
             return False
 
-    def on_connection_delete(self, connection):
+    def on_connection_delete(self, connection: Connection):
         self.origin = None
 
-    def typesafe(self, other):
+    def typesafe(self, other: Pin) -> bool:
         return super().typesafe(other) and self.origin == None

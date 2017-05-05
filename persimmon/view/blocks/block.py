@@ -64,7 +64,7 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
 
     @abstractmethod
     def function(self):
-        pass
+        raise NotImplementedError
 
     # Kivy touch events override
     def on_touch_down(self, touch):
