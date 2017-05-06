@@ -1,18 +1,9 @@
 
 ---
-author: |
-    Á. Bermejo
-    Supervised by Mariana Lilley
-title: |
-    University of Hertfordshire
-    School of Computer Science
-    Modular BSc Honours in Computer Science
-    6COM105	- Artificial Intelligence Project
-subtitle: |
-    Final Report
-    April 2017
-    Persimmon
-#date: 2017-03-01
+author: Álvaro Bermejo García
+title: Persimmon
+subtitle: A visual dataflow language for machine learning
+date: \today
 documentclass: scrreprt
 colorlinks: True
 lof: True

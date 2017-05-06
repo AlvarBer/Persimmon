@@ -1,12 +1,14 @@
+# Kivy stuff
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.graphics import Color, Ellipse, Line
-from functools import partial
 from kivy.clock import Clock
-from time import sleep
+# Numpy for sin
 import numpy as np
+# Others
 from math import pi
+import logging
 
 
 """
@@ -24,6 +26,8 @@ from math import pi
         #Line:
             #points: root.lin
 """
+
+logger = logging.getLogger(__name__)
 
 class Connection(Widget):
     start = ObjectProperty(allownone=True)
@@ -140,7 +144,7 @@ class Connection(Widget):
         elif pin == self.end:
             self.canvas.before.remove(self.end_cr)
         else:
-            print('Attempted to uncircle pin without circle')
+            logger.error('Attempted to uncircle pin without circle')
 
     def circle_bind(self, pin, new_pos):
         if pin == self.start:
@@ -148,7 +152,7 @@ class Connection(Widget):
         elif pin == self.end:
             self.end_cr.pos = pin.pos
         else:
-            print('No circle associated with pin')
+            logger.error('No circle associated with pin')
 
     def line_bind(self, pin, new_pos):
         if pin == self.start:
@@ -156,14 +160,14 @@ class Connection(Widget):
         elif pin == self.end:
             self.lin.points = self.lin.points[:2] + pin.center
         else:
-            print('No line associated with pin')
+            logger.error('No line associated with pin')
 
     def warn(self):
         self.warned = True
         self.canvas.before.remove(self.lin)
         with self.canvas.before:
             Color(1, 0, 0)
-            self.lin = Line(points=self.lin.points, width=2)
+            self.lin = Line(points=self.lin.points, width=3)
 
     def unwarn(self):
         self.warned = False
@@ -174,6 +178,7 @@ class Connection(Widget):
 
     def pulse(self):
         self.it = self._change_width()
+        next(self.it)
         Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
 
     def stop_pulse(self):

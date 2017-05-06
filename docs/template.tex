@@ -54,8 +54,8 @@ $endif$
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
 \IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+  \usepackage{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
 $if(geometry)$
   \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
@@ -85,18 +85,18 @@ $endif$
         breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 $if(lang)$
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
-$if(babel-newcommands)$
-  $babel-newcommands$
-$endif$
-\else
-  \usepackage{polyglossia}
-  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
-$for(polyglossia-otherlangs)$
-  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
-$endfor$
-\fi
+  \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+    \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+  $if(babel-newcommands)$
+    $babel-newcommands$
+  $endif$
+  \else
+    \usepackage{polyglossia}
+    \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+    $for(polyglossia-otherlangs)$
+      \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+    $endfor$
+  \fi
 $endif$
 $if(natbib)$
   \usepackage{natbib}
@@ -183,7 +183,7 @@ $endif$
 
 % set default figure placement to htbp
 \makeatletter
-\def\fps@figure{htbp}
+  \def\fps@figure{htbp}
 \makeatother
 
 $for(header-includes)$
@@ -191,31 +191,18 @@ $for(header-includes)$
 $endfor$
 
 $if(title)$
-  $if(titlepic)$
-    \usepackage{titlepic}
-    \titlepic{\includegraphics[width=\textwidth]{$titlepic$}}
-  $endif$
-  \title{$title$$if(thanks)$\thanks{$thanks$}$endif$$if(subtitle)$%
-    \subtitle{$subtitle$}$endif$$if(institute)$\institute{$institute$}%
-    $endif$}
-  %\makeatletter
-  %\def\maketitle{
-  % \newpage
-  % \null
-  % \vskip 2em%
-  %   {\sffamily\Huge\bfseries \@title}\par%
-  %   {\@author}\par}%
-  %\makeatother
-  % Let's make titles better
-  %\newfontfamily{\titlefont}
-  % [UprightFont = {* 43 Light Extended},
-  %  BoldFont = {* 107 Extra Black Condensed}]{Helvetica Neue LT Com}
-  %\usepackage{titling}
-  %\renewcommand{\maketitlehooka}{\sffamily}
-%$endif$
-%$if(subtitle)$
-  %\providecommand{\subtitle}[1]{}
-  %\subtitle{$subtitle$}
+%  $if(titlepic)$
+%    \usepackage{titlepic}
+%    \titlepic{\includegraphics[width=\textwidth]{$titlepic$}}
+%  $endif$
+%  \title{$title$$if(thanks)$\thanks{$thanks$}$endif$$if(subtitle)$%
+%    \subtitle{$subtitle$}$endif$$if(institute)$\institute{$institute$}%
+%    $endif$}
+  \title{$title$}
+$endif$
+$if(subtitle)$
+  \providecommand{\subtitle}[1]{}
+  \subtitle{$subtitle$}
 $endif$
 $if(author)$
   \author{$for(author)$$author$$sep$ \and $endfor$}
@@ -224,7 +211,9 @@ $if(institute)$
   \providecommand{\institute}[1]{}
   \institute{$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
-\date{$date$}
+$if(date)$
+  \date{$date$}
+$endif$
 
 % Make sections great again
 \usepackage{titlesec}
@@ -232,45 +221,86 @@ $endif$
 \titleformat*{\section}{\sffamily\LARGE\bfseries}
 \titleformat*{\subsection}{\sffamily\Large\bfseries}
 \titleformat*{\subsubsection}{\sffamily\large\bfseries}
-\titleformat*{\paragraph}{\sffamily\large\bfseries}
-\titleformat*{\subparagraph}{\sffamily\large\bfseries}
 
-\renewenvironment{abstract}{%
+% Better abstract
+\renewenvironment{abstract}{
     \clearpage\small
     \null\vfil
-    \begin{center}%
+    \begin{center}
         {\bfseries \abstractname\vspace{-.5em}\vspace{0pt}}%
-    \end{center}%
+    \end{center}
     \quotation
-    }
+}
 
-\begin{document}
-  %$if(title)$
-   % \maketitle
-  %$endif$
-  %\begin{titlepage}
-  %\end{titlepage}
+% Title page
+\makeatletter
+\renewcommand\maketitle{
   \begin{titlepage}
     \centering
-    {\scshape\Large University of hertfordshire \par}
+    $if(institute)$
+      {\scshape\Large $institute$ \par}
+      %{\scshape\Large \@institute \par}
+    $else$
+      \null
+    $endif$
     \vspace{0.25cm}
-    {\scshape\large School of Computer Science \par}
+    $if(school)$
+      {\scshape\large $school$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{1cm}
-    {\large\bfseries Modular BSc Honours in Computer Science \par}
+    $if(degree)$
+      {\bfseries\large $degree$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{1.5cm}
-    {\large\itshape 6COM1054 - Artificial Intelligence Project \par}
+    $if(degreecode)$
+      {\itshape\large $degreecode$ \par}
+    $else$
+      \null
+    $endif$
     \vspace{2cm}
-    {\large Final Report\par}
-    {\large \today\par}
+    $if(date)$
+      {\large \@date \par}
+    $else$
+      \null
+    $endif$
     \vfill
-    {\scshape\Large Persimmon: A visual dataflow language for machine learning pipelines \par}
+    {\scshape\Large \@title \par}
+    $if(subtitle)$
+      {\scshape\Large \@subtitle \par}
+    $else$
+      \null
+    $endif$
     \vfill
-    { Á. Bermejo \par}
+    $if(author)$
+      {\@author \par}
+    $else$
+      \null
+    $endif$
     \vspace{0.25cm}
-    { Supervised by Dr.Mariana Lilley \par}
+    $if(supervisor)$
+      {Supervised by $supervisor$\par}
+    $else$
+      \null
+    $endif$
+    $if(cosupervisor)$
+      {Cosupervised by $cosupervisor$\par}
+    $else$
+      \null
+    $endif$
     \vfill
   \end{titlepage}
+}
+\makeatother
 
+
+\begin{document}
+  $if(title)$
+    \maketitle
+  $endif$
   $if(abstract)$
     \begin{abstract}
       $abstract$

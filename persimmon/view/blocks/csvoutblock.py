@@ -3,6 +3,7 @@ from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
+
 import numpy as np
 import pandas as pd
 
@@ -21,8 +22,7 @@ class CSVOutBlock(Block):
         # Let's bind two together
         self.file_dialog.bind(file_chosen=self.setter('path'))
         self.tainted = True
-        self.tainted_msg = 'File not chosen in block {}!'.format(self.block_label)
-
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.title)
 
     def function(self):
         if type(self.in_1.val) == np.ndarray:
@@ -30,7 +30,5 @@ class CSVOutBlock(Block):
         self.in_1.val.to_csv(path_or_buf=self.path, index=False)
 
     def on_path(self, instance, value):
-        if value.endswith('.csv'):
-            self.tainted = False
-        else:
-            self.tainted = True
+        self.tainted = not value.endswith('.csv')
+

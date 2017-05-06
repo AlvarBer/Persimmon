@@ -1,12 +1,12 @@
-<RandomForestBlock>:
-	title: 'Random Forest'
+<SGDBlock>:
+	title: 'Stochastic Gradient Descent'
 	block_color: root.b.CLASSIFICATOR.value
 	outputs: outputs
-	out_1: out_1
+	est_out: est_out
 	Widget:
 		id: outputs
 		OutputPin:
-			id: out_1
+			id: est_out
 			x: root.x + root.width - 10 - 5
 			y: root.y + root.height / 2
 			_type: root.t.CLASSIFICATOR

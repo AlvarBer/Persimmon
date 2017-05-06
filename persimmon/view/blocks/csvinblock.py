@@ -21,13 +21,10 @@ class CSVInBlock(Block):
         # This binds two properties together
         self.file_dialog.bind(file_chosen=self.setter('file_chosen'))
         self.tainted = True
-        self.tainted_msg = 'File not chosen in block {}!'.format(self.block_label)
+        self.tainted_msg = 'File not chosen in block {}!'.format(self.title)
 
     def function(self):
         self.out_1.val = pd.read_csv(self.file_chosen, header=0)
 
     def on_file_chosen(self, instance, value):
-        if value.endswith('.csv'):
-            self.tainted = False
-        else:
-            self.tainted = True
+        self.tainted = not value.endswith('.csv')

@@ -33,7 +33,7 @@ compile time (on the literature referred as write time).
 
 The two languages
 -----------------
-As seen on the previous sections and the implementation chapter Python and
+As seen on the previous sections and the [implementation chapter](#implementation) Python and
 Persimmon are essentially two different languages, but just how different are
 they?
 

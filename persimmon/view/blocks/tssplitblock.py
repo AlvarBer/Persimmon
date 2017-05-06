@@ -4,13 +4,13 @@ from persimmon.view.blocks import Block
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 
-from sklearn.model_selection import KFold
+from sklearn.model_selection import TimeSeriesSplit
 
 
-Builder.load_file('view/blocks/tenfoldblock.kv')
+Builder.load_file('view/blocks/tssplitblock.kv')
 
-class TenFoldBlock(Block):
+class TSSplitBlock(Block):
     out_1 = ObjectProperty()
 
     def function(self):
-        self.out_1.val = KFold()
+        self.out_1.val = TimeSeriesSplit()

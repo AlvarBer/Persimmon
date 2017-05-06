@@ -1,33 +1,33 @@
+# Persimmon imports
+from persimmon.view import blocks
+from persimmon.view.util import Notification
+import persimmon.backend as backend
+# Kivy imports
 from kivy.app import App
-# Widgets
+from kivy.lang import Builder
+from kivy.clock import Clock, mainthread
+from kivy.config import Config
+from kivy.properties import ObjectProperty
+from kivy.core.window import Window
+# Kivy Widgets
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.uix.label import Label
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatterlayout import ScatterLayout
-# Properties
-from kivy.properties import (ObjectProperty, NumericProperty, StringProperty,
-                             ListProperty)
-# Miscelaneous
-from kivy.config import Config
-from kivy.graphics import Color, Ellipse, Line, Rectangle, Bezier
-from kivy.core.window import Window
-from functools import partial
-
-from persimmon.view import blocks
-from persimmon.view.util import (CircularButton, InputPin, OutputPin,
-                                 Notification)
-
+# Others
+from functools import partial, reduce
 from collections import deque
-import persimmon.backend as backend
-from kivy.lang import Builder
-from kivy.clock import Clock
-import threading
+import logging
+from typing import Optional
+from persimmon.view.blocks import Block
+from itertools import chain
 
 
+logger = logging.getLogger(__name__)
 Config.read('config.ini')
 
 class ViewApp(App):
@@ -43,11 +43,90 @@ class ViewApp(App):
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
-    popup = ObjectProperty(Notification(title=''))
+    popup = ObjectProperty(Notification())
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def execute_graph(self):
+        """ Tries to execute the graph, if some block is tainted it prevents
+        the execution, if not it starts running the backend. """
+        logger.debug('Checking taint')
+        # Check if any block is tainted
+        if any(map(lambda block: block.tainted, self.blocks.children)):
+            # Get tainted block
+            tainted_block = reduce(lambda l, r: l if l.tainted else r,
+                                   self.blocks.children)
+            logger.debug('Some block is tainted')
+            self.popup.title = 'Warning'
+            self.popup.message = tainted_block.tainted_msg
+            self.popup.open()
+        else:
+            logger.debug('No block is tainted')
+            for block in self.blocks.children:
+                if block.kindled:
+                    block.unkindle()
+            backend.execute_graph(self.to_ir(), self)
 
+    def get_relations(self) -> str:
+        """ Gets the relations between pins as a string. """
+        # generator expressions are cool
+        ins = ('{} -> {}\n'.format(block.title, in_pin.origin.end.block.title)
+               for block in self.blocks.children
+               for in_pin in block.input_pins if in_pin.origin)
+        outs = ('{} <- {}\n'.format(block.title, destination.start.block.title)
+                for block in self.blocks.children
+                for out_pin in block.output_pins
+                for destination in out_pin.destinations)
+
+        return ''.join(chain(ins, outs))
+
+    def to_ir(self) -> backend.IR:
+        """ Transforms the relations between blocks into an intermediate
+            representation in O(n), n being the number of pins. """
+        ir_blocks = {}
+        ir_inputs = {}
+        ir_outputs = {}
+        logger.debug('Transforming to IR')
+        for block in self.blocks.children:
+            if block.is_orphan():  # Ignore orphaned blocks
+                continue
+            block_hash = id(block)
+            block_inputs, block_outputs = [], []
+            avoid = False
+            for in_pin in block.input_pins:
+                pin_hash = id(in_pin)
+                block_inputs.append(pin_hash)
+                other = id(in_pin.origin.end)  # Always origin
+                ir_inputs[pin_hash] = backend.InputEntry(origin=other,
+                                                         pin=in_pin,
+                                                         block=block_hash)
+            for out_pin in block.output_pins:
+                pin_hash = id(out_pin)
+                block_outputs.append(pin_hash)
+                dest = list(map(id, out_pin.destinations))
+                ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
+                                                           pin=out_pin,
+                                                           block=block_hash)
+            ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
+                                                       function=block.function,
+                                                       outputs=block_outputs)
+        self.block_hashes = ir_blocks
+        return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
+
+    #@mainthread Concurrency bug?
+    def on_block_executed(self, block_hash: int):
+        """ Callback that kindles a block, pulses future connections and
+        stops the pulse of past connections. """
+        block_idx = list(map(id, self.blocks.children)).index(block_hash)
+        block = self.blocks.children[block_idx]
+        block.kindle()
+        logger.debug('Kindling block {}'.format(block.__class__.__name__))
+
+        # Python list comprehensions can be nested forwards, but also backwards
+        # http://rhodesmill.org/brandon/2009/nested-comprehensions/
+        [connection.pulse() for out_pin in block.output_pins
+                            for connection in out_pin.destinations]
+        [in_pin.origin.stop_pulse() for in_pin in block.input_pins]
+
+    # Touch events override
     def on_touch_move(self, touch):
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
@@ -56,8 +135,9 @@ class BlackBoard(ScatterLayout):
         else:
             return super().on_touch_move(touch)
 
-    # TODO: Move dragging info into blackboard class instead of touch global
     def on_touch_up(self, touch):
+        """ Inherited from
+        https://github.com/kivy/kivy/blob/master/kivy/uix/scatter.py#L590. """
         if self.disabled:
             return
 
@@ -78,8 +158,9 @@ class BlackBoard(ScatterLayout):
             del self._last_touch_pos[touch]
             self._touches.remove(touch)
 
-        if ('cur_line' in touch.ud.keys() and touch.button == 'left'):
-            print('Delete connection')
+        # if no connection was made
+        if 'cur_line' in touch.ud.keys() and touch.button == 'left':
+            logger.info('Connection was not finished')
             touch.ud['cur_line'].delete_connection(self)
             return True
 
@@ -87,109 +168,23 @@ class BlackBoard(ScatterLayout):
         if self.collide_point(x, y):
             return True
 
-    def in_block(self, x, y):
+    def in_block(self, x: float, y: float) -> Optional[Block]:
+        """ Check if a position hits a block. """
         for block in self.blocks.children:
             if block.collide_point(x, y):
                 return block
         return None
 
-    def see_relations(self):
-        string = ''
-        for block in self.blocks.children:
-            if block.inputs:
-                for pin in block.inputs.children:
-                    if pin.origin:
-                        string += '{} -> {}\n'.format(block.block_label,
-                                                      pin.origin.end.block.block_label)
-            if block.outputs:
-                for pin in block.outputs.children:
-                    for destination in pin.destinations:
-                        string += '{} <- {}\n'.format(block.block_label,
-                                                      destination.start.block.block_label)
-
-        self.popup.title = 'Block Relations'
-        self.popup.message = string
-        self.popup.open()
-
-    def to_ir(self):
-        """ Transforms the relations between blocks into an intermediate
-            representation in O(n), n being the number of pins. """
-        ir_blocks = {}
-        ir_inputs = {}
-        ir_outputs = {}
-        for block in self.blocks.children:
-            block_hash = id(block)
-            block_inputs, block_outputs = [], []
-            avoid = False
-            if block.inputs:
-                for pin in block.inputs.children:
-                    pin_hash = id(pin)
-                    block_inputs.append(pin_hash)
-                    if pin.origin:
-                        other = id(pin.origin.end)
-                    else:
-                        avoid = True
-                        break  # This means we are not connected
-                    ir_inputs[pin_hash] = backend.InputEntry(origin=other,
-                                                             pin=pin,
-                                                             block=block_hash)
-            if block.outputs and not avoid:
-                for pin in block.outputs.children:
-                    pin_hash = id(pin)
-                    block_outputs.append(pin_hash)
-                    dest = []
-                    if pin.destinations:
-                        for d in pin.destinations:
-                            dest.append(id(d.start))
-                    ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
-                                                               pin=pin,
-                                                               block=block_hash)
-            if not avoid:
-                ir_blocks[block_hash] = backend.BlockEntry(inputs=block_inputs,
-                                                           function=block.function,
-                                                           outputs=block_outputs)
-        self.block_hashes = ir_blocks
-        return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
-
-    def process(self):
-        tainted, tainted_msg = self.check_taint()
-        if tainted:
-            self.popup.title = 'Warning'
-            self.popup.message = tainted_msg
-            self.popup.open()
-        else:
-            threading.Thread(target=backend.execute_graph,
-                             args=(self.to_ir(), self)).start()
-
-    # TODO: Merge this check with block tainted property
-    def check_taint(self):
-        for block in self.blocks.children:
-            if block.inputs:
-                orphaned = [x.origin == None for x in block.inputs.children]
-                if not all(orphaned) and any(orphaned):
-                    return True, 'Block "{}" has unconnected inputs!'.format(
-                                    block.block_label)
-            if block.tainted:
-                return True, block.tainted_msg
-        return False, ''
-
-    def on_block_executed(self, block_hash):
-        block_idx = list(map(id, self.blocks.children)).index(block_hash)
-        block = self.blocks.children[block_idx]
-        if block.outputs:
-            for out_pin in block.outputs.children:
-                for connection in out_pin.destinations:
-                    connection.pulse()
-                    Clock.schedule_once(lambda _: connection.stop_pulse(), 2)
-
     def spawnprint(self):
-        if not any(map(lambda b: b.__class__ == blocks.PrintBlock,
+        """ Spawns a print block only if no print block is currently present.
+        """
+        if any(map(lambda b: b.__class__ == blocks.PrintBlock,
                        self.blocks.children)):
-            self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
-        else:
             self.popup.title = 'Warning'
             self.popup.message = 'Only one print block allowed!'
             self.popup.open()
+        else:
+            self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
 
 if __name__ == '__main__':
     ViewApp().run()

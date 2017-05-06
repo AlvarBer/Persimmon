@@ -5,20 +5,26 @@
     drag_rectangle: self.x, self.y, self.width, self.height
     drag_timeout: 10000000
     drag_distance: 0
-	canvas.before:
+	canvas:
 		Color:
 			rgb: .2, .2, .2
 		Rectangle:
 			pos: self.pos
 			size: self.size
-
+	#canvas.before:
+		#Color:
+			#rgb: 1, 1, 1
+		#BorderImage:
+			#pos: self.x - 5, self.y - 5
+			#size: self.width + 10, self.height + 10
+			#source: 'tex2.png'
     # Children
     Label:
         pos: root.x, root.y + root.height - 20
         size_hint: None, None
         height: '20dp'
 		width: root.width
-		text: root.block_label
+		text: root.title
         canvas.before:
             Color:
                 rgb: root.block_color

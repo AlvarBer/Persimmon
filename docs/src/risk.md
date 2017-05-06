@@ -49,7 +49,7 @@ refocus on ever-changing requirements.
 In the case of an unreachable goal partial objectives could established that
 would be easier to archive, splitting the main goal into several smaller goals,
 making it easier to at least accomplish some, if not all.
-This is explored on the milestones chapter.
+This is explored on the [milestones chapter](#tree).
 
 Performance issues can be countered reducing the data used for processing,
 making it more of a proof of concept while retaining the validity of the
