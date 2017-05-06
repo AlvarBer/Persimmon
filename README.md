@@ -1,35 +1,27 @@
-Project Definition ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master)
-==================
+Persimmon ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master)
+===================
 
-Problem
--------
-Machine Learning is a multi-disciplinary subject. Because of this learners come from a variety of backgrounds,
-and the mastering process can be though, specially when some of these backgrounds don't have strong programming foundations.
+![Final aspect](docs/images/final_aspect.png)
 
-<img src="https://2.bp.blogspot.com/-UNxoJDELWyw/V-E4f2V9BwI/AAAAAAAAMFs/GWd7v4tRUKMfaXqQODy403gCicrwET85ACLcB/s1600/Data_Science_VD.png" width=200>
+What is it?
+-----------
+Persimmon is a visual dataflow language for creating sklearn pipelines.
 
-Approaches
----------
-A visual interface for programming could help easing the steep learning curve, focusing on the methods, the intuition and
-their connections instead on the technicals details of the underlying library.
+It represents functions as blocks, inputs and outputs are presented as pins,
+and type safety is enforced when the connection is being made.
 
-Possible Outcomes
------------------
-* Greater engagement than traditional coding
-* Similar engagement than traditional coding
-* Less engagement than traditional coding
+![Type safety](docs/images/type_safety.gif)
 
-Each of these outcomes can occur for the same project based on the user background.
-
-Experimentation
+How to install?
 ---------------
-The ideal experimentation would include trials with subjects from the following backgrounds
-* Statistics
-* Mahematics
-* Physics/Engineering
-* CS
-* Others (Business, etc...)
+If you have pip (Python 3.5+) you can simply type
 
-Trials would be based on
-* A/B Testing based on different interfaces paradigms (Including no visual interface at all)
-* Focus groups with iterative feedback that can influence development
+`$> pip install persimmon`
+
+For windows self-contained executables can be found on the [releases page].
+
+
+![Full use](docs/images/full_use.gif)
+
+
+[releases page]: https://github.com/AlvarBer/Persimmon/releases
