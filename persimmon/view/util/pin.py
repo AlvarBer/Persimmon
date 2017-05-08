@@ -14,21 +14,21 @@ class Pin(CircularButton, metaclass=AbstractWidget):
     block = ObjectProperty()
     ellipse = ObjectProperty()
     line = ObjectProperty()
-    _type = ObjectProperty(Type.ANY) 
+    _type = ObjectProperty(Type.ANY)
 
     def on__type(self, instance, value):
         """ If the kv lang was a bit smarted this would not be needed
         """
         self.color = value.value
-    
+
     @abstractmethod
     def on_touch_down(self, touch):
         raise NotImplementedError
-    
+
     @abstractmethod
     def on_touch_up(self, touch):
         raise NotImplementedError
-    
+
     @abstractmethod
     def on_connection_delete(self, connection: Connection):
         raise NotImplementedError

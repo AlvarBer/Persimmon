@@ -10,6 +10,7 @@ from kivy.uix.image import Image
 # Types are fun
 from typing import Optional
 from abc import abstractmethod
+from functools import partial
 
 
 Builder.load_file('view/blocks/block.kv')
@@ -17,6 +18,7 @@ Builder.load_file('view/blocks/block.kv')
 class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])
     title = StringProperty()
+    label = ObjectProperty()
     inputs = ObjectProperty()
     outputs = ObjectProperty()
     input_pins = ListProperty()
@@ -26,6 +28,7 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
         if self.inputs:
             for pin in self.inputs.children:
                 self.input_pins.append(pin)
@@ -38,6 +41,19 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         self._tainted = False
         self.kindled = None
         self.border_texture = Image(source='border.png').texture
+        # Position pins nicely
+        self.gap = 20  # gap between pins
+        self.height = (max(len(self.output_pins), len(self.input_pins), 3) *
+                       self.gap + self.label.height)
+        y_origin = self.y + (self.height - self.label.height)
+        for i, in_pin in enumerate(list(self.input_pins[::-1]), 1):
+            in_pin.x = self.x + 5
+            in_pin.y = y_origin - i * self.gap + in_pin.height / 2
+            self.fbind('pos', self._bind_pin, pin=in_pin, i=i, output=False)
+        for i, out_pin in enumerate(list(self.output_pins[::-1]), 1):
+            out_pin.x = self.x + self.width - 15
+            out_pin.y = y_origin - i * self.gap + out_pin.height / 2
+            self.fbind('pos', self._bind_pin, pin=out_pin, i=i, output=True)
 
     @property
     def tainted(self):
@@ -110,3 +126,13 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     def _bind_border(self, block, new_pos):
         """ Bind border to position. """
         self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
+
+    def _bind_pin(self, block, new_pos, pin, i, output):
+        """ Keep pins on their respective places- """
+        pin.y = (block.y + (block.height - block.label.height) - i * self.gap +
+                 pin.height / 2)
+        if output:
+            pin.x = block.x + block.width - 15
+        else:
+            pin.x = block.x + 5
+
