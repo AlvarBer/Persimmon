@@ -1,9 +1,11 @@
 from persimmon.view.util import Pin, Connection
 from kivy.properties import ObjectProperty, ListProperty
+from kivy.lang import Builder
 
 import logging
 
 
+Builder.load_file('view/util/outpin.kv')
 logger = logging.getLogger(__name__)
 
 class OutputPin(Pin):
@@ -38,6 +40,6 @@ class OutputPin(Pin):
     def on_connection_delete(self, connection):
         if connection in self.destinations:
             self.destinations.remove(connection)
-        
+
     def typesafe(self, other):
         return super().typesafe(other)

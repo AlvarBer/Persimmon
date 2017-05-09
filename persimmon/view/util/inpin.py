@@ -1,8 +1,10 @@
 from persimmon.view.util import Pin, Connection
 from kivy.properties import ObjectProperty
+from kivy.lang import Builder
 import logging
 
 
+Builder.load_file('view/util/inpin.kv')
 logger = logging.getLogger(__name__)
 
 class InputPin(Pin):
