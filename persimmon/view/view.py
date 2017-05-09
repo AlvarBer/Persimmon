@@ -34,15 +34,15 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
-        self.background = Image(source='connections.png').texture
+        self.background = Image(source='background.png').texture
         self.background.wrap = 'repeat'
-        self.background.uvsize = 30, 30
-        #self.background.uvsize = (Window.width / self.background.width,
-        #                          Window.height / self.background.height)
+        self.background.uvsize = (Window.width / self.background.width,
+                                  Window.height / self.background.height)
         return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
+    connections = ObjectProperty()
     popup = ObjectProperty(Notification())
 
     def execute_graph(self):

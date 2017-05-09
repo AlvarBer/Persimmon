@@ -34,8 +34,8 @@ class Connection(Widget):
     end = ObjectProperty(allownone=True)
     color = ListProperty()
     lin = ObjectProperty()
-    start_cr = ObjectProperty()
-    end_cr = ObjectProperty()
+    start_cr = ObjectProperty(allownone=True)
+    end_cr = ObjectProperty(allownone=True)
 
     def __init__(self, **kwargs):
         """ On this initializer the connection has to check whether the
@@ -48,8 +48,7 @@ class Connection(Widget):
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
                 self.bez_start = self.start.center
-                self.lin = Line(bezier=self.start.center * 4,
-                                width=1.5)
+                self.lin = Line(bezier=self.bez_start * 4, width=1.5)
             self._bind_pin(self.start)
         else:
             self.forward = False
@@ -57,8 +56,7 @@ class Connection(Widget):
                 Color(*self.color)
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
                 self.bez_end = self.end.center
-                self.lin = Line(bezier=self.end.center * 4,
-                                width=1.5)
+                self.lin = Line(bezier=self.bez_end * 4, width=1.5)
             self._bind_pin(self.end)
         self.warned = False
         self.it = None
@@ -81,7 +79,7 @@ class Connection(Widget):
     # Kivy touch override
     def on_touch_down(self, touch):
         """ On touch down on connection means we are modifying an already
-            existing connection, not creating a new one """
+            existing connection, not creating a new one. """
         if self.start.collide_point(*touch.pos):
             self.forward = False
             # Remove start edge

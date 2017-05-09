@@ -8,7 +8,7 @@
 	label: label
 	canvas:
 		Color:
-			rgb: .2, .2, .2
+			rgba: .15, .15, .15, .8
 		RoundedRectangle:
 			pos: self.pos
 			size: self.size
@@ -22,7 +22,7 @@
 		text: root.title
 		canvas.before:
 			Color:
-				rgb: root.block_color
+				rgba: [*root.block_color, 0.8]
 			RoundedRectangle:
 				pos: self.pos
 				size: self.size
