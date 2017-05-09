@@ -1,7 +1,7 @@
 <Block>:
 	# Fixed options
 	size_hint: None, None
-	size: '200dp', '75dp'
+	width: '200dp'
 	drag_rectangle: self.x, self.y, self.width, self.height
 	drag_timeout: 10000000
 	drag_distance: 0
@@ -9,7 +9,7 @@
 	canvas:
 		Color:
 			rgb: .2, .2, .2
-		Rectangle:
+		RoundedRectangle:
 			pos: self.pos
 			size: self.size
 	# Children
@@ -23,6 +23,7 @@
 		canvas.before:
 			Color:
 				rgb: root.block_color
-			Rectangle:
+			RoundedRectangle:
 				pos: self.pos
 				size: self.size
+				radius: [(10, 10), (10, 10), (0, 0), (0, 0)]

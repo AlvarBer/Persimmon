@@ -5,7 +5,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
-from kivy.graphics import BorderImage, Color
+from kivy.graphics import BorderImage, Color, RoundedRectangle
 from kivy.uix.image import Image
 # Types are fun
 from typing import Optional
