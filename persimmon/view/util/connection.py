@@ -38,6 +38,8 @@ class Connection(Widget):
     end_cr = ObjectProperty()
 
     def __init__(self, **kwargs):
+        """ On this initializer the connection has to check whether the
+        connection is being made forward or backwards. """
         super().__init__(**kwargs)
         if self.start:
             self.forward = True
@@ -47,8 +49,9 @@ class Connection(Widget):
                                         size=self.start.size)
                 self.lin = Line(points=self.start.center + self.start.center,
                                 width=1.5)
-            self.start.fbind('pos', self.circle_bind)
-            self.start.fbind('pos', self.line_bind)
+            self._bind_pin(self.start)
+            #self.start.fbind('pos', self._circle_bind)
+            #self.start.fbind('pos', self._line_bind)
         else:
             self.forward = False
             with self.canvas.before:
@@ -56,8 +59,9 @@ class Connection(Widget):
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
                 self.lin = Line(points=self.end.center + self.end.center,
                                 width=1.5)
-            self.end.fbind('pos', self.circle_bind)
-            self.end.fbind('pos', self.line_bind)
+            self._bind_pin(self.end)
+            #self.end.fbind('pos', self._circle_bind)
+            #self.end.fbind('pos', self._line_bind)
         self.warned = False
         self.it = None
 
@@ -68,13 +72,41 @@ class Connection(Widget):
             self.end = pin
             with self.canvas.before:
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
-            self.rebind_pin(self.end, pin)
+            self._bind_pin(self.end)
         else:
             self.start = pin
             with self.canvas.before:
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
-            self.rebind_pin(self.start, pin)
+            self._bind_pin(self.start)
+
+    # Kivy touch override
+    def on_touch_down(self, touch):
+        """ On touch down on connection means we are modifying an already
+            existing connection, not creating a new one """
+        if self.start.collide_point(*touch.pos):
+            self.forward = False
+            # Remove start edge
+            self._unbind_pin(self.start)
+            self.canvas.before.remove(self.start_cr)
+            self.start_cr = None
+            self.start.on_connection_delete(self)
+            self.start = None
+            # This signals that we are dragging a connection
+            touch.ud['cur_line'] = self
+            return True
+        elif self.end.collide_point(*touch.pos):
+            # Same as before but with the other edge
+            self.forward = True
+            self._unbind_pin(self.end)
+            self.canvas.before.remove(self.end_cr)
+            self.end_cr = None
+            self.end.on_connection_delete(self)
+            self.end = None
+            touch.ud['cur_line'] = self
+            return True
+        else:
+            return False
 
     def follow_cursor(self, newpos, blackboard):
         """ This functions makes sure the current end being dragged follows the
@@ -86,67 +118,53 @@ class Connection(Widget):
         else:
             self.lin.points = [*newpos] + self.lin.points[2:]
             fixed_edge = self.end
+        # The conditionals are so complicated because it is necessary to check
+        # whether or not a pin in a block has been touched, and then check
+        # the typesafety.
         if (self.warned and (not blackboard.in_block(*newpos) or
             not blackboard.in_block(*newpos).in_pin(*newpos) or
             blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
-            self.unwarn()
+            self._unwarn()
         elif (blackboard.in_block(*newpos) and
               blackboard.in_block(*newpos).in_pin(*newpos) and
               (not blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
-            self.warn()
+            # This conditional represents that the cursor stepped out the pin
+            self._warn()
 
     def delete_connection(self, parent):
         """ This function deletes both ends (if they exist) and the connection
-            itself. """
-        parent.remove_widget(self)
+        itself. """
+        parent.remove_widget(self)  # Self-destruct
         if self.start:
             self.start.on_connection_delete(self)
         if self.end:
             self.end.on_connection_delete(self)
 
-    def on_touch_down(self, touch):
-        """ On touch down on connection means we are modifying an already
-            existing connection, not creating a new one """
-        if self.start.collide_point(*touch.pos):
-            self.forward = False
-            self.unbind_pin(self.start)
-            self.uncircle_pin(self.start)
-            self.start.on_connection_delete(self)
-            touch.ud['cur_line'] = self
-            self.start = None
-            return True
-        elif self.end.collide_point(*touch.pos):
-            self.forward = True
-            self.unbind_pin(self.end)
-            self.uncircle_pin(self.end)
-            self.end.on_connection_delete(self)
-            touch.ud['cur_line'] = self
-            self.end = None
-            return True
-        else:
-            return False
+    def pulse(self):
+        """ Makes a connection appear to pulse by modifying its width
+        continuosly. """
+        self.it = self._change_width()
+        next(self.it)
+        Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
 
-    def rebind_pin(self, old, new):
-        """ Unbinds pin and circle pin, changes pin and rebinds. """
-        old.funbind('pos', self.circle_bind)
-        old.funbind('pos', self.line_bind)
-        old = new
-        old.fbind('pos', self.circle_bind)
-        old.fbind('pos', self.line_bind)
+    def stop_pulse(self):
+        """ Stops vibrating a connection. It will throw an execution if
+        the connection is not pulsing right now. """
+        self.it.throw(StopIteration)
 
-    def unbind_pin(self, finish):
-        finish.funbind('pos', self.circle_bind)
-        finish.funbind('pos', self.line_bind)
+    # Auxiliary methods
+    # Binding methods
+    def _unbind_pin(self, pin):
+        """ Undos pin's circle and line binding. """
+        pin.funbind('pos', self._circle_bind)
+        pin.funbind('pos', self._line_bind)
 
-    def uncircle_pin(self, pin):
-        if pin == self.start:
-            self.canvas.before.remove(self.start_cr)
-        elif pin == self.end:
-            self.canvas.before.remove(self.end_cr)
-        else:
-            logger.error('Attempted to uncircle pin without circle')
+    def _bind_pin(self, pin):
+        """ Performs pin circle and line binding. """
+        pin.fbind('pos', self._circle_bind)
+        pin.fbind('pos', self._line_bind)
 
-    def circle_bind(self, pin, new_pos):
+    def _circle_bind(self, pin, new_pos):
         if pin == self.start:
             self.start_cr.pos = pin.pos
         elif pin == self.end:
@@ -154,7 +172,7 @@ class Connection(Widget):
         else:
             logger.error('No circle associated with pin')
 
-    def line_bind(self, pin, new_pos):
+    def _line_bind(self, pin, new_pos):
         if pin == self.start:
             self.lin.points = pin.center + self.lin.points[2:]
         elif pin == self.end:
@@ -162,35 +180,15 @@ class Connection(Widget):
         else:
             logger.error('No line associated with pin')
 
-    def warn(self):
-        self.warned = True
-        self.canvas.before.remove(self.lin)
-        with self.canvas.before:
-            Color(1, 0, 0)
-            self.lin = Line(points=self.lin.points, width=3)
-
-    def unwarn(self):
-        self.warned = False
-        self.canvas.before.remove(self.lin)
-        with self.canvas.before:
-            Color(*self.color)
-            self.lin = Line(points=self.lin.points, width=1.5)
-
-    def pulse(self):
-        self.it = self._change_width()
-        next(self.it)
-        Clock.schedule_interval(lambda _: next(self.it), 0.05) # 20 FPS
-
-    def stop_pulse(self):
-        self.it.throw(StopIteration)
-
+    # Pulsing methods
     def _change_width(self):
         """ Ok, so let me explain what is going on, this generator/coroutine
             changes the width of the line continuosly using the width_gen
             generator. We use it by calling it 20 times per second. The tricky
             part is stopping the scheduled calls. The way to tell Kivy to stop
             calling is to return a False value, and to do that we need to call
-            this coroutine itself, which maybe execting or not at that moment.
+            this coroutine itself, which may be executing or not at that
+            precise moment.
 
             That is where throw comes in, allowing for exceptions to be thrown
             on during the execution, hijacking the current execution (like a
@@ -212,3 +210,21 @@ class Connection(Widget):
         while True:
             yield 2 * np.sin(val) + 4
             val += pi / 20
+
+    # Warn methods
+    def _warn(self):
+        """ Changes the current line to a red thick connection. """
+        self.warned = True
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(1, 0, 0)
+            self.lin = Line(points=self.lin.points, width=3)
+
+    def _unwarn(self):
+        """ Returns the red thick connection to its normal state. """
+        self.warned = False
+        self.canvas.before.remove(self.lin)
+        with self.canvas.before:
+            Color(*self.color)
+            self.lin = Line(points=self.lin.points, width=1.5)
+

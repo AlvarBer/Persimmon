@@ -16,11 +16,6 @@ class Pin(CircularButton, metaclass=AbstractWidget):
     line = ObjectProperty()
     _type = ObjectProperty(Type.ANY)
 
-    def on__type(self, instance, value):
-        """ If the kv lang was a bit smarted this would not be needed
-        """
-        self.color = value.value
-
     @abstractmethod
     def on_touch_down(self, touch):
         raise NotImplementedError
@@ -39,3 +34,9 @@ class Pin(CircularButton, metaclass=AbstractWidget):
             return True  # Anything is possible with ANY
         else:
             return self._type == other._type and self.block != other.block and self.__class__ != other.__class__
+
+    def on__type(self, instance, value):
+        """ If the kv lang was a bit smarted this would not be needed
+        """
+        self.color = value.value
+
