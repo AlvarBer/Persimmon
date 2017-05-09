@@ -2,7 +2,7 @@
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
-from kivy.graphics import Color, Ellipse, Line
+from kivy.graphics import Color, Ellipse, Line, Point
 from kivy.clock import Clock
 # Numpy for sin
 import numpy as np
@@ -47,21 +47,19 @@ class Connection(Widget):
                 Color(*self.color)
                 self.start_cr = Ellipse(pos=self.start.pos,
                                         size=self.start.size)
-                self.lin = Line(points=self.start.center + self.start.center,
+                self.bez_start = self.start.center
+                self.lin = Line(bezier=self.start.center * 4,
                                 width=1.5)
             self._bind_pin(self.start)
-            #self.start.fbind('pos', self._circle_bind)
-            #self.start.fbind('pos', self._line_bind)
         else:
             self.forward = False
             with self.canvas.before:
                 Color(*self.color)
                 self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
-                self.lin = Line(points=self.end.center + self.end.center,
+                self.bez_end = self.end.center
+                self.lin = Line(bezier=self.end.center * 4,
                                 width=1.5)
             self._bind_pin(self.end)
-            #self.end.fbind('pos', self._circle_bind)
-            #self.end.fbind('pos', self._line_bind)
         self.warned = False
         self.it = None
 
@@ -113,11 +111,13 @@ class Connection(Widget):
             cursor. It also checks for type safety and changes the line color
             if needed."""
         if self.forward:
-            self.lin.points = self.lin.points[:2] + [*newpos]
             fixed_edge = self.start
+            self.bez_end = [*newpos]
+            self._rebezier()
         else:
-            self.lin.points = [*newpos] + self.lin.points[2:]
             fixed_edge = self.end
+            self.bez_start = [*newpos]
+            self._rebezier()
         # The conditionals are so complicated because it is necessary to check
         # whether or not a pin in a block has been touched, and then check
         # the typesafety.
@@ -174,9 +174,11 @@ class Connection(Widget):
 
     def _line_bind(self, pin, new_pos):
         if pin == self.start:
-            self.lin.points = pin.center + self.lin.points[2:]
+            self.bez_start = pin.center
+            self._rebezier()
         elif pin == self.end:
-            self.lin.points = self.lin.points[:2] + pin.center
+            self.bez_end = pin.center
+            self._rebezier()
         else:
             logger.error('No line associated with pin')
 
@@ -219,6 +221,7 @@ class Connection(Widget):
         with self.canvas.before:
             Color(1, 0, 0)
             self.lin = Line(points=self.lin.points, width=3)
+        self._rebezier()
 
     def _unwarn(self):
         """ Returns the red thick connection to its normal state. """
@@ -227,4 +230,13 @@ class Connection(Widget):
         with self.canvas.before:
             Color(*self.color)
             self.lin = Line(points=self.lin.points, width=1.5)
+        self._rebezier()
+
+    # Bezier refreshing
+    def _rebezier(self):
+        """ Refreshes bezier curve according to start and end. """
+        dist = (min(self.bez_start[0], self.bez_end[0]) +
+                abs(self.bez_start[0] - self.bez_end[0]) / 2)
+        self.lin.bezier = (self.bez_start + [dist, self.bez_start[1]] +
+                           [dist, self.bez_end[1]] + self.bez_end)
 
