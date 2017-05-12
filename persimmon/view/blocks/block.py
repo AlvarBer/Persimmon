@@ -107,9 +107,9 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         """ Praise the sun \[T]/ """
         with self.canvas.before:
             Color(1, 1, 1)
-            self.kindled = BorderImage(pos=(self.x - 5, self.y - 5),
-                                       size=(self.width + 10,
-                                             self.height + 10),
+            self.kindled = BorderImage(pos=(self.x - 2, self.y - 2),
+                                       size=(self.width + 4,
+                                             self.height + 4),
                                        texture=self.border_texture)
             self.fbind('pos', self._bind_border)
 
@@ -125,7 +125,7 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     # Auxiliary functions
     def _bind_border(self, block, new_pos):
         """ Bind border to position. """
-        self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
+        self.kindled.pos = new_pos[0] - 2, new_pos[1] - 2
 
     def _bind_pin(self, block, new_pos, pin, i, output):
         """ Keep pins on their respective places. """

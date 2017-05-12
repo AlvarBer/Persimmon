@@ -161,7 +161,7 @@ class BlackBoard(ScatterLayout):
         # if no connection was made
         if 'cur_line' in touch.ud.keys() and touch.button == 'left':
             logger.info('Connection was not finished')
-            touch.ud['cur_line'].delete_connection(self)
+            touch.ud['cur_line'].delete_connection()
             return True
 
         # stop propagating if its within our bounds

@@ -4,28 +4,14 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.graphics import Color, Ellipse, Line, Point
 from kivy.clock import Clock
+# For type hinting
+from kivy.input.motionevent import MotionEvent
 # Numpy for sin
 import numpy as np
 # Others
 from math import pi
 import logging
 
-
-"""
-<Connection>:
-    #lin: root.start_pos + root.end_pos
-    canvas.after:
-        Color:
-            rgb: root.color
-        Ellipse:
-            pos: root.start_pos
-            size: root.start.size
-        Ellipse:
-            pos: root.end_pos
-            size: root.end.size
-        #Line:
-            #points: root.lin
-"""
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +31,6 @@ class Connection(Widget):
             self.forward = True
             with self.canvas.before:
                 Color(*self.color)
-                self.start_cr = Ellipse(pos=self.start.pos,
-                                        size=self.start.size)
                 self.bez_start = self.start.center
                 self.lin = Line(bezier=self.bez_start * 4, width=1.5)
             self._bind_pin(self.start)
@@ -54,38 +38,30 @@ class Connection(Widget):
             self.forward = False
             with self.canvas.before:
                 Color(*self.color)
-                self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
                 self.bez_end = self.end.center
                 self.lin = Line(bezier=self.bez_end * 4, width=1.5)
             self._bind_pin(self.end)
         self.warned = False
         self.it = None
 
-    def finish_connection(self, pin):
+    def finish_connection(self, pin: 'Pin'):
         """ This functions finishes a connection that has only start or end and
             is being currently dragged """
         if self.forward:
             self.end = pin
-            with self.canvas.before:
-                self.end_cr = Ellipse(pos=self.end.pos, size=self.end.size)
             self._bind_pin(self.end)
         else:
             self.start = pin
-            with self.canvas.before:
-                self.start_cr = Ellipse(pos=self.start.pos,
-                                        size=self.start.size)
             self._bind_pin(self.start)
 
     # Kivy touch override
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch: MotionEvent):
         """ On touch down on connection means we are modifying an already
             existing connection, not creating a new one. """
         if self.start.collide_point(*touch.pos):
             self.forward = False
             # Remove start edge
             self._unbind_pin(self.start)
-            self.canvas.before.remove(self.start_cr)
-            self.start_cr = None
             self.start.on_connection_delete(self)
             self.start = None
             # This signals that we are dragging a connection
@@ -95,8 +71,6 @@ class Connection(Widget):
             # Same as before but with the other edge
             self.forward = True
             self._unbind_pin(self.end)
-            self.canvas.before.remove(self.end_cr)
-            self.end_cr = None
             self.end.on_connection_delete(self)
             self.end = None
             touch.ud['cur_line'] = self
@@ -129,10 +103,11 @@ class Connection(Widget):
             # This conditional represents that the cursor stepped out the pin
             self._warn()
 
-    def delete_connection(self, parent):
+    def delete_connection(self):
         """ This function deletes both ends (if they exist) and the connection
         itself. """
-        parent.remove_widget(self)  # Self-destruct
+        #parent.parent.parent.connections.remove_widget(self)
+        self.parent.remove_widget(self)  # Self-destruct
         if self.start:
             self.start.on_connection_delete(self)
         if self.end:
@@ -152,25 +127,15 @@ class Connection(Widget):
 
     # Auxiliary methods
     # Binding methods
-    def _unbind_pin(self, pin):
+    def _unbind_pin(self, pin: 'Pin'):
         """ Undos pin's circle and line binding. """
-        pin.funbind('pos', self._circle_bind)
         pin.funbind('pos', self._line_bind)
 
-    def _bind_pin(self, pin):
+    def _bind_pin(self, pin: 'Pin'):
         """ Performs pin circle and line binding. """
-        pin.fbind('pos', self._circle_bind)
         pin.fbind('pos', self._line_bind)
 
-    def _circle_bind(self, pin, new_pos):
-        if pin == self.start:
-            self.start_cr.pos = pin.pos
-        elif pin == self.end:
-            self.end_cr.pos = pin.pos
-        else:
-            logger.error('No circle associated with pin')
-
-    def _line_bind(self, pin, new_pos):
+    def _line_bind(self, pin: 'Pin', new_pos: (float, float)):
         if pin == self.start:
             self.bez_start = pin.center
             self._rebezier()
