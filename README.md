@@ -18,6 +18,10 @@ If you have pip (Python 3.5+) you can simply type
 
 `$> pip install persimmon`
 
+To execute use.
+
+`$> python -m persimmon`
+
 For windows self-contained executables can be found on the [releases page].
 
 
