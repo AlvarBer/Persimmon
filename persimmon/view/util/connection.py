@@ -2,7 +2,7 @@
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
-from kivy.graphics import Color, Ellipse, Line, Point
+from kivy.graphics import Color, Ellipse, Line
 from kivy.clock import Clock
 # For type hinting
 from kivy.input.motionevent import MotionEvent
@@ -20,8 +20,6 @@ class Connection(Widget):
     end = ObjectProperty(allownone=True)
     color = ListProperty()
     lin = ObjectProperty()
-    start_cr = ObjectProperty(allownone=True)
-    end_cr = ObjectProperty(allownone=True)
 
     def __init__(self, **kwargs):
         """ On this initializer the connection has to check whether the
@@ -29,20 +27,19 @@ class Connection(Widget):
         super().__init__(**kwargs)
         if self.start:
             self.forward = True
+            self.bez_start = self.start.center
             with self.canvas.before:
                 Color(*self.color)
-                self.bez_start = self.start.center
                 self.lin = Line(bezier=self.bez_start * 4, width=1.5)
             self._bind_pin(self.start)
         else:
             self.forward = False
+            self.bez_end = self.end.center
             with self.canvas.before:
                 Color(*self.color)
-                self.bez_end = self.end.center
                 self.lin = Line(bezier=self.bez_end * 4, width=1.5)
             self._bind_pin(self.end)
         self.warned = False
-        self.it = None
 
     def finish_connection(self, pin: 'Pin'):
         """ This functions finishes a connection that has only start or end and
@@ -106,11 +103,12 @@ class Connection(Widget):
     def delete_connection(self):
         """ This function deletes both ends (if they exist) and the connection
         itself. """
-        #parent.parent.parent.connections.remove_widget(self)
         self.parent.remove_widget(self)  # Self-destruct
         if self.start:
+            self._unbind_pin(self.start)
             self.start.on_connection_delete(self)
         if self.end:
+            self._unbind_pin(self.end)
             self.end.on_connection_delete(self)
 
     def pulse(self):
@@ -197,9 +195,20 @@ class Connection(Widget):
 
     # Bezier refreshing
     def _rebezier(self):
-        """ Refreshes bezier curve according to start and end. """
+        """ Refreshes bezier curve according to start and end.
+        It uses the arctan to force the bèzier curve always going a bit
+        forward before drifting."""
+        arc_tan = np.arctan2(self.bez_start[1] - self.bez_end[1],
+                             self.bez_start[0] - self.bez_end[0])
+        abs_angle = np.abs(np.degrees(arc_tan))
+        # We use the angle value plus a fixed amount to steer the line a bit
+        start_right = [self.bez_start[0] - 5 - 0.6 * abs_angle,
+                       self.bez_start[1]]
+        end_left = [self.bez_end[0] + 5 + 0.6 * abs_angle, self.bez_end[1]]
+        # Y distance to mid point
         dist = (min(self.bez_start[0], self.bez_end[0]) +
                 abs(self.bez_start[0] - self.bez_end[0]) / 2)
-        self.lin.bezier = (self.bez_start + [dist, self.bez_start[1]] +
-                           [dist, self.bez_end[1]] + self.bez_end)
-
+        # This updates the bèzier curve graphics
+        self.lin.bezier = (self.bez_start + start_right +
+                           [dist, self.bez_start[1]] + [dist, self.bez_end[1]] +
+                           end_left + self.bez_end)

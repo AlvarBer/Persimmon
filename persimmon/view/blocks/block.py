@@ -42,7 +42,7 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         self.tainted_msg = 'Block {} has unconnected inputs'.format(self.title)
         self._tainted = False
         self.kindled = None
-        self.border_texture = Image(source='l_border.png').texture
+        self.border_texture = Image(source='border.png').texture
         # Make block taller if necessary
         self.height = (max(len(self.output_pins), len(self.input_pins), 3) *
                        self.gap + self.label.height)
