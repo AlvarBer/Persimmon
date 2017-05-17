@@ -1,6 +1,7 @@
 # Persimmon imports
 from persimmon.view import blocks
 from persimmon.view.util import Notification
+from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
 from kivy.app import App
@@ -23,7 +24,6 @@ from functools import partial, reduce
 from collections import deque
 import logging
 from typing import Optional
-from persimmon.view.blocks import Block
 from itertools import chain
 
 
@@ -34,15 +34,12 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
-        self.background = Image(source='connections.png').texture
-        self.background.wrap = 'repeat'
-        self.background.uvsize = 30, 30
-        #self.background.uvsize = (Window.width / self.background.width,
-        #                          Window.height / self.background.height)
+        self.background = Image(source='background.png').texture
         return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
+    connections = ObjectProperty()
     popup = ObjectProperty(Notification())
 
     def execute_graph(self):
@@ -161,7 +158,7 @@ class BlackBoard(ScatterLayout):
         # if no connection was made
         if 'cur_line' in touch.ud.keys() and touch.button == 'left':
             logger.info('Connection was not finished')
-            touch.ud['cur_line'].delete_connection(self)
+            touch.ud['cur_line'].delete_connection()
             return True
 
         # stop propagating if its within our bounds

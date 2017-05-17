@@ -1,33 +1,29 @@
 <Block>:
-    # Fixed options
-    size_hint: None, None
-    size: '200dp', '75dp'
-    drag_rectangle: self.x, self.y, self.width, self.height
-    drag_timeout: 10000000
-    drag_distance: 0
+	# Fixed options
+	size_hint: None, None
+	width: '200dp'
+	drag_rectangle: self.x, self.y, self.width, self.height
+	drag_timeout: 10000000
+	drag_distance: 0
+	label: label
 	canvas:
 		Color:
-			rgb: .2, .2, .2
-		Rectangle:
+			rgba: .15, .15, .15, .8
+		RoundedRectangle:
 			pos: self.pos
 			size: self.size
-	#canvas.before:
-		#Color:
-			#rgb: 1, 1, 1
-		#BorderImage:
-			#pos: self.x - 5, self.y - 5
-			#size: self.width + 10, self.height + 10
-			#source: 'tex2.png'
-    # Children
-    Label:
-        pos: root.x, root.y + root.height - 20
-        size_hint: None, None
-        height: '20dp'
+	# Children
+	Label:
+		id: label
+		pos: root.x, root.y + root.height - 20
+		size_hint: None, None
+		height: '20dp'
 		width: root.width
 		text: root.title
-        canvas.before:
-            Color:
-                rgb: root.block_color
-            Rectangle:
-                pos: self.pos
-                size: self.size
+		canvas.before:
+			Color:
+				rgba: [*root.block_color, 0.8]
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [(10, 10), (10, 10), (0, 0), (0, 0)]
