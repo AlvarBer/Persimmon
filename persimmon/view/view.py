@@ -1,6 +1,7 @@
 # Persimmon imports
 from persimmon.view import blocks
 from persimmon.view.util import Notification
+from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
 from kivy.app import App
@@ -23,7 +24,6 @@ from functools import partial, reduce
 from collections import deque
 import logging
 from typing import Optional
-from persimmon.view.blocks import Block
 from itertools import chain
 
 
@@ -35,9 +35,6 @@ class ViewApp(App):
 
     def build(self):
         self.background = Image(source='background.png').texture
-        self.background.wrap = 'repeat'
-        self.background.uvsize = (Window.width / self.background.width,
-                                  Window.height / self.background.height)
         return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):

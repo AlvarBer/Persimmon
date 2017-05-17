@@ -56,7 +56,7 @@ class InputPin(Pin):
 
     def typesafe(self, other: Pin) -> bool:
         return super().typesafe(other) and self.origin == None
-    
+
     def _circle_pin(self):
         if hasattr(self, 'circle'):
             logger.error('Circling pin twice')

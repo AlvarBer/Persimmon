@@ -3,6 +3,11 @@
 
 
 FloatLayout:
+	canvas.before:
+		Rectangle:
+			pos: 0, 0
+			size: app.background.size if app.background else [0, 0]
+			texture: app.background
 	BlackBoard:
 		id: blackboard
 		pos: 0, 0
@@ -11,11 +16,6 @@ FloatLayout:
 		do_scale: False
 		do_translation: False
 		auto_bring_to_front: False
-		canvas.before:
-			Rectangle:
-				pos: 0, 0
-				size: self.size
-				texture: app.background
 	Button:
 		text: 'Execute'
 		size_hint: None, None
