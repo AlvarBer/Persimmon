@@ -171,7 +171,7 @@ class Connection(Widget):
         """ Infinity oscillating generator (between 2 and 4) """
         val = 0
         while True:
-            yield 2 * np.sin(val) + 4
+            yield np.sin(val) + 3
             val += pi / 20
 
     # Warn methods
