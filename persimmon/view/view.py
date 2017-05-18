@@ -1,6 +1,6 @@
 # Persimmon imports
 from persimmon.view import blocks
-from persimmon.view.util import Notification
+from persimmon.view.util import Notification, SmartBubble
 from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
@@ -125,7 +125,17 @@ class BlackBoard(ScatterLayout):
         [in_pin.origin.stop_pulse() for in_pin in block.input_pins]
 
     # Touch events override
-    def on_touch_move(self, touch):
+    def on_touch_down(self, touch) -> bool:
+        if self.collide_point(*touch.pos):
+            if touch.button == 'right':
+                self.add_widget(SmartBubble(pos=touch.pos))
+                return True
+            else:
+                return super().on_touch_down(touch)
+        else:
+            return False
+
+    def on_touch_move(self, touch) -> bool:
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
             touch.ud['cur_line'].follow_cursor(touch.pos, self)
@@ -133,7 +143,7 @@ class BlackBoard(ScatterLayout):
         else:
             return super().on_touch_move(touch)
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         """ Inherited from
         https://github.com/kivy/kivy/blob/master/kivy/uix/scatter.py#L590. """
         if self.disabled:
