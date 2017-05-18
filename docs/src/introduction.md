@@ -5,7 +5,7 @@ On this chapter Persimmon is introduced, along its main objectives and
 motivations.
 It also includes a section about topics that are related but beyond the scope
 of this project.
-Finally, it includes an overviewof the project report structure.
+Finally, it includes an overview of the project report structure.
 
 
 Description

@@ -5,11 +5,12 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
-from kivy.graphics import BorderImage, Color
+from kivy.graphics import BorderImage, Color, RoundedRectangle
 from kivy.uix.image import Image
 # Types are fun
 from typing import Optional
 from abc import abstractmethod
+from functools import partial
 
 
 Builder.load_file('view/blocks/block.kv')
@@ -17,6 +18,7 @@ Builder.load_file('view/blocks/block.kv')
 class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])
     title = StringProperty()
+    label = ObjectProperty()
     inputs = ObjectProperty()
     outputs = ObjectProperty()
     input_pins = ListProperty()
@@ -26,18 +28,32 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
         if self.inputs:
             for pin in self.inputs.children:
                 self.input_pins.append(pin)
                 pin.block = self
+                self.gap = pin.width * 2
         if self.outputs:
             for pin in self.outputs.children:
                 self.output_pins.append(pin)
                 pin.block = self
+                self.gap = pin.width * 2
         self.tainted_msg = 'Block {} has unconnected inputs'.format(self.title)
         self._tainted = False
         self.kindled = None
         self.border_texture = Image(source='border.png').texture
+        # Make block taller if necessary
+        self.height = (max(len(self.output_pins), len(self.input_pins), 3) *
+                       self.gap + self.label.height)
+        # Position pins nicely
+        y_origin = self.y + (self.height - self.label.height)
+        for i, in_pin in enumerate(list(self.input_pins[::-1]), 1):
+            self._bind_pin(self, (in_pin.x, in_pin.y), in_pin, i, False)
+            self.fbind('pos', self._bind_pin, pin=in_pin, i=i, output=False)
+        for i, out_pin in enumerate(list(self.output_pins[::-1]), 1):
+            self._bind_pin(self, (out_pin.x, out_pin.y), out_pin, i, True)
+            self.fbind('pos', self._bind_pin, pin=out_pin, i=i, output=True)
 
     @property
     def tainted(self):
@@ -72,14 +88,14 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         raise NotImplementedError
 
     # Kivy touch events override
-    def on_touch_down(self, touch):
+    def on_touch_down(self, touch) -> bool:
         pin = self.in_pin(*touch.pos)
         if pin:  # if touch is on pin let them handle
             return pin.on_touch_down(touch)
         else:  # else default behavior (drag if collide)
             return super().on_touch_down(touch)
 
-    def on_touch_up(self, touch):
+    def on_touch_up(self, touch) -> bool:
         pin = self.in_pin(*touch.pos)
         if pin:
             result = pin.on_touch_up(touch)
@@ -91,9 +107,9 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         """ Praise the sun \[T]/ """
         with self.canvas.before:
             Color(1, 1, 1)
-            self.kindled = BorderImage(pos=(self.x - 5, self.y - 5),
-                                       size=(self.width + 10,
-                                             self.height + 10),
+            self.kindled = BorderImage(pos=(self.x - 2, self.y - 2),
+                                       size=(self.width + 4,
+                                             self.height + 4),
                                        texture=self.border_texture)
             self.fbind('pos', self._bind_border)
 
@@ -109,4 +125,14 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
     # Auxiliary functions
     def _bind_border(self, block, new_pos):
         """ Bind border to position. """
-        self.kindled.pos = new_pos[0] - 5, new_pos[1] - 5
+        self.kindled.pos = new_pos[0] - 2, new_pos[1] - 2
+
+    def _bind_pin(self, block, new_pos, pin, i, output):
+        """ Keep pins on their respective places. """
+        pin.y = (block.y + (block.height - block.label.height) - i * self.gap +
+                 pin.height / 2)
+        if output:
+            pin.x = block.x + block.width - self.gap
+        else:
+            pin.x = block.x + 5
+
