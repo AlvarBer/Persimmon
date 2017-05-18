@@ -6,6 +6,7 @@ FloatLayout:
 	canvas.before:
 		Rectangle:
 			pos: 0, 0
+			#late-binding hack
 			size: app.background.size if app.background else [0, 0]
 			texture: app.background
 	BlackBoard:

@@ -34,6 +34,7 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
+        self.title = 'Persimmon'
         self.background = Image(source='background.png').texture
         return Builder.load_file('view/view.kv')
 
