@@ -7,13 +7,12 @@ from glob import glob
 from os.path import dirname
 import pathlib
 
-kv_files = glob('**/*.kv', recursive=True) 
 
-non_python_files = []
-for file in kv_files:
-	non_python_files.append((file,
-	       str(pathlib.Path(*pathlib.Path(dirname(file)).parts[1:]))))
-non_python_files.append(('persimmon/connections.png', '.'))
+kv_files = glob('**/*.kv', recursive=True) 
+png_files = glob('**/*.png', recursive=True)
+
+
+non_py_files = [(file, str(pathlib.Path(*pathlib.Path(dirname(dile)).parts[1:]))) for file in kv_files + png_files]
 
 block_cipher = None
 

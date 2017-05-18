@@ -9,14 +9,15 @@ import pathlib
 
 
 kv_files = glob('**/*.kv', recursive=True) 
+png_files = glob('**/*.png', recursive=True)
 
 non_python_files = []
-for file in kv_files:
+for file in kv_files + png_files:
 	non_python_files.append((file,
 	       str(pathlib.Path(*pathlib.Path(dirname(file)).parts[1:]))))
 block_cipher = None
 
-non_python_files.append(('persimmon/connections.png', '.'))
+#non_python_files.append(('persimmon/connections.png', '.'))
 
 a = Analysis(['persimmon\\__main__.py'],
              pathex=['persimmon'],
