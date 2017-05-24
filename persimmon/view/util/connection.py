@@ -55,7 +55,8 @@ class Connection(Widget):
     def on_touch_down(self, touch: MotionEvent):
         """ On touch down on connection means we are modifying an already
             existing connection, not creating a new one. """
-        if self.start.collide_point(*touch.pos):
+        # TODO: remove start check
+        if self.start and self.start.collide_point(*touch.pos):
             self.forward = False
             # Remove start edge
             self._unbind_pin(self.start)
@@ -64,7 +65,7 @@ class Connection(Widget):
             # This signals that we are dragging a connection
             touch.ud['cur_line'] = self
             return True
-        elif self.end.collide_point(*touch.pos):
+        elif self.end and self.end.collide_point(*touch.pos):
             # Same as before but with the other edge
             self.forward = True
             self._unbind_pin(self.end)

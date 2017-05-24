@@ -20,17 +20,17 @@
 			spacing: dp(2)
 
 <Row>:
+    cls_name: ''
+	cls_: None
+	bub: None
+	backdrop: None
     canvas.before:
         Color:
             rgba: 0.5, 0.5, 0.5
         Rectangle:
             size: self.size
             pos: self.pos
-    cls_name: ''
-	cls_: None
-	bub: None
-	backdrop: None
-    Button:
+	Button:
         text: root.cls_name
 		on_release: root.spawn_block()
 

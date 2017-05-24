@@ -1,6 +1,6 @@
 # Persimmon imports
 from persimmon.view import blocks
-from persimmon.view.util import Notification, SmartBubble, FunList
+from persimmon.view.util import Notification, SmartBubble
 from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
@@ -126,20 +126,36 @@ class BlackBoard(ScatterLayout):
 
     # Touch events override
     def on_touch_down(self, touch) -> bool:
+        # TODO: Refactor this
+        # There is a current bubble
+        bub = self._get_bub()
+        """
+        if bub:
+            if 'current_line' in touch.ud.keys():  # And a connection
+                return bub.on_touch_down(touch)
+            elif touch.button == 'left':
+                bub.dismiss()
+                return True
+            elif touch.button == 'right':
+                bub.pos = touch.pos
+                return True
+        """
         if self.collide_point(*touch.pos):
-            if touch.button == 'right':
-                if any(map(lambda w: w.__class__ == SmartBubble,
-                           self.content.children)):
-                    bub = reduce(lambda w1, w2: w1 if w1.__class__ == SmartBubble else w2,
-                                 self.content.children)
-                    bub.pos = touch.pos
-                else:
-                    self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
+            if not super().on_touch_down(touch) and touch.button == 'right':
+                self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
                 return True
             else:
-                return super().on_touch_down(touch)
+                return False
         else:
             return False
+
+    def _get_bub(self) -> Optional[SmartBubble]:
+        if any(map(lambda w: w.__class__ == SmartBubble,
+                   self.content.children)):
+            return reduce(lambda w1, w2: w1 if w1.__class__ == SmartBubble else w2,
+                          self.content.children)
+        else:
+            return None
 
     def on_touch_move(self, touch) -> bool:
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
@@ -174,8 +190,15 @@ class BlackBoard(ScatterLayout):
 
         # if no connection was made
         if 'cur_line' in touch.ud.keys() and touch.button == 'left':
-            logger.info('Connection was not finished')
-            touch.ud['cur_line'].delete_connection()
+            logger.info('Finish connection through smart bubble')
+            connection = touch.ud['cur_line']
+            if connection.forward:
+                edge = connection.start
+            else:
+                edge = connection.end
+            self.add_widget(SmartBubble(pos=touch.pos, backdrop=self, pin=edge))
+            #logger.info('Connection was not finished')
+            #touch.ud['cur_line'].delete_connection()
             return True
 
         # stop propagating if its within our bounds
