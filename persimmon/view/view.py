@@ -134,7 +134,7 @@ class BlackBoard(ScatterLayout):
                                  self.content.children)
                     bub.pos = touch.pos
                 else:
-                    self.add_widget(SmartBubble(pos=touch.pos))
+                    self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
                 return True
             else:
                 return super().on_touch_down(touch)

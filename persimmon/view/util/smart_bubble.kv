@@ -19,20 +19,6 @@
 			height: self.minimum_height
 			spacing: dp(2)
 
-<FunList>:
-	scroll_type: ['bars', 'content']
-	bar_width: '10dp'
-	viewclass: 'Row'
-	RecycleBoxLayout:
-		#default_size: None, dp(56)
-		#default_size_hint: 1, None
-		default_size_hint: None, None
-		default_size: root.default_size
-		#size_hint_y: None
-		#height: self.minimum_height
-		orientation: 'vertical'
-		spacing: dp(2)
-
 <Row>:
     canvas.before:
         Color:
@@ -41,9 +27,10 @@
             size: self.size
             pos: self.pos
     cls_name: ''
-	#cls: None
+	cls_: None
+	bub: None
+	backdrop: None
     Button:
         text: root.cls_name
-		#on_release: print(type(root.value))
-		#on_release: root.parent.add_widget(root.value())
+		on_release: root.spawn_block()
 
