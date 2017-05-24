@@ -1,6 +1,6 @@
 # Persimmon imports
 from persimmon.view import blocks
-from persimmon.view.util import Notification, SmartBubble
+from persimmon.view.util import Notification, SmartBubble, FunList
 from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
@@ -128,7 +128,13 @@ class BlackBoard(ScatterLayout):
     def on_touch_down(self, touch) -> bool:
         if self.collide_point(*touch.pos):
             if touch.button == 'right':
-                self.add_widget(SmartBubble(pos=touch.pos))
+                if any(map(lambda w: w.__class__ == SmartBubble,
+                           self.content.children)):
+                    bub = reduce(lambda w1, w2: w1 if w1.__class__ == SmartBubble else w2,
+                                 self.content.children)
+                    bub.pos = touch.pos
+                else:
+                    self.add_widget(SmartBubble(pos=touch.pos))
                 return True
             else:
                 return super().on_touch_down(touch)

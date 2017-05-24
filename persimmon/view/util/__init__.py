@@ -8,4 +8,4 @@ from .outpin import OutputPin
 
 from .filedialog import FileDialog
 from .notification import Notification
-from .smart_bubble import SmartBubble
+from .smart_bubble import SmartBubble, FunList
