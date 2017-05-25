@@ -36,7 +36,7 @@ class ViewApp(App):
     def build(self):
         self.title = 'Persimmon'
         self.background = Image(source='background.png').texture
-        return Builder.load_file('view/view.kv')
+        #return Builder.load_file('view/view.kv')
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
@@ -126,21 +126,7 @@ class BlackBoard(ScatterLayout):
 
     # Touch events override
     def on_touch_down(self, touch) -> bool:
-        # TODO: Refactor this
-        # There is a current bubble
-        bub = self._get_bub()
-        """
-        if bub:
-            if 'current_line' in touch.ud.keys():  # And a connection
-                return bub.on_touch_down(touch)
-            elif touch.button == 'left':
-                bub.dismiss()
-                return True
-            elif touch.button == 'right':
-                bub.pos = touch.pos
-                return True
-        """
-        if self.collide_point(*touch.pos):
+        if self.collide_point(*touch.pos):  # There is a current bubble
             if not super().on_touch_down(touch) and touch.button == 'right':
                 self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
                 return True

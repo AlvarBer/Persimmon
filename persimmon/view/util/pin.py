@@ -12,8 +12,8 @@ Builder.load_file('view/util/pin.kv')
 class Pin(CircularButton, metaclass=AbstractWidget):
     val = ObjectProperty(None, force_dispatch=True)
     block = ObjectProperty()
-    ellipse = ObjectProperty()
-    line = ObjectProperty()
+    #ellipse = ObjectProperty()
+    #line = ObjectProperty()
     _type = ObjectProperty(Type.ANY)
 
     @abstractmethod
@@ -26,6 +26,10 @@ class Pin(CircularButton, metaclass=AbstractWidget):
 
     @abstractmethod
     def on_connection_delete(self, connection: Connection):
+        raise NotImplementedError
+
+    @abstractmethod
+    def connect_pin(self, connection: Connection):
         raise NotImplementedError
 
     def typesafe(self, other: 'Pin') -> bool:

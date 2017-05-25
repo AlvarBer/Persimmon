@@ -27,14 +27,15 @@ class Connection(Widget):
         super().__init__(**kwargs)
         if self.start:
             self.forward = True
-            self.bez_start = self.start.center
+            # The value is repeated for correctness sake
+            self.bez_start, self.bez_end = [self.start.center] * 2
             with self.canvas.before:
                 Color(*self.color)
                 self.lin = Line(bezier=self.bez_start * 4, width=1.5)
             self._bind_pin(self.start)
         else:
             self.forward = False
-            self.bez_end = self.end.center
+            self.bez_start, self.bez_end = [self.end.center] * 2
             with self.canvas.before:
                 Color(*self.color)
                 self.lin = Line(bezier=self.bez_end * 4, width=1.5)
@@ -52,10 +53,10 @@ class Connection(Widget):
             self._bind_pin(self.start)
 
     # Kivy touch override
-    def on_touch_down(self, touch: MotionEvent):
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         """ On touch down on connection means we are modifying an already
             existing connection, not creating a new one. """
-        # TODO: remove start check
+        # TODO: remove start check?
         if self.start and self.start.collide_point(*touch.pos):
             self.forward = False
             # Remove start edge
@@ -133,6 +134,7 @@ class Connection(Widget):
     def _bind_pin(self, pin: 'Pin'):
         """ Performs pin circle and line binding. """
         pin.fbind('pos', self._line_bind)
+        self._line_bind(pin, pin.pos)
 
     def _line_bind(self, pin: 'Pin', new_pos: (float, float)):
         if pin == self.start:

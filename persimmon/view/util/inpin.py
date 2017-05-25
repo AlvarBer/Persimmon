@@ -33,10 +33,11 @@ class InputPin(Pin):
                 self.collide_point(*touch.pos)):
             if (touch.ud['cur_line'].end and
                 self.typesafe(touch.ud['cur_line'].end)):
-                logger.info('Establishing connection')
-                touch.ud['cur_line'].finish_connection(self)
-                self.origin = touch.ud['cur_line']
-                self._circle_pin()
+                self.connect_pin(touch.ud['cur_line'])
+                #logger.info('Establishing connection')
+                #touch.ud['cur_line'].finish_connection(self)
+                #self.origin = touch.ud['cur_line']
+                #self._circle_pin()
             else:
                 logger.info('Deleting connection')
                 touch.ud['cur_line'].delete_connection()
@@ -53,6 +54,12 @@ class InputPin(Pin):
             del self.circle
         else:
             logger.error('Deleting connection not fully formed')
+
+    def connect_pin(self, connection):
+        logger.info('Finish connection')
+        connection.finish_connection(self)
+        self.origin = connection
+        self._circle_pin()
 
     def typesafe(self, other: Pin) -> bool:
         return super().typesafe(other) and self.origin == None

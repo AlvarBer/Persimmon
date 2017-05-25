@@ -2,9 +2,10 @@ from kivy.uix.bubble import Bubble
 from kivy.lang import Builder
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, ListProperty
 from kivy.uix.button import Button
 import inspect
+from functools import reduce
 from persimmon.view import blocks
 from persimmon.view.util import InputPin, OutputPin
 
@@ -13,42 +14,31 @@ Builder.load_file('view/util/smart_bubble.kv')
 
 class SmartBubble(Bubble):
     # TODO: cache instancing
-    def __init__(self, *, backdrop, pin=None, **kwargs):
+    def __init__(self, backdrop, *, pin=None, **kwargs):
         super().__init__(**kwargs)
+        self.pin = pin
         # Let's do some introspection, removing strings we do not care about
         block_members = map(lambda m: m[1], inspect.getmembers(blocks))
         block_cls = filter(lambda m: inspect.isclass(m) and
                            issubclass(m, blocks.Block) and
                            m != blocks.Block, block_members)
-        #print(list(map(lambda b: b.title, classes)))
-        block_cls = list(block_cls)
-        suitable = []
-        if pin:
-            for block in block_cls:
-                instance = block()
-                if issubclass(pin, InputPin):
-                    if any(filter(lambda p: p._type == pin._type,
-                                  instance.input_pins)):
-                        suitable.append(instance)
-                else:
-                    if any(filter(lambda p: p._type == pin._type,
-                                  instance.input_pins)):
-                        suitable.append(instance)
-            self.rv.data = [{'cls_name': i.title, 'cls_': i.__class__,
-                             'bub': self, 'backdrop': backdrop}
-                             for i in suitable]
-        else:
-            self.rv.data = [{'cls_name': c.__name__, 'cls_': c,
-                             'bub': self, 'backdrop': backdrop}
-                            for c in block_cls]
+        # Kivy properties are not really static, so we need to instance blocks
+        instances = (block() for block in block_cls)
+        if pin:  # Context sensitive if we are connecting
+            instances = filter(self._is_suitable, instances)
+
+        # This is how we pass information to each shown row
+        self.rv.data = [{'cls_name': block.title, 'cls_': block.__class__,
+                         'bub': self, 'backdrop': backdrop, 'pin': self.pin,
+                         'block_pos': self.pos} for block in instances]
 
     def on_touch_down(self, touch) -> bool:
-        print('smubble touch down')
         if not self.collide_point(*touch.pos):
-            print(touch.ud.keys())
-            # HEY HEY HEY, this is a new touch event
-            if 'cur_line' in touch.ud.keys():
-                print(touch.ud['cur_line'])
+            if self.pin:  # If there is a connection going on
+                if issubclass(self.pin.__class__, InputPin):
+                    self.pin.origin.delete_connection()
+                else:
+                    self.pin.destinations[-1].delete_connection()
             if touch.button == 'left':
                 self.dismiss()
                 return True
@@ -61,12 +51,38 @@ class SmartBubble(Bubble):
     def dismiss(self):
         self.parent.remove_widget(self)
 
+    def _is_suitable(self, block) -> bool:
+        if issubclass(self.pin.__class__, InputPin):
+            if any(filter(lambda p: p._type == self.pin._type,
+                          block.output_pins)):
+                return True
+        else:
+            if any(filter(lambda p: p._type == self.pin._type,
+                          block.input_pins)):
+                return True
+        return False
+
 class Row(BoxLayout):
     cls_name = StringProperty()
     cls_ = ObjectProperty()
     bub = ObjectProperty()
     backdrop = ObjectProperty()
+    block_pos = ListProperty()
+    pin = ObjectProperty(allownone=True)
 
     def spawn_block(self):
-        self.backdrop.add_widget(self.cls_())
+        block = self.cls_(pos=self.block_pos)
+        self.backdrop.blocks.add_widget(block)
+        if self.pin:
+            if issubclass(self.pin.__class__, InputPin):
+                other_pin = self._suitable_pin(block.output_pins)
+                conn = self.pin.origin
+            else:
+                other_pin = self._suitable_pin(block.input_pins)
+                conn = self.pin.destinations[-1]
+            other_pin.connect_pin(conn)
         self.bub.dismiss()
+
+    def _suitable_pin(self, pins):
+        return reduce(lambda p1, p2: p1 if p1._type == self.pin._type else p2,
+                      pins)
