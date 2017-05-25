@@ -9,6 +9,8 @@
 		size_hint: 1, None
 		height: dp(30)
 		text: ''
+		multiline: False
+		# Text on the middle
 		padding_x: (self.width - self._get_text_width(self.text, self.tab_width, self._label_cached)) / 2
 		on_text: root.search(args[1])
 	RecycleView:
