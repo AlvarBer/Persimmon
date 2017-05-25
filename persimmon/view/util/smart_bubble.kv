@@ -2,9 +2,15 @@
 	size_hint: None, None
 	size: 160, 200
 	pos: self.pos
-	arrow_pos: 'left_mid'
+	arrow_pos: 'left_top'
 	orientation: 'vertical'
 	rv: rv
+	TextInput:
+		size_hint: 1, None
+		height: dp(30)
+		text: ''
+		padding_x: (self.width - self._get_text_width(self.text, self.tab_width, self._label_cached)) / 2
+		on_text: root.search(args[1])
 	RecycleView:
 		id: rv
 		scroll_type: ['bars', 'content']

@@ -23,24 +23,24 @@ FloatLayout:
 		size: '100dp', '100dp'
 		pos: 0, 0
 		on_release: blackboard.execute_graph()
-	Button:
-		text: 'See Relations'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 200, 0
-		on_release:
-			blackboard.popup.title = 'Relations'
-			blackboard.popup.message = blackboard.get_relations();
-			blackboard.popup.open()
-	Button:
-		text: 'See IR'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 300, 0
-		on_release:
-			blackboard.popup.title = 'IR'
-			blackboard.popup.message = str(blackboard.to_ir())
-			blackboard.popup.open()
+#	Button:
+#		text: 'See Relations'
+#		size_hint: None, None
+#		size: '100dp', '100dp'
+#		pos: 200, 0
+#		on_release:
+#			blackboard.popup.title = 'Relations'
+#			blackboard.popup.message = blackboard.get_relations();
+#			blackboard.popup.open()
+#	Button:
+#		text: 'See IR'
+#		size_hint: None, None
+#		size: '100dp', '100dp'
+#		pos: 300, 0
+#		on_release:
+#			blackboard.popup.title = 'IR'
+#			blackboard.popup.message = str(blackboard.to_ir())
+#			blackboard.popup.open()
 	TabbedPanel:
 		pos_hint: {'top': 1}
 		size_hint_y: None

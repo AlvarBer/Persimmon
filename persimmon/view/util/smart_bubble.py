@@ -1,22 +1,28 @@
 from kivy.uix.bubble import Bubble
-from kivy.lang import Builder
-from kivy.uix.recycleview import RecycleView
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.recycleview import RecycleView
+from kivy.lang import Builder
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
-from kivy.uix.button import Button
-import inspect
-from functools import reduce
 from persimmon.view import blocks
 from persimmon.view.util import InputPin, OutputPin
+import inspect
+import logging
+from functools import reduce
+from fuzzywuzzy import process
+from kivy.core.window import Window
 
 
 Builder.load_file('view/util/smart_bubble.kv')
+logger = logging.getLogger(__name__)
 
 class SmartBubble(Bubble):
     # TODO: cache instancing
     def __init__(self, backdrop, *, pin=None, **kwargs):
         super().__init__(**kwargs)
+        self.y -= self.width
+        #print(Window.size)
         self.pin = pin
+        self.backdrop = backdrop
         # Let's do some introspection, removing strings we do not care about
         block_members = map(lambda m: m[1], inspect.getmembers(blocks))
         block_cls = filter(lambda m: inspect.isclass(m) and
@@ -31,6 +37,7 @@ class SmartBubble(Bubble):
         self.rv.data = [{'cls_name': block.title, 'cls_': block.__class__,
                          'bub': self, 'backdrop': backdrop, 'pin': self.pin,
                          'block_pos': self.pos} for block in instances]
+        self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
 
     def on_touch_down(self, touch) -> bool:
         if not self.collide_point(*touch.pos):
@@ -43,13 +50,29 @@ class SmartBubble(Bubble):
                 self.dismiss()
                 return True
             elif touch.button == 'right':
-                self.pos = touch.pos
+                self.x = touch.x
+                self.y = touch.y - self.height
                 return True
         else:
             return super().on_touch_down(touch)
 
+
     def dismiss(self):
         self.parent.remove_widget(self)
+
+    def search(self, string):
+        if string:
+            results = process.extract(string, self.cache,
+                                      limit=len(self.cache))
+            self.rv.data = [{'cls_name': block[0], 'cls_': block[2],
+                             'bub': self, 'backdrop': self.backdrop,
+                             'pin': self.pin, 'block_pos': self.pos}
+                            for block in results if block[1] > 50]
+        else:
+            self.rv.data = [{'cls_name': name, 'cls_': class_, 'bub': self,
+                             'backdrop': self.backdrop, 'pin': self.pin,
+                             'block_pos': self.pos}
+                            for class_, name in self.cache.items()]
 
     def _is_suitable(self, block) -> bool:
         if issubclass(self.pin.__class__, InputPin):
@@ -80,6 +103,7 @@ class Row(BoxLayout):
             else:
                 other_pin = self._suitable_pin(block.input_pins)
                 conn = self.pin.destinations[-1]
+            logger.debug('Spawning block {} from bubble'.format(block))
             other_pin.connect_pin(conn)
         self.bub.dismiss()
 
