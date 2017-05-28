@@ -1,8 +1,10 @@
 #:kivy 1.9
 #:import b persimmon.view.blocks
 
+Backdrop:
 
-FloatLayout:
+<Backdrop>:
+	play_button: play_button
 	canvas.before:
 		Rectangle:
 			pos: 0, 0
@@ -17,12 +19,11 @@ FloatLayout:
 		do_scale: False
 		do_translation: False
 		auto_bring_to_front: False
-	Button:
-		text: 'Execute'
+	PlayButton:
+		id: play_button
+		pos: root.width - self.width, 0
 		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 0, 0
-		on_release: blackboard.execute_graph()
+		on_release: self.start();blackboard.execute_graph()
 #	Button:
 #		text: 'See Relations'
 #		size_hint: None, None

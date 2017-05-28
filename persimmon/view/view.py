@@ -1,6 +1,6 @@
 # Persimmon imports
 from persimmon.view import blocks
-from persimmon.view.util import Notification, SmartBubble
+from persimmon.view.util import Notification, SmartBubble, PlayButton
 from persimmon.view.blocks import Block
 import persimmon.backend as backend
 # Kivy imports
@@ -37,6 +37,15 @@ class ViewApp(App):
         self.title = 'Persimmon'
         self.background = Image(source='background.png').texture
         #return Builder.load_file('view/view.kv')
+
+class Backdrop(FloatLayout):
+    play_button = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def on_graph_executed(self):
+        self.play_button.ready()
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
@@ -123,6 +132,10 @@ class BlackBoard(ScatterLayout):
         [connection.pulse() for out_pin in block.output_pins
                             for connection in out_pin.destinations]
         [in_pin.origin.stop_pulse() for in_pin in block.input_pins]
+
+    def on_graph_executed(self):
+        # TODO: Fix this
+        self.parent.on_graph_executed()
 
     # Touch events override
     def on_touch_down(self, touch) -> bool:

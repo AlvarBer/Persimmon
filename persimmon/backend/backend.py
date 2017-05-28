@@ -24,6 +24,7 @@ def execute_graph_parallel(ir: IR, blackboard):
         unexplored, seen = execute_block(unexplored.pop(), ir, blackboard,
                                          unexplored, seen)
     logger.info('Execution done')
+    blackboard.on_graph_executed()
 
 def execute_block(current: int, ir: IR, blackboard, unexplored: set, seen: {}) -> (set, {}):
     """ Execute a block, if any dependency is not yet executed we
