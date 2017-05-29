@@ -1,4 +1,5 @@
-from persimmon.view.util import CircularButton, Connection
+from persimmon.view.pins import CircularButton
+from persimmon.view.util import Connection
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
@@ -7,7 +8,7 @@ from persimmon.view.util import Type, AbstractWidget
 from abc import abstractmethod
 
 
-Builder.load_file('view/util/pin.kv')
+Builder.load_file('view/pins/pin.kv')
 
 class Pin(CircularButton, metaclass=AbstractWidget):
     val = ObjectProperty(None, force_dispatch=True)

@@ -1,8 +1,7 @@
 from persimmon.view.blocks import Block
-from persimmon.view.util import InputPin, OutputPin
-
-from kivy.properties import ObjectProperty
+from persimmon.view.pins import InputPin, OutputPin
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 
 
 Builder.load_file('view/blocks/predictblock.kv')

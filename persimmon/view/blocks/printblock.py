@@ -1,8 +1,8 @@
-from persimmon.view.util import InputPin, Notification
+from persimmon.view.pins import InputPin
+from persimmon.view.util import Notification
 from persimmon.view.blocks import Block
-
-from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 
 
 Builder.load_file('view/blocks/printblock.kv')

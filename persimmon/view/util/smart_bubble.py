@@ -5,7 +5,7 @@ from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
 from persimmon.view import blocks
-from persimmon.view.util import InputPin, OutputPin
+from persimmon.view.pins import InputPin, OutputPin
 import inspect
 import logging
 from functools import reduce

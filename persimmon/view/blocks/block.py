@@ -1,6 +1,6 @@
 # Persimmon stuff
-from persimmon.view.util import (Type, BlockType, AbstractWidget, Pin,
-                                 InputPin, OutputPin)
+from persimmon.view.util import Type, BlockType, AbstractWidget
+from persimmon.view.pins import Pin, InputPin, OutputPin
 # kivy stuff
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior, FocusBehavior
