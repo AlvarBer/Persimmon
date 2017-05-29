@@ -1,4 +1,4 @@
-from persimmon.view.util import InputPin
+from persimmon.view.util import InputPin, Notification
 from persimmon.view.blocks import Block
 
 from kivy.properties import ObjectProperty
@@ -11,6 +11,5 @@ class PrintBlock(Block):
     in_1 = ObjectProperty()
 
     def function(self):
-        self.parent.parent.parent.popup.title = 'Print results'
-        self.parent.parent.parent.popup.message = str(self.in_1.val)
-        self.parent.parent.parent.popup.open()
+        Notification(title='Print results',
+                     message=str(self.in_1.val)).open()

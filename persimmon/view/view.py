@@ -41,6 +41,8 @@ class ViewApp(App):
 
 
 class Backdrop(FloatLayout):
+    """ Class on top of blackboard where the main control panel and buttons are
+    displayed. Unaffected by zoom/movement of the underlying scatter. """
     play_button = ObjectProperty()
 
     def __init__(self, **kwargs):
@@ -60,9 +62,10 @@ class Backdrop(FloatLayout):
 
 
 class BlackBoard(ScatterLayout):
-    blocks = ObjectProperty()
-    connections = ObjectProperty()
-    popup = ObjectProperty(Notification())
+    """ Widget containing blocks and connections, it can be moved and zoomed
+    (sometime on the future). """
+    blocks = ObjectProperty()  # Block child reference
+    connections = ObjectProperty()  # Connection child reference
 
     def execute_graph(self):
         """ Tries to execute the graph, if some block is tainted it prevents
@@ -74,9 +77,8 @@ class BlackBoard(ScatterLayout):
             tainted_block = reduce(lambda l, r: l if l.tainted else r,
                                    self.blocks.children)
             logger.debug('Some block is tainted')
-            self.popup.title = 'Warning'
-            self.popup.message = tainted_block.tainted_msg
-            self.popup.open()
+            Notification(title='Warning',
+                         message=tainted_block.tainted_msg).open()
             self.parent.on_graph_executed()
         else:
             logger.debug('No block is tainted')
@@ -230,9 +232,8 @@ class Blocks(Widget):
         """ Add widget override. """
         if (widget.__class__ == blocks.PrintBlock and
             any(map(lambda w: w.__class__ == blocks.PrintBlock, self.children))):
-            self.parent.parent.popup.title = 'Warning'
-            self.parent.parent.popup.message = 'Only one print block allowed!'
-            self.parent.parent.popup.open()
+            Notification(title='Warning',
+                         message='Only one print block allowed!').open()
             return
         if not self.children:
             self.parent.parent.parent.remove_hint()
