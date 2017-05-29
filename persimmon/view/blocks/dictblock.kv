@@ -1,14 +1,11 @@
 <DictBlock>:
 	title: 'Dictionary'
 	block_color: root.b.STATE.value
-	outputs: outputs
 	dict_out: dict_out
 	tinput: tinput
-	Widget:
-		id: outputs
-		OutputPin:
-			id: dict_out
-			_type: root.t.STATE
+	OutputPin:
+		id: dict_out
+		_type: root.t.STATE
 	TextInput:
 		id: tinput
 		pos: root.x + 5, root.y + 5

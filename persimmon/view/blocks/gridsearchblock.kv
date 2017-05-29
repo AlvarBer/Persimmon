@@ -1,29 +1,23 @@
 <GridSearchBlock>:
 	title: 'Grid Search'
 	block_color: root.b.MODEL_SELECTION.value
-	inputs: inputs
-	outputs: outputs
 	data_in: data_in
 	est_in: est_in
 	params_in: params_in
 	est_out: est_out
 	score_out: score_out
-	Widget:
-		id: inputs
-		InputPin:
-			id: data_in
-			_type: root.t.DATAFRAME
-		InputPin:
-			id: est_in
-			_type: root.t.CLASSIFICATOR
-		InputPin:
-			id: params_in
-			_type: root.t.STATE
-	Widget:
-		id: outputs
-		OutputPin:
-			id: est_out
-			_type: root.t.CLASSIFICATOR
-		OutputPin:
-			id: score_out
-			_type: root.t.STR
+	InputPin:
+		id: data_in
+		_type: root.t.DATAFRAME
+	InputPin:
+		id: est_in
+		_type: root.t.CLASSIFICATOR
+	InputPin:
+		id: params_in
+		_type: root.t.STATE
+	OutputPin:
+		id: est_out
+		_type: root.t.CLASSIFICATOR
+	OutputPin:
+		id: score_out
+		_type: root.t.STR

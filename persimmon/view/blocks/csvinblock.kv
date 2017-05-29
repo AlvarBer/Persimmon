@@ -2,14 +2,11 @@
 	out_1: out_1
 	title: 'Read .csv'
 	block_color: root.b.IO.value
-	outputs: outputs
 	Button:
 		pos: root.x + 30, root.y + 10
 		size_hint: 0.7, 0.5
 		text: 'Load file'
 		on_press: root.file_dialog.open()
-	Widget:
-		id: outputs
-		OutputPin:
-			id: out_1
-			_type: root.t.DATAFRAME
+	OutputPin:
+		id: out_1
+		_type: root.t.DATAFRAME

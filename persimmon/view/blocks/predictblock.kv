@@ -1,22 +1,16 @@
 <PredictBlock>:
 	title: 'Predict'
 	block_color: root.b.FIT_AND_PREDICT.value
-	inputs: inputs
-	outputs: outputs
 	est_in: est_in
 	data_in: data_in
 	plain_out: plain_out
-	Widget:
-		id: inputs
-		InputPin:
-			id: est_in
-			_type: root.t.CLASSIFICATOR
-		InputPin:
-			id: data_in
-			_type: root.t.DATAFRAME
-	Widget:
-		id: outputs
-		OutputPin:
-			id: plain_out
-			_type: root.t.STR
+	InputPin:
+		id: est_in
+		_type: root.t.CLASSIFICATOR
+	InputPin:
+		id: data_in
+		_type: root.t.DATAFRAME
+	OutputPin:
+		id: plain_out
+		_type: root.t.STR
 

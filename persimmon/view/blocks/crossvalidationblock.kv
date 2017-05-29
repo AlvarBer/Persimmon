@@ -1,26 +1,22 @@
 <CrossValidationBlock>:
 	title: 'Cross Validation'
 	block_color: root.b.MODEL_SELECTION.value
-	inputs: inputs
-	outputs: outputs
 	data_input: data_input
 	estimator_input: estimator_input
 	cross_val_input: cross_val_input
 	cross_out: cross_out
-	Widget:
-		id: inputs
-		InputPin:
-			id: data_input
-			_type: root.t.DATAFRAME
-		InputPin:
-			id: estimator_input
-			_type: root.t.CLASSIFICATOR
-		InputPin:
-			id: cross_val_input
-			_type: root.t.CROSS_VALIDATOR
-	Widget:
-		id: outputs
-		OutputPin:
-			id: cross_out
-			_type: root.t.STR
+	# Inputs
+	InputPin:
+		id: data_input
+		_type: root.t.DATAFRAME
+	InputPin:
+		id: estimator_input
+		_type: root.t.CLASSIFICATOR
+	InputPin:
+		id: cross_val_input
+		_type: root.t.CROSS_VALIDATOR
+	# Outputs
+	OutputPin:
+		id: cross_out
+		_type: root.t.STR
 

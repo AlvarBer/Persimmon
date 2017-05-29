@@ -42,8 +42,9 @@ class SmartBubble(Bubble):
     def on_touch_down(self, touch) -> bool:
         if not self.collide_point(*touch.pos):
             if self.pin:  # If there is a connection going on
-                if issubclass(self.pin.__class__, InputPin) and self.pin.origin:
-                    self.pin.origin.delete_connection()
+                if issubclass(self.pin.__class__, InputPin):
+                    if self.pin.origin:
+                        self.pin.origin.delete_connection()
                 elif self.pin.destinations:
                     self.pin.destinations[-1].delete_connection()
             if touch.button == 'left':
@@ -55,7 +56,6 @@ class SmartBubble(Bubble):
                 return True
         else:
             return super().on_touch_down(touch)
-
 
     def dismiss(self):
         self.parent.remove_widget(self)

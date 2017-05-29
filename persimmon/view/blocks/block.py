@@ -1,5 +1,6 @@
 # Persimmon stuff
-from persimmon.view.util import Type, BlockType, Pin, AbstractWidget
+from persimmon.view.util import (Type, BlockType, AbstractWidget, Pin,
+                                 InputPin, OutputPin)
 # kivy stuff
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior
@@ -28,17 +29,20 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # Reverse ids on class because dict ordering is reversed
+        ids = list(self.ids.values())[::-1]
+        self.input_pins = [x.__self__ for x in ids
+                           if issubclass(x.__class__, InputPin)]
+        self.output_pins = [x.__self__ for x in ids
+                            if issubclass(x.__class__, OutputPin)]
 
-        if self.inputs:
-            for pin in self.inputs.children:
-                self.input_pins.append(pin)
-                pin.block = self
-                self.gap = pin.width * 2
-        if self.outputs:
-            for pin in self.outputs.children:
-                self.output_pins.append(pin)
-                pin.block = self
-                self.gap = pin.width * 2
+        for pin in self.input_pins:
+            pin.block = self
+            self.gap = pin.width * 2
+        for pin in self.output_pins:
+            pin.block = self
+            self.gap = pin.width * 2
+
         self.tainted_msg = 'Block {} has unconnected inputs'.format(self.title)
         self._tainted = False
         self.kindled = None
