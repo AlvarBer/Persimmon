@@ -128,3 +128,17 @@ Backdrop:
 		id: connections
 	Widget:
 		id: blocks
+
+<Hint@Label>:
+	text: 'Press Right-Click to spawn blocks'
+	font_size: '20sp'
+	size: self.texture_size
+	color: 1, 1, 1, 0.7
+	padding: 10, 10
+	canvas.before:
+		Color: 
+			rgba: 0, 0, 0, 0.7
+		Rectangle:
+			pos: root.width / 2 - self.texture_size[0] / 2, root.height / 2 - self.texture_size[1] / 2
+			size: self.texture_size
+

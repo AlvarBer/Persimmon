@@ -8,6 +8,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.clock import Clock, mainthread
 from kivy.config import Config
+from kivy.factory import Factory
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 # Kivy Widgets
@@ -43,9 +44,22 @@ class Backdrop(FloatLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.hint = Factory.Hint()
+        self.add_widget(self.hint)
 
     def on_graph_executed(self):
         self.play_button.ready()
+
+    def remove_hint(self):
+        self.remove_widget(self.hint)
+        self.hint = None
+
+    def add_hint(self):
+        blackboard = reduce(lambda c1, c2: c1 if c1.__class__ == BlackBoard else c2,
+                            self.children)
+        if not blackboard.blocks.children:
+            self.hint = Factory.Hint()
+            self.add_widget(self.hint)
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
@@ -65,6 +79,7 @@ class BlackBoard(ScatterLayout):
             self.popup.title = 'Warning'
             self.popup.message = tainted_block.tainted_msg
             self.popup.open()
+            self.parent.on_graph_executed()
         else:
             logger.debug('No block is tainted')
             for block in self.blocks.children:
