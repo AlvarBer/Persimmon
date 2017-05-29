@@ -39,13 +39,13 @@ class ViewApp(App):
         self.background = Image(source='background.png').texture
         #return Builder.load_file('view/view.kv')
 
+
 class Backdrop(FloatLayout):
     play_button = ObjectProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.hint = Factory.Hint()
-        self.add_widget(self.hint)
+        self.add_hint()
 
     def on_graph_executed(self):
         self.play_button.ready()
@@ -55,11 +55,9 @@ class Backdrop(FloatLayout):
         self.hint = None
 
     def add_hint(self):
-        blackboard = reduce(lambda c1, c2: c1 if c1.__class__ == BlackBoard else c2,
-                            self.children)
-        if not blackboard.blocks.children:
-            self.hint = Factory.Hint()
-            self.add_widget(self.hint)
+        self.hint = Factory.Hint()
+        self.add_widget(self.hint, index=len(self.children))
+
 
 class BlackBoard(ScatterLayout):
     blocks = ObjectProperty()
@@ -226,27 +224,25 @@ class BlackBoard(ScatterLayout):
                 return block
         return None
 
-    def spawnprint(self):
-        """ Spawns a print block only if no print block is currently present.
-        """
-        if any(map(lambda b: b.__class__ == blocks.PrintBlock,
-                       self.blocks.children)):
-            self.popup.title = 'Warning'
-            self.popup.message = 'Only one print block allowed!'
-            self.popup.open()
-        else:
-            self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
 
 class Blocks(Widget):
-
-    def add_widget(self, widget):
+    def add_widget(self, widget, index=0, canvas=None):
+        """ Add widget override. """
         if (widget.__class__ == blocks.PrintBlock and
             any(map(lambda w: w.__class__ == blocks.PrintBlock, self.children))):
             self.parent.parent.popup.title = 'Warning'
             self.parent.parent.popup.message = 'Only one print block allowed!'
             self.parent.parent.popup.open()
             return
-        super().add_widget(widget)
+        if not self.children:
+            self.parent.parent.parent.remove_hint()
+        super().add_widget(widget, index, canvas)
+
+    def remove_widget(self, widget):
+        super().remove_widget(widget)
+        if not self.children:
+            self.parent.parent.parent.remove_hint()
+
 
 if __name__ == '__main__':
     ViewApp().run()

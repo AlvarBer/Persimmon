@@ -38,8 +38,6 @@ class SmartBubble(Bubble):
                          'bub': self, 'backdrop': backdrop, 'pin': self.pin,
                          'block_pos': self.pos} for block in instances]
         self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
-        if self.backdrop.parent.hint:
-            self.backdrop.parent.remove_hint()
 
     def on_touch_down(self, touch) -> bool:
         if not self.collide_point(*touch.pos):
@@ -50,7 +48,6 @@ class SmartBubble(Bubble):
                     self.pin.destinations[-1].delete_connection()
             if touch.button == 'left':
                 self.dismiss()
-                self.backdrop.parent.add_hint()
                 return True
             elif touch.button == 'right':
                 self.x = touch.x
