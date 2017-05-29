@@ -61,7 +61,7 @@ Backdrop:
 					on_release: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
 				Button:
 					text: 'Print'
-					on_release: blackboard.spawnprint()
+					on_release: blackboard.blocks.add_widget(b.PrintBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Classificators'
 			BoxLayout:
@@ -126,7 +126,7 @@ Backdrop:
 	connections: connections
 	Widget:
 		id: connections
-	Widget:
+	Blocks:
 		id: blocks
 
 <Hint@Label>:
@@ -141,4 +141,5 @@ Backdrop:
 		Rectangle:
 			pos: root.width / 2 - self.texture_size[0] / 2, root.height / 2 - self.texture_size[1] / 2
 			size: self.texture_size
+<Block>:
 

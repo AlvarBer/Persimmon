@@ -237,5 +237,16 @@ class BlackBoard(ScatterLayout):
         else:
             self.blocks.add_widget(blocks.PrintBlock(pos=(300, 250)))
 
+class Blocks(Widget):
+
+    def add_widget(self, widget):
+        if (widget.__class__ == blocks.PrintBlock and
+            any(map(lambda w: w.__class__ == blocks.PrintBlock, self.children))):
+            self.parent.parent.popup.title = 'Warning'
+            self.parent.parent.popup.message = 'Only one print block allowed!'
+            self.parent.parent.popup.open()
+            return
+        super().add_widget(widget)
+
 if __name__ == '__main__':
     ViewApp().run()
