@@ -12,8 +12,6 @@ Builder.load_file('view/util/pin.kv')
 class Pin(CircularButton, metaclass=AbstractWidget):
     val = ObjectProperty(None, force_dispatch=True)
     block = ObjectProperty()
-    #ellipse = ObjectProperty()
-    #line = ObjectProperty()
     _type = ObjectProperty(Type.ANY)
 
     @abstractmethod
@@ -34,12 +32,12 @@ class Pin(CircularButton, metaclass=AbstractWidget):
 
     def typesafe(self, other: 'Pin') -> bool:
         """ Tells if a relation between two pins is typesafe. """
-        if ((self._type == Type.ANY or other._type == Type.ANY) and
-                self.block != other.block and self.__class__ != other.__class__):
+        if self.block == other.block or self.__class__ == other.__class__:
+            return False
+        elif self._type == Type.ANY or other._type == Type.ANY:
             return True  # Anything is possible with ANY
         else:
-            return (self._type == other._type and self.block != other.block and
-                    self.__class__ != other.__class__)
+            return self._type == other._type
 
     # Hack
     def on__type(self, instance, value):

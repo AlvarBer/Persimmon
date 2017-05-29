@@ -75,15 +75,8 @@ class SmartBubble(Bubble):
                             for class_, name in self.cache.items()]
 
     def _is_suitable(self, block) -> bool:
-        if issubclass(self.pin.__class__, InputPin):
-            if any(filter(lambda p: p._type == self.pin._type,
-                          block.output_pins)):
-                return True
-        else:
-            if any(filter(lambda p: p._type == self.pin._type,
-                          block.input_pins)):
-                return True
-        return False
+        return any(filter(lambda p: p.typesafe(self.pin),
+                          block.output_pins + block.input_pins))
 
 class Row(BoxLayout):
     cls_name = StringProperty()
