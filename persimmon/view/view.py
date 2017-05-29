@@ -228,7 +228,7 @@ class BlackBoard(ScatterLayout):
 
 
 class Blocks(Widget):
-    def add_widget(self, widget, index=0, canvas=None):
+    def add_widget(self, widget: Widget, index: int = 0, canvas: str = None):
         """ Add widget override. """
         if (widget.__class__ == blocks.PrintBlock and
             any(map(lambda w: w.__class__ == blocks.PrintBlock, self.children))):
@@ -239,10 +239,10 @@ class Blocks(Widget):
             self.parent.parent.parent.remove_hint()
         super().add_widget(widget, index, canvas)
 
-    def remove_widget(self, widget):
+    def remove_widget(self, widget: Widget):
         super().remove_widget(widget)
         if not self.children:
-            self.parent.parent.parent.remove_hint()
+            self.parent.parent.parent.add_hint()
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ from persimmon.view.util import (Type, BlockType, AbstractWidget, Pin,
                                  InputPin, OutputPin)
 # kivy stuff
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.behaviors import DragBehavior
+from kivy.uix.behaviors import DragBehavior, FocusBehavior
 from kivy.properties import ListProperty, StringProperty, ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import BorderImage, Color, RoundedRectangle
@@ -16,7 +16,7 @@ from functools import partial
 
 Builder.load_file('view/blocks/block.kv')
 
-class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
+class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])
     title = StringProperty()
     label = ObjectProperty()
@@ -140,3 +140,12 @@ class Block(DragBehavior, FloatLayout, metaclass=AbstractWidget):
         else:
             pin.x = block.x + 5
 
+    def on_focus(self, instance, focus):
+        if focus:
+            self.kindle()
+        else:
+            self.unkindle()
+
+    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+        if keycode == (127, 'delete'):
+            self.parent.remove_widget(self)
