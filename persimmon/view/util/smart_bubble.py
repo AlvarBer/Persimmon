@@ -2,6 +2,7 @@ from kivy.uix.bubble import Bubble
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.recycleview import RecycleView
 from kivy.lang import Builder
+from kivy.clock import Clock
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
 from persimmon.view import blocks
 from persimmon.view.util import InputPin, OutputPin
@@ -9,18 +10,19 @@ import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
-from kivy.core.window import Window
 
 
 Builder.load_file('view/util/smart_bubble.kv')
 logger = logging.getLogger(__name__)
 
 class SmartBubble(Bubble):
+    rv = ObjectProperty()
+    ti = ObjectProperty()
+
     # TODO: cache instancing
     def __init__(self, backdrop, *, pin=None, **kwargs):
         super().__init__(**kwargs)
         self.y -= self.width
-        #print(Window.size)
         self.pin = pin
         self.backdrop = backdrop
         # Let's do some introspection, removing strings we do not care about
@@ -38,6 +40,10 @@ class SmartBubble(Bubble):
                          'bub': self, 'backdrop': backdrop, 'pin': self.pin,
                          'block_pos': self.pos} for block in instances]
         self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
+        Clock.schedule_once(self.refocus, 0.3)
+
+    def refocus(self, dt):
+        self.ti.focus = True
 
     def on_touch_down(self, touch) -> bool:
         if not self.collide_point(*touch.pos):
