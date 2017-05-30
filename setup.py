@@ -13,6 +13,5 @@ setup(name='persimmon',
       include_package_data=True,
       python_requires='>=3.5',
       setup_requires=['Cython'],
-      install_requires=['Cython', 'Kivy', 'scipy', 'scikit-learn', 'pandas',
-                        'coloredlogs'],
+      install_requires=['Cython', 'Kivy', 'scipy', 'scikit-learn', 'pandas'],
       zip_safe=False)
