@@ -94,7 +94,7 @@ class Row(BoxLayout):
 
     def spawn_block(self):
         block = self.cls_(pos=self.block_pos)
-        self.backdrop.blocks.add_widget(block)
+        self.backdrop.block_div.add_widget(block)
         if self.pin:
             if issubclass(self.pin.__class__, InputPin):
                 other_pin = self._suitable_pin(block.output_pins)

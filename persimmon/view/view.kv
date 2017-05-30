@@ -2,6 +2,7 @@
 #:import b persimmon.view.blocks
 
 Backdrop:
+	id: backdrop
 
 <Backdrop>:
 	play_button: play_button
@@ -24,6 +25,84 @@ Backdrop:
 		pos: root.width - self.width, 0
 		size_hint: None, None
 		on_release: self.start();blackboard.execute_graph()
+	TabbedPanel:
+		pos_hint: {'top': 1}
+		size_hint_y: None
+		height: '100dp'
+		tab_width: '125dp'
+		do_default_tab: False
+		TabbedPanelItem:
+			text: 'Input/Output'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Read .csv'
+					on_release: blackboard.block_div.add_widget(b.CSVInBlock(pos=(300, 250)))
+				Button:
+					text: 'Write .csv'
+					on_release: blackboard.block_div.add_widget(b.CSVOutBlock(pos=(300, 250)))
+				Button:
+					text: 'Print'
+					on_release: blackboard.block_div.add_widget(b.PrintBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Classificators'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Random Forest'
+					on_release: blackboard.block_div.add_widget(b.RandomForestBlock(pos=(300, 250)))
+				Button:
+					text: 'SVM'
+					on_release: blackboard.block_div.add_widget(b.SVMBlock(pos=(300, 250)))
+				Button:
+					text: 'KNN'
+					on_release: blackboard.block_div.add_widget(b.KNNBlock(pos=(300, 250)))
+				Button:
+					text: 'SGD'
+					on_release: blackboard.block_div.add_widget(b.SGDBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Fit & Predict'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Fit'
+					on_release: blackboard.block_div.add_widget(b.FitBlock(pos=(300, 250)))
+				Button:
+					text: 'Predict'
+					on_release: blackboard.block_div.add_widget(b.PredictBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Model Selection'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Cross Validation Score'
+					on_release: blackboard.block_div.add_widget(b.CrossValidationBlock(pos=(300, 250)))
+				Button:
+					text: 'Grid Search'
+					on_release: blackboard.block_div.add_widget(b.GridSearchBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'Cross Validators'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'K-Folds'
+					on_release: blackboard.block_div.add_widget(b.TenFoldBlock(pos=(300, 250)))
+				Button:
+					text: 'Time Series Split'
+					on_release: blackboard.block_div.add_widget(b.TSSplitBlock(pos=(300, 250)))
+		TabbedPanelItem:
+			text: 'State'
+			BoxLayout:
+				spacing: '10dp'
+				padding: '5dp'
+				Button:
+					text: 'Dictionary'
+					on_release: blackboard.block_div.add_widget(b.DictBlock(pos=(300, 250)))
 
 #<DebugButtons@Widget>:
 #	Button:
@@ -44,92 +123,7 @@ Backdrop:
 #			blackboard.popup.title = 'IR'
 #			blackboard.popup.message = str(blackboard.to_ir())
 #			blackboard.popup.open()
-	TabbedPanel:
-		pos_hint: {'top': 1}
-		size_hint_y: None
-		height: '100dp'
-		tab_width: '125dp'
-		do_default_tab: False
-		TabbedPanelItem:
-			text: 'Input/Output'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Read .csv'
-					on_release: blackboard.blocks.add_widget(b.CSVInBlock(pos=(300, 250)))
-				Button:
-					text: 'Write .csv'
-					on_release: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
-				Button:
-					text: 'Print'
-					on_release: blackboard.blocks.add_widget(b.PrintBlock(pos=(300, 250)))
-		TabbedPanelItem:
-			text: 'Classificators'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Random Forest'
-					on_release: blackboard.blocks.add_widget(b.RandomForestBlock(pos=(300, 250)))
-				Button:
-					text: 'SVM'
-					on_release: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
-				Button:
-					text: 'KNN'
-					on_release: blackboard.blocks.add_widget(b.KNNBlock(pos=(300, 250)))
-				Button:
-					text: 'SGD'
-					on_release: blackboard.blocks.add_widget(b.SGDBlock(pos=(300, 250)))
-		TabbedPanelItem:
-			text: 'Fit & Predict'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Fit'
-					on_release: blackboard.blocks.add_widget(b.FitBlock(pos=(300, 250)))
-				Button:
-					text: 'Predict'
-					on_release: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
-		TabbedPanelItem:
-			text: 'Model Selection'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Cross Validation Score'
-					on_release: blackboard.blocks.add_widget(b.CrossValidationBlock(pos=(300, 250)))
-				Button:
-					text: 'Grid Search'
-					on_release: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
-		TabbedPanelItem:
-			text: 'Cross Validators'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'K-Folds'
-					on_release: blackboard.blocks.add_widget(b.TenFoldBlock(pos=(300, 250)))
-				Button:
-					text: 'Time Series Split'
-					on_release: blackboard.blocks.add_widget(b.TSSplitBlock(pos=(300, 250)))
-		TabbedPanelItem:
-			text: 'State'
-			BoxLayout:
-				spacing: '10dp'
-				padding: '5dp'
-				Button:
-					text: 'Dictionary'
-					on_release: blackboard.blocks.add_widget(b.DictBlock(pos=(300, 250)))
 
-<Blackboard>:
-	blocks: blocks
-	connections: connections
-	Widget:
-		id: connections
-	Blocks:
-		id: blocks
 
 <Hint@Label>:
 	text: 'Press Right-Click to spawn blocks'
@@ -138,10 +132,9 @@ Backdrop:
 	color: 1, 1, 1, 0.7
 	padding: 10, 10
 	canvas.before:
-		Color: 
+		Color:
 			rgba: 0, 0, 0, 0.7
 		Rectangle:
 			pos: root.width / 2 - self.texture_size[0] / 2, root.height / 2 - self.texture_size[1] / 2
 			size: self.texture_size
-<Block>:
 
