@@ -104,27 +104,6 @@ Backdrop:
 					text: 'Dictionary'
 					on_release: blackboard.block_div.add_widget(b.DictBlock(pos=(300, 250)))
 
-#<DebugButtons@Widget>:
-#	Button:
-#		text: 'See Relations'
-#		size_hint: None, None
-#		size: '100dp', '100dp'
-#		pos: 200, 0
-#		on_release:
-#			blackboard.popup.title = 'Relations'
-#			blackboard.popup.message = blackboard.get_relations();
-#			blackboard.popup.open()
-#	Button:
-#		text: 'See IR'
-#		size_hint: None, None
-#		size: '100dp', '100dp'
-#		pos: 300, 0
-#		on_release:
-#			blackboard.popup.title = 'IR'
-#			blackboard.popup.message = str(blackboard.to_ir())
-#			blackboard.popup.open()
-
-
 <Hint@Label>:
 	text: 'Press Right-Click to spawn blocks'
 	font_size: '20sp'
@@ -137,4 +116,21 @@ Backdrop:
 		Rectangle:
 			pos: root.width / 2 - self.texture_size[0] / 2, root.height / 2 - self.texture_size[1] / 2
 			size: self.texture_size
+
+<DebugButtons@Widget>:
+	blackboard: None
+	Button:
+		text: 'See Relations'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 0, 0
+		on_release:
+			Notification(title='Relations', message=blackboard.get_relations()).open()
+	Button:
+		text: 'See IR'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 100, 0
+		on_release:
+			Notification(title='IR', message=str(blackboard.to_ir())).open()
 

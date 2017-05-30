@@ -1,6 +1,6 @@
 # Persimmon imports
 from persimmon.view import BlackBoard, Blocks
-from persimmon.view.util import PlayButton
+from persimmon.view.util import PlayButton, Notification
 # Kivy imports
 from kivy.app import App
 from kivy.config import Config
@@ -12,6 +12,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 # Others
 import logging
+import sys
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,6 @@ class ViewApp(App):
     def build(self):
         self.title = 'Persimmon'
         self.background = Image(source='background.png').texture
-
 
 class Backdrop(FloatLayout):
     """ Class on top of blackboard where the main control panel and buttons are
