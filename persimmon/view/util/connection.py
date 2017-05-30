@@ -1,9 +1,13 @@
 # Kivy stuff
 from kivy.uix.widget import Widget
+from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.graphics import Color, Ellipse, Line
 from kivy.clock import Clock
+from kivy.lang import Builder
+from kivy.factory import Factory
+from kivy.core.window import Window
 # For type hinting
 from kivy.input.motionevent import MotionEvent
 # Numpy for sin
@@ -13,7 +17,28 @@ from math import pi
 import logging
 
 
+#TODO: Info must be before everything
+Builder.load_string("""
+<Connection>:
+
+<Info>:
+    #pos: self.pos
+    text: 'Spawn new block'
+    font_size: '15dp'
+    size: self.texture_size
+    color: 1, 1, 1, 0.7
+    padding: 5, 5
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.7
+        Rectangle:
+            pos: self.pos
+            size: self.texture_size
+""")
 logger = logging.getLogger(__name__)
+
+class Info(Label):
+    pass
 
 class Connection(Widget):
     start = ObjectProperty(allownone=True)
@@ -41,10 +66,13 @@ class Connection(Widget):
                 self.lin = Line(bezier=self.bez_end * 4, width=1.5)
             self._bind_pin(self.end)
         self.warned = False
+        self.info = Factory.Info(pos=self.bez_start)
+        self.add_widget(self.info)
 
     def finish_connection(self, pin: 'Pin'):
         """ This functions finishes a connection that has only start or end and
             is being currently dragged """
+        self.remove_widget(self.info)
         if self.forward:
             self.end = pin
             self._bind_pin(self.end)
@@ -65,6 +93,7 @@ class Connection(Widget):
             self.start = None
             # This signals that we are dragging a connection
             touch.ud['cur_line'] = self
+            self.add_widget(self.info)
             return True
         elif self.end and self.end.collide_point(*touch.pos):
             # Same as before but with the other edge
@@ -73,6 +102,7 @@ class Connection(Widget):
             self.end.on_connection_delete(self)
             self.end = None
             touch.ud['cur_line'] = self
+            Window.add_widget(self.info)
             return True
         else:
             return False
@@ -89,23 +119,30 @@ class Connection(Widget):
             fixed_edge = self.end
             self.bez_start = [*newpos]
             self._rebezier()
+        self.info.pos = [*newpos]
         # The conditionals are so complicated because it is necessary to check
         # whether or not a pin in a block has been touched, and then check
         # the typesafety.
-        if (self.warned and (not blackboard.in_block(*newpos) or
-            not blackboard.in_block(*newpos).in_pin(*newpos) or
-            blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
-            self._unwarn()
-        elif (blackboard.in_block(*newpos) and
-              blackboard.in_block(*newpos).in_pin(*newpos) and
-              (not blackboard.in_block(*newpos).in_pin(*newpos).typesafe(fixed_edge))):
+        if (self._in_pin(blackboard, newpos) and
+            not self._in_pin(blackboard, newpos).typesafe(fixed_edge)):
             # This conditional represents that the cursor stepped out the pin
+            self.info.text = 'Connection is not possible'
             self._warn()
+        elif (self._in_pin(blackboard, newpos) and
+              self._in_pin(blackboard, newpos).typesafe(fixed_edge)):
+            self.info.text = 'Connect'
+            if self.warned:
+                self._unwarn()
+        else:
+            self.info.text = 'Spawn new block'
+            if self.warned:
+                self._unwarn()
 
     def delete_connection(self):
         """ This function deletes both ends (if they exist) and the connection
         itself. """
         self.parent.remove_widget(self)  # Self-destruct
+        Window.remove_widget(self.info)
         if self.start:
             self._unbind_pin(self.start)
             self.start.on_connection_delete(self)
@@ -126,6 +163,14 @@ class Connection(Widget):
         self.it.throw(StopIteration)
 
     # Auxiliary methods
+    def _in_pin(self, blackboard, pos):
+        block = blackboard.in_block(*pos)
+        if block:
+            pin = block.in_pin(*pos)
+            if pin:
+                return pin
+        return False
+
     # Binding methods
     def _unbind_pin(self, pin: 'Pin'):
         """ Undos pin's circle and line binding. """
@@ -215,3 +260,6 @@ class Connection(Widget):
         self.lin.bezier = (self.bez_start + start_right +
                            [dist, self.bez_start[1]] + [dist, self.bez_end[1]] +
                            end_left + self.bez_end)
+
+    def _search_window(self):
+        return Window
