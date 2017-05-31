@@ -25,6 +25,7 @@ Builder.load_string("""
     #pos: self.pos
     text: 'Spawn new block'
     font_size: '15dp'
+    size_hint: None, None
     size: self.texture_size
     color: 1, 1, 1, 0.7
     padding: 5, 5
@@ -67,12 +68,13 @@ class Connection(Widget):
             self._bind_pin(self.end)
         self.warned = False
         self.info = Factory.Info(pos=self.bez_start)
-        self.add_widget(self.info)
+        Window.add_widget(self.info)
 
     def finish_connection(self, pin: 'Pin'):
         """ This functions finishes a connection that has only start or end and
             is being currently dragged """
-        self.remove_widget(self.info)
+        print('Removing info')
+        Window.remove_widget(self.info)
         if self.forward:
             self.end = pin
             self._bind_pin(self.end)
@@ -93,7 +95,7 @@ class Connection(Widget):
             self.start = None
             # This signals that we are dragging a connection
             touch.ud['cur_line'] = self
-            self.add_widget(self.info)
+            Window.add_widget(self.info)
             return True
         elif self.end and self.end.collide_point(*touch.pos):
             # Same as before but with the other edge

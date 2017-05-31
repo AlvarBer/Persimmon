@@ -14,7 +14,7 @@ and type safety is enforced when the connection is being made.
 
 A smart bubble helps suggesting suitable context-sensitive blocks when making
 a connection, showing only the blocks which are type safe.
-There is alsoa search box that can be used for finding a particular block.
+There is also a search box that can be used for finding a particular block.
 
 ![Smart bubble](docs/images/smubble.gif)
 
