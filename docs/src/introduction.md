@@ -112,6 +112,7 @@ overcome the difficulties of learning the algorithms themselves.
 
 Objectives
 ----------
+<!--
 Research:
 
 :   On terms of research this project touches on a multitude of topics, from
@@ -127,43 +128,48 @@ Requirements:
     A good risk analysis can also prevent failures in a multitude of areas
     such as time management or technical debt.
 
-Design:
-
-:   The system has to be designed in accordance to those requirements, both
-    in terms of making it easy to progress through the milestones as well as
-    producing a usable software at each stage.
-
-Implementation:
-
-:   There are some **non-functional requirements**, such as the project running
-    on the desktop platform, being able to pack it into a executable (to make
-    evaluation easier for participants), have a framerate good enough for
-    pleasant use (minimum 30 FPS), or support multithreading (as to not block
-    the main/UI thread from running when executing the backend),
-
 Testing:
 
 :   The software needs to be testable, as to allow for the automation of
     testing on the source repository, caching bugs faster in the process.
+-->
+
+Feasibility:
+:   The project has to explore the space of possible solutions on visual
+    machine learning approaches, trying different estrategies for both the
+    front and backend of the application (Flow based programming, Dataflow
+    programming, etc).
+
+Design and Usability:
+:   The system has to be designed in accordance to requirements, both
+    in terms of making it easy to progress through the milestones, as well as
+    producing usable software at each stage.
+    In all cases it must balance complexity against expresivity, trying to
+    provide the user with a powerful tool while avoiding complex and
+    unusable interface.
 
 Evaluation:
-
 :   The software will be evaluated by participants that belong to the intended
     audience of the system, a form must be prepared detailing the task they
     will have to perform, as well as how their data will be treated.
 
-Learning:
-
+Learning Tool:
 :   The software will help both with the programming barrier, easing the
     learning curve of Machine Learning as to allow the learner to focus on the
     connections, intuitions and mathematical basis of the algorithms and not on
     the implementation details and the quirks of the language.
 
-Faster exploratory work:
-
+Faster Exploratory Work:
 :    By providing an easy to use, drag and drop interface the user can try a
      plethora of different estimators and adjusting the hyper-parameters as
      they see fit faster, and without writing a single line of code.
+
+Implementation:
+:   There are some **non-functional requirements**, such as the project running
+    on the desktop platform, being able to pack it into a executable (to make
+    evaluation easier for participants), have a framerate good enough for
+    pleasant use (minimum 30 FPS), or support multithreading (as to not block
+    the main/UI thread from running when executing the backend),
 
 
 What the project is not
