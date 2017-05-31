@@ -5,7 +5,7 @@ from kivy.lang import Builder
 from kivy.properties import ListProperty
 
 
-Builder.load_file('view/util/circularbutton.kv')
+Builder.load_file('view/pins/circularbutton.kv')
 
 class CircularButton(ButtonBehavior, Widget):
     color = ListProperty([.7, .7, .7])

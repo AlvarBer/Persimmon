@@ -14,6 +14,7 @@ class Type(Enum):
     CLASSIFICATOR = .667, .424, .224
     CROSS_VALIDATOR = .133, .4, .4
     STATE = .667, .667, .224
+    STR = .408, .624, .608
 
 class BlockType(Enum):
     IO = .667, .224, .224

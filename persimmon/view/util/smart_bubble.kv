@@ -1,0 +1,47 @@
+<SmartBubble>:
+	size_hint: None, None
+	size: 160, 200
+	pos: self.pos
+	arrow_pos: 'left_top'
+	orientation: 'vertical'
+	ti: ti
+	rv: rv
+	TextInput:
+		id: ti
+		size_hint: 1, None
+		height: dp(30)
+		text: ''
+		multiline: False
+		# Text on the middle
+		padding_x: (self.width - self._get_text_width(self.text, self.tab_width, self._label_cached)) / 2
+		on_text: root.search(args[1])
+	RecycleView:
+		id: rv
+		scroll_type: ['bars', 'content']
+		bar_width: '10dp'
+		viewclass: 'Row'
+		RecycleBoxLayout:
+			default_size_hint: 1, None
+			default_size: None, dp(50)
+			# Kivy bug, shown on examples
+			size_hint_y: None
+			orientation: 'vertical'
+			height: self.minimum_height
+			spacing: dp(2)
+
+<Row>:
+    cls_name: ''
+	cls_: None
+	bub: None
+	backdrop: None
+	touch_pos: [0, 0]
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.5, 0.5
+        Rectangle:
+            size: self.size
+            pos: self.pos
+	Button:
+        text: root.cls_name
+		on_release: root.spawn_block()
+

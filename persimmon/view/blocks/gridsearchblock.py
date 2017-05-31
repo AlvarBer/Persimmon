@@ -1,5 +1,5 @@
 from persimmon.view.blocks import Block
-from persimmon.view.util import InputPin, OutputPin
+from persimmon.view.pins import InputPin, OutputPin
 
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder

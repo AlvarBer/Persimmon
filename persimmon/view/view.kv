@@ -1,11 +1,15 @@
 #:kivy 1.9
 #:import b persimmon.view.blocks
 
+Backdrop:
+	id: backdrop
 
-FloatLayout:
+<Backdrop>:
+	play_button: play_button
 	canvas.before:
 		Rectangle:
 			pos: 0, 0
+			#late-binding hack
 			size: app.background.size if app.background else [0, 0]
 			texture: app.background
 	BlackBoard:
@@ -16,30 +20,11 @@ FloatLayout:
 		do_scale: False
 		do_translation: False
 		auto_bring_to_front: False
-	Button:
-		text: 'Execute'
+	PlayButton:
+		id: play_button
+		pos: root.width - self.width, 0
 		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 0, 0
-		on_release: blackboard.execute_graph()
-	Button:
-		text: 'See Relations'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 200, 0
-		on_release:
-			blackboard.popup.title = 'Relations'
-			blackboard.popup.message = blackboard.get_relations();
-			blackboard.popup.open()
-	Button:
-		text: 'See IR'
-		size_hint: None, None
-		size: '100dp', '100dp'
-		pos: 300, 0
-		on_release:
-			blackboard.popup.title = 'IR'
-			blackboard.popup.message = str(blackboard.to_ir())
-			blackboard.popup.open()
+		on_release: self.start();blackboard.execute_graph()
 	TabbedPanel:
 		pos_hint: {'top': 1}
 		size_hint_y: None
@@ -53,13 +38,13 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Read .csv'
-					on_release: blackboard.blocks.add_widget(b.CSVInBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.CSVInBlock(pos=(300, 250)))
 				Button:
 					text: 'Write .csv'
-					on_release: blackboard.blocks.add_widget(b.CSVOutBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.CSVOutBlock(pos=(300, 250)))
 				Button:
 					text: 'Print'
-					on_release: blackboard.spawnprint()
+					on_release: blackboard.block_div.add_widget(b.PrintBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Classificators'
 			BoxLayout:
@@ -67,16 +52,16 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Random Forest'
-					on_release: blackboard.blocks.add_widget(b.RandomForestBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.RandomForestBlock(pos=(300, 250)))
 				Button:
 					text: 'SVM'
-					on_release: blackboard.blocks.add_widget(b.SVMBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.SVMBlock(pos=(300, 250)))
 				Button:
 					text: 'KNN'
-					on_release: blackboard.blocks.add_widget(b.KNNBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.KNNBlock(pos=(300, 250)))
 				Button:
 					text: 'SGD'
-					on_release: blackboard.blocks.add_widget(b.SGDBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.SGDBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Fit & Predict'
 			BoxLayout:
@@ -84,10 +69,10 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Fit'
-					on_release: blackboard.blocks.add_widget(b.FitBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.FitBlock(pos=(300, 250)))
 				Button:
 					text: 'Predict'
-					on_release: blackboard.blocks.add_widget(b.PredictBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.PredictBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Model Selection'
 			BoxLayout:
@@ -95,10 +80,10 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Cross Validation Score'
-					on_release: blackboard.blocks.add_widget(b.CrossValidationBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.CrossValidationBlock(pos=(300, 250)))
 				Button:
 					text: 'Grid Search'
-					on_release: blackboard.blocks.add_widget(b.GridSearchBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.GridSearchBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'Cross Validators'
 			BoxLayout:
@@ -106,10 +91,10 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'K-Folds'
-					on_release: blackboard.blocks.add_widget(b.TenFoldBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.TenFoldBlock(pos=(300, 250)))
 				Button:
 					text: 'Time Series Split'
-					on_release: blackboard.blocks.add_widget(b.TSSplitBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.TSSplitBlock(pos=(300, 250)))
 		TabbedPanelItem:
 			text: 'State'
 			BoxLayout:
@@ -117,12 +102,35 @@ FloatLayout:
 				padding: '5dp'
 				Button:
 					text: 'Dictionary'
-					on_release: blackboard.blocks.add_widget(b.DictBlock(pos=(300, 250)))
+					on_release: blackboard.block_div.add_widget(b.DictBlock(pos=(300, 250)))
 
-<Blackboard>:
-	blocks: blocks
-	connections: connections
-	Widget:
-		id: connections
-	Widget:
-		id: blocks
+<Hint@Label>:
+	text: 'Press Right-Click to spawn blocks'
+	font_size: '20sp'
+	size: self.texture_size
+	color: 1, 1, 1, 0.7
+	padding: 10, 10
+	canvas.before:
+		Color:
+			rgba: 0, 0, 0, 0.7
+		Rectangle:
+			pos: root.width / 2 - self.texture_size[0] / 2, root.height / 2 - self.texture_size[1] / 2
+			size: self.texture_size
+
+<DebugButtons@Widget>:
+	blackboard: None
+	Button:
+		text: 'See Relations'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 0, 0
+		on_release:
+			Notification(title='Relations', message=blackboard.get_relations()).open()
+	Button:
+		text: 'See IR'
+		size_hint: None, None
+		size: '100dp', '100dp'
+		pos: 100, 0
+		on_release:
+			Notification(title='IR', message=str(blackboard.to_ir())).open()
+
