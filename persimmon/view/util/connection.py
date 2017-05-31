@@ -73,8 +73,7 @@ class Connection(Widget):
     def finish_connection(self, pin: 'Pin'):
         """ This functions finishes a connection that has only start or end and
             is being currently dragged """
-        print('Removing info')
-        Window.remove_widget(self.info)
+        self.remove_info()
         if self.forward:
             self.end = pin
             self._bind_pin(self.end)
@@ -144,7 +143,7 @@ class Connection(Widget):
         """ This function deletes both ends (if they exist) and the connection
         itself. """
         self.parent.remove_widget(self)  # Self-destruct
-        Window.remove_widget(self.info)
+        self.remove_info()
         if self.start:
             self._unbind_pin(self.start)
             self.start.on_connection_delete(self)
@@ -163,6 +162,9 @@ class Connection(Widget):
         """ Stops vibrating a connection. It will throw an execution if
         the connection is not pulsing right now. """
         self.it.throw(StopIteration)
+
+    def remove_info(self):
+        Window.remove_widget(self.info)
 
     # Auxiliary methods
     def _in_pin(self, blackboard, pos):

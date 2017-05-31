@@ -33,6 +33,11 @@ class SmartBubble(Bubble):
         # Kivy properties are not really static, so we need to instance blocks
         instances = (block() for block in block_cls)
         if pin:  # Context sensitive if we are connecting
+            if issubclass(pin.__class__, InputPin):
+                conn = pin.origin
+            else:
+                conn = pin.destinations[-1]
+            conn.remove_info()
             instances = filter(self._is_suitable, instances)
 
         # This is how we pass information to each shown row
