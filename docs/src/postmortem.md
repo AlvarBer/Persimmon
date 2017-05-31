@@ -1,13 +1,12 @@
 Postmortem
 ==========
 
-After the evaluation it is time to make a retrospective, and look what has
-been achieved and what has not.
+After the evaluation it is time to make a retrospective, look what Persimmon
+has achieved.
 
-On the introduction several objectives were mentioned, let's revisit those.
 
-Let's revisit the project objectives:
-
+Objectives Review
+-----------------
 <!--
 Research:
 :   Background research was conducted on fields covered by the
@@ -71,6 +70,23 @@ Implementation:
     a hitch, and keeping the frame rate steady while modifying connections and
     running the execution of the pipeline simultaneously.
 
+Retrospective
+-------------
+With over 7k lines of code 10 releases, and more than 200 commits, Persimmon
+stands as a medium size codebase, since its inception it has gathered
+attention, with over 3000 visits, and more than 90 stars on [Github].
+
+<!--
+![Lines of code](images/loc.png)
+-->
+
+It has been featured on [multiple], [websites], and even won [best project] at
+the compshow 2017 at the University of Hertfordshire.
+
+![Chinese machine learning forum](images/china.png)
+
+Conclusion
+----------
 In conclusion Persimmon has achieved all proposed objectives, proving
 there is room for improvement on the field of visual languages for machine
 learning, and that small improvements make a significant impact on the user
@@ -78,13 +94,19 @@ experience.
 In fact a system should not only make it hard or impossible to construct
 incorrect graphs, but should make it easier and faster to create correct graph.
 
-Giving more power to the user should not mean making the interface more
-complicated, it should make it easier
+Giving more power to the user does not mean making the interface more
+complicated, in fact it can be the opposite.
 
 
 Bibliography
 ============
 
+[Github]: htttps://github.com/AlvarBer/Persimmon
+[multiple]: http://mailchi.mp/pythonweekly/python-weekly-issue-295
+[websites]: http://forum.ai100.com.cn/blog/thread/ml-2017-05-10/
+[best project]: https://twitter.com/HertfordshireCS/status/857266574356598785
+
 [^REPL]: A Read Eval Print Loop is an interactive console many modern
     programming languages that allows for the interactive execution of
     expressions, saving the results in a local session.
+
