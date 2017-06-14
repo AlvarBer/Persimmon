@@ -10,7 +10,6 @@ from sklearn.svm import SVC
 Builder.load_file('view/blocks/svmblock.kv')
 
 class SVMBlock(Block):
-    title2 = 'gds'
     out_1 = ObjectProperty()
 
     def function(self):

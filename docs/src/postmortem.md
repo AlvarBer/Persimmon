@@ -27,10 +27,9 @@ Testing:
 -->
 
 Feasibility:
-:   Using evaluation it can be concluded that it is possible to create a
-    machine learning visual interface that is as flexible as a language,
-    including a type system and errors in compilation time, and yet remains
-    simple to use, even for newcomers.
+:   Evaluation seems to show that it is possible to create a machine learning
+    visual interface that is both flexible and relatively easy to use, even
+    for learners, including a type system and errors in compilation time.
 
 Design and Usability:
 :   The final implementation closely followed the initial sketches, proving the
@@ -81,21 +80,42 @@ attention, with over 3000 visits, and more than 90 stars on [Github].
 -->
 
 It has been featured on [multiple], [websites], and even won [best project] at
-the compshow 2017 at the University of Hertfordshire.
+the 2017 compshow at University of Hertfordshire.
 
 ![Chinese machine learning forum](images/china.png)
 
+
 Conclusion
 ----------
-In conclusion Persimmon has achieved all proposed objectives, proving
-there is room for improvement on the field of visual languages for machine
-learning, and that small improvements make a significant impact on the user
-experience.
-In fact a system should not only make it hard or impossible to construct
-incorrect graphs, but should make it easier and faster to create correct graph.
+In conclusion the system has managed to reach a testable state in which
+participants have remarked its usability, flexibility and potential.
+This seems to indicate that is is possible for small improvements on visual
+machine learning tools do make an impact on the user experience
 
-Giving more power to the user does not mean making the interface more
-complicated, in fact it can be the opposite.
+This corresponds with the hypothesis of the project, as well as the objective
+that the system should not only make it hard or impossible to construct
+incorrect graphs, but should make it easier and faster to create correct graphs.
+
+Giving more power to the user does not mean convoluting the interface,
+in fact it can be the opposite.
+
+
+Future Work
+-----------
+* Surface of optional parameters.
+* Visual Polish.
+    - Smart Bubble breakdown by category.
+    - More indicators when dragging/dropping.
+* Graph Serialization.
+* Support move and zoom in background.
+* Automatic block generation from Python function.
+* Undo functionality (Command pattern).
+* Area drag select.
+* Skeletons of common workflows.
+* Unit/Integration/End to end testing.
+* Type checking.
+* Automatic windows deployment.
+* Continuous integration.
 
 
 Bibliography
