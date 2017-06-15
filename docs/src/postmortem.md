@@ -34,12 +34,9 @@ Feasibility:
 Design and Usability:
 :   The final implementation closely followed the initial sketches, proving the
     initial design had solid fundamentals.
-    The good evaluation scores, and final remarks given by participants
-    demonstrates that the interface has accomplished its objectives of
+    The good evaluation scores, and final remarks given by participants, seem to
+    demonstrate that the interface has accomplished its objectives of
     producing a powerful yet simple to use interface.
-    Features like the smart bubble that use instrospection to suggest suitable
-    blocks to connect leverage the type system to help the user create the
-    pipelines faster and easier.
 
 Evaluation:
 :   Despite having a low number of participants the evaluation
@@ -47,20 +44,18 @@ Evaluation:
     providing very useful feedback for future improvements.
 
 Learning Tool:
-:   Because most of the milestones were achieved the final system has
-    proved to be useful enough for its use as a learning tool, it was even
+:   Because most of the milestones were achieved the final system has reached a
+    state where it is useful enough for its use as a learning tool thanks to
+    supporting the simplest (and most common) workflows, it was even
     remarked by two participants how easy it was to use, and how easy it was to do
     complex actions (such as hyper-parameter tuning) compared to other
     frameworks/libraries.
 
 Faster Exploratory Work:
-:   I personally used the software for performing
-    ml analysis, finding it worked pretty well for early exploratory work, when
-    limited by the lack of a block it was pretty easy and fast adding a block
-    that solved the problem (in around ~20 lines of code).
-    During this use I realized another possible improvement, caching operations,
-    with this the results of pipelines are not recalculated unless something
-    changes upstream, this provides the closest thing to a visual REPL[^REPL].
+:   Like last objective thanks to the current state of the system it is pretty
+    fast to perform early ml analysis, when limited by the lack of a block it
+    was pretty easy and fast adding a block that solved the problem (in around
+    ~20 lines of code).
 
 Implementation:
 :   At the end of the project the non-functional requirements have been met,
@@ -91,6 +86,9 @@ In conclusion the system has managed to reach a testable state in which
 participants have remarked its usability, flexibility and potential.
 This seems to indicate that is is possible for small improvements on visual
 machine learning tools do make an impact on the user experience
+Features like the smart bubble that use introspection to suggest suitable
+blocks to connect leverage the type system to help the user create the
+pipelines faster and easier.
 
 This corresponds with the hypothesis of the project, as well as the objective
 that the system should not only make it hard or impossible to construct
@@ -113,10 +111,9 @@ Future Work
 * Area drag select.
 * Skeletons of common workflows.
 * Unit/Integration/End to end testing.
-* Type checking.
 * Automatic windows deployment.
 * Continuous integration.
-
+* Cache results similar to a REPL[^REPL].
 
 Bibliography
 ============
