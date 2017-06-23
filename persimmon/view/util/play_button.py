@@ -7,7 +7,7 @@ from kivy.loader import Loader
 from kivy.graphics.context_instructions import Rotate, PushMatrix, PopMatrix
 
 
-Builder.load_file('view/util/play_button.kv')
+Builder.load_file('persimmon/view/util/play_button.kv')
 
 class PlayButton(ButtonBehavior, AsyncImage):
     angle = NumericProperty()

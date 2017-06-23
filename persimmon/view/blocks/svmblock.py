@@ -7,7 +7,7 @@ from kivy.properties import ObjectProperty
 from sklearn.svm import SVC
 
 
-Builder.load_file('view/blocks/svmblock.kv')
+Builder.load_file('persimmon/view/blocks/svmblock.kv')
 
 class SVMBlock(Block):
     out_1 = ObjectProperty()

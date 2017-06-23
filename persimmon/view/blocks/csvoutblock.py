@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 
-Builder.load_file('view/blocks/csvoutblock.kv')
+Builder.load_file('persimmon/view/blocks/csvoutblock.kv')
 
 class CSVOutBlock(Block):
     in_1 = ObjectProperty()

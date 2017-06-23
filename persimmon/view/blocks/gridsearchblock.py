@@ -6,7 +6,7 @@ from kivy.lang import Builder
 from sklearn.model_selection import GridSearchCV
 
 
-Builder.load_file('view/blocks/gridsearchblock.kv')
+Builder.load_file('persimmon/view/blocks/gridsearchblock.kv')
 
 class GridSearchBlock(Block):
     data_in = ObjectProperty()

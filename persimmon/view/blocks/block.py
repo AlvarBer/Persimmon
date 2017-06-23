@@ -14,7 +14,7 @@ from abc import abstractmethod
 from functools import partial
 
 
-Builder.load_file('view/blocks/block.kv')
+Builder.load_file('persimmon/view/blocks/block.kv')
 
 class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])

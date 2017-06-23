@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 
 
-Builder.load_file('view/blocks/predictblock.kv')
+Builder.load_file('persimmon/view/blocks/predictblock.kv')
 
 class PredictBlock(Block):
     est_in = ObjectProperty()

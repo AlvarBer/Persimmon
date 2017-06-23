@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
 
 
-Builder.load_file('view/blocks/dictblock.kv')
+Builder.load_file('persimmon/view/blocks/dictblock.kv')
 
 class DictBlock(Block):
     dict_out = ObjectProperty()

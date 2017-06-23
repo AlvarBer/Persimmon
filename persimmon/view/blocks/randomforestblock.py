@@ -7,7 +7,7 @@ from kivy.properties import ObjectProperty
 from sklearn.ensemble import RandomForestClassifier
 
 
-Builder.load_file('view/blocks/randomforestblock.kv')
+Builder.load_file('persimmon/view/blocks/randomforestblock.kv')
 
 class RandomForestBlock(Block):
     out_1 = ObjectProperty()

@@ -7,7 +7,7 @@ from kivy.input.motionevent import MotionEvent
 import logging
 
 
-Builder.load_file('view/pins/inpin.kv')
+Builder.load_file('persimmon/view/pins/inpin.kv')
 logger = logging.getLogger(__name__)
 
 class InputPin(Pin):

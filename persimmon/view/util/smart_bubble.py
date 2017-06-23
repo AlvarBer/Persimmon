@@ -12,7 +12,7 @@ from functools import reduce
 from fuzzywuzzy import process
 
 
-Builder.load_file('view/util/smart_bubble.kv')
+Builder.load_file('persimmon/view/util/smart_bubble.kv')
 logger = logging.getLogger(__name__)
 
 class SmartBubble(Bubble):
@@ -65,8 +65,7 @@ class SmartBubble(Bubble):
                 self.x = touch.x
                 self.y = touch.y - self.height
                 return True
-        else:
-            return super().on_touch_down(touch)
+        return super().on_touch_down(touch)
 
     def dismiss(self):
         self.parent.remove_widget(self)

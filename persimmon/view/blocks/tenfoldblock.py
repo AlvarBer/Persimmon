@@ -7,7 +7,7 @@ from kivy.properties import ObjectProperty
 from sklearn.model_selection import KFold
 
 
-Builder.load_file('view/blocks/tenfoldblock.kv')
+Builder.load_file('persimmon/view/blocks/tenfoldblock.kv')
 
 class TenFoldBlock(Block):
     out_1 = ObjectProperty()

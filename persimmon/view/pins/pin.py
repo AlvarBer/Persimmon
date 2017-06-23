@@ -8,7 +8,7 @@ from persimmon.view.util import Type, AbstractWidget
 from abc import abstractmethod
 
 
-Builder.load_file('view/pins/pin.kv')
+Builder.load_file('persimmon/view/pins/pin.kv')
 
 class Pin(CircularButton, metaclass=AbstractWidget):
     val = ObjectProperty(None, force_dispatch=True)

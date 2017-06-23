@@ -5,7 +5,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 
-Builder.load_file('view/blocks/fitblock.kv')
+Builder.load_file('persimmon/view/blocks/fitblock.kv')
 
 class FitBlock(Block):
     data_in = ObjectProperty()

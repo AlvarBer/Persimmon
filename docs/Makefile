@@ -33,7 +33,7 @@ $(PDF): $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(M
 		--bibliography $(BIBLIOGRAPHY) --csl $(CSL) --table-of-contents \
 		--top-level-division chapter --highlight-style breezedark \
 		--include-in-header question.tex \
-		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) -o $@
+		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) --output $@
 
 # Hertfordshire digital submission
 herts: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
@@ -49,7 +49,7 @@ herts: $(MARKDOWN) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(ME
 		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
 		--metadata supervisor:"Dr.Mariana Lilley" \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX) \
-		-o persimmon_herts.pdf
+		--output persimmon_herts.pdf
 
 # Hertfordshire print submission
 herts_print: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
@@ -63,7 +63,7 @@ herts_print: $(MARKDOWN) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA
 		--metadata degree:"Modular BSc Honours in Computer Science" \
 		--metadata degreecode:"6COM1054 - Artificial Intelligence Project" \
 		--metadata supervisor:"Dr.Mariana Lilley" \
-		$(METADATA) $(MARKDOWN) -o persimmon_herts_print.pdf
+		$(METADATA) $(MARKDOWN) --output persimmon_herts_print.pdf
 
 # Complutense digital submission
 complu: $(MARKDOWN_COMPLU) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(CSL) $(METADATA)
@@ -74,12 +74,12 @@ complu: $(MARKDOWN_COMPLU) $(APPENDIX) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(C
 		--metadata sansfont:"Helvetica Neue LT Com" \
 		--metadata institute:"Universidad Complutense" \
 		--metadata school:"Facultad de Informática" \
-		--metadata degree:"Computer Engineering" \
+		--metadata degree:"Ingenieria Informática" \
 		--metadata degreecode:"Tecnología Específica de Computación" \
 		--metadata supervisor:"Manuel Freire Moran" \
 		--metadata cosupervisor:"Pablo Moreno Ger" \
 		--metadata titlepic:images/fdi.png $(METADATA) $(MARKDOWN_COMPLU) \
-		--include-after-body $(APPENDIX) -o persimmon_complu.pdf
+		--include-after-body $(APPENDIX) --output persimmon_complu.pdf
 
 # For standalone images
 images/%.pdf: graphs/%.tex
@@ -89,7 +89,8 @@ images/%.pdf: graphs/%.tex
 
 # Appendices
 $(APPENDIX): $(APPENDICES)
-	pandoc --smart --no-tex-ligatures --top-level-division chapter $(APPENDICES) -o $@
+	pandoc --smart --no-tex-ligatures --top-level-division chapter $(APPENDICES) \
+		--output $@
 
 # Travis generation, only necessary because travis version of pandoc is old.
 APPENDIX_TRAVIS := appendix_travis.tex
@@ -100,10 +101,10 @@ travis: $(MARKDOWN) $(APPENDIX_TRAVIS) $(TEMPLATE) $(IMAGES) $(BIBLIOGRAPHY) $(C
 		--chapters --highlight-style espresso \
 		--include-in-header question.tex \
 		$(METADATA) $(MARKDOWN) --include-after-body $(APPENDIX_TRAVIS) \
-		-o $(PDF)
+		--output $(PDF)
 
 $(APPENDIX_TRAVIS): $(APPENDICES)
-	pandoc --no-tex-ligatures --chapters $(APPENDICES) -o $@
+	pandoc --no-tex-ligatures --chapters $(APPENDICES) --output $@
 
 
 clean:

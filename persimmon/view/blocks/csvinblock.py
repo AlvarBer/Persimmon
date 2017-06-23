@@ -8,7 +8,7 @@ from kivy.lang import Builder
 import pandas as pd
 
 
-Builder.load_file('view/blocks/csvinblock.kv')
+Builder.load_file('persimmon/view/blocks/csvinblock.kv')
 
 class CSVInBlock(Block):
     out_1 = ObjectProperty()

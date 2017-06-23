@@ -7,7 +7,7 @@ from kivy.properties import ObjectProperty
 from sklearn.model_selection import TimeSeriesSplit
 
 
-Builder.load_file('view/blocks/tssplitblock.kv')
+Builder.load_file('persimmon/view/blocks/tssplitblock.kv')
 
 class TSSplitBlock(Block):
     out_1 = ObjectProperty()

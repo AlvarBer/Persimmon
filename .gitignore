@@ -31,3 +31,6 @@ dist/
 
 # virtualenv
 env
+
+# Mypy cache
+.mypy_cache

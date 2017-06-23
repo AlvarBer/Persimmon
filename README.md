@@ -1,4 +1,4 @@
-Persimmon ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master)
+Persimmon ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AlvarBer/Persimmon/master/LICENSE.txt)
 ===================
 
 ![Final aspect](docs/images/final_aspect.png)

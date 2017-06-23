@@ -4,7 +4,7 @@ from kivy.lang import Builder
 import kivy.uix.filechooser
 
 
-Builder.load_file('view/util/filedialog.kv')
+Builder.load_file('persimmon/view/util/filedialog.kv')
 
 # TODO: firx for write csv
 class FileDialog(Popup):

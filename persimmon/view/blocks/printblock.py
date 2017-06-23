@@ -5,7 +5,7 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 
 
-Builder.load_file('view/blocks/printblock.kv')
+Builder.load_file('persimmon/view/blocks/printblock.kv')
 
 class PrintBlock(Block):
     in_1 = ObjectProperty()

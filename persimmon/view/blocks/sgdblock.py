@@ -6,7 +6,7 @@ from kivy.lang import Builder
 
 from sklearn.linear_model import SGDClassifier
 
-Builder.load_file('view/blocks/sgdblock.kv')
+Builder.load_file('persimmon/view/blocks/sgdblock.kv')
 
 class SGDBlock(Block):
     est_out = ObjectProperty()
