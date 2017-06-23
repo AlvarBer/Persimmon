@@ -12,5 +12,4 @@ if hasattr(sys, '_MEIPASS'):
     os.chdir(sys._MEIPASS)  # type: ignore
 from persimmon.view import ViewApp
 
-
 ViewApp().run()

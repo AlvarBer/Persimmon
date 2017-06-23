@@ -1,10 +1,10 @@
 from persimmon.view.pins import CircularButton
 from persimmon.view.util import Connection
+from persimmon.view.util import Type, AbstractWidget
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
 from kivy.input.motionevent import MotionEvent
-from persimmon.view.util import Type, AbstractWidget
 from abc import abstractmethod
 
 

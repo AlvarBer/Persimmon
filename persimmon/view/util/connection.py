@@ -12,8 +12,8 @@ from kivy.core.window import Window
 from kivy.input.motionevent import MotionEvent
 from typing import Tuple, TYPE_CHECKING
 if TYPE_CHECKING:
-    from persimmon.view.pins import Pin
-# Numpy for sin
+    pass
+    #from persimmon.view.pins import Pin
 import numpy as np
 # Others
 from math import pi
