@@ -111,5 +111,5 @@ class Row(BoxLayout):
         self.bub.dismiss()
 
     def _suitable_pin(self, pins):
-        return reduce(lambda p1, p2: p1 if p1._type == self.pin._type else p2,
+        return reduce(lambda p1, p2: p1 if p1.type_ == self.pin.type_ else p2,
                       pins)
