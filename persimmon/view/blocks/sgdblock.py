@@ -1,4 +1,4 @@
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block  # MYPY HACK
 from persimmon.view.pins import OutputPin
 
 from kivy.properties import ObjectProperty

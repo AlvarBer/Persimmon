@@ -15,3 +15,4 @@ from .gridsearchblock import GridSearchBlock
 from .randomforestblock import RandomForestBlock
 from .crossvalidationblock import CrossValidationBlock
 
+from .smart_bubble import SmartBubble

@@ -31,7 +31,7 @@ class FileDialog(Popup):
             self.load_button.disabled = False
         else:
             self.load_button.disabled = True
-    
+
     def changed_dir(self, file_chooser, entry, _):
         #self.file_chosen = file_chooser.path
         self.tinput.text = file_chooser.path

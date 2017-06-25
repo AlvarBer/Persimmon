@@ -9,7 +9,7 @@ install:
     - pip install mypy
 
 script:
-    - mypy persimmon
+    - mypy --package persimmon
 
 
 after_success:  # Build binaries and documentation

@@ -1,6 +1,5 @@
-from persimmon.view.pins import CircularButton
-from persimmon.view.util import Connection
-from persimmon.view.util import Type, AbstractWidget
+from persimmon.view.pins.circularbutton import CircularButton  # MYPY HACK
+from persimmon.view.util import Type, AbstractWidget, Connection
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line

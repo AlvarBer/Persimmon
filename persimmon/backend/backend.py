@@ -1,8 +1,7 @@
 from threading import Thread
 from pymitter import EventEmitter
 from typing import List, Dict, Any, Tuple, NamedTuple, Callable, TYPE_CHECKING
-if TYPE_CHECKING:
-    from persimmon.view.pins import Pin
+from persimmon.view.pins import Pin  # For typing only
 import logging
 
 

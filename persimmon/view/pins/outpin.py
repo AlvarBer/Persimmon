@@ -1,4 +1,4 @@
-from persimmon.view.pins import Pin
+from persimmon.view.pins.pin import Pin  # MYPY HACK
 from persimmon.view.util import Connection
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.lang import Builder

@@ -1,6 +1,6 @@
 # We need blocks to make a few checks
 from persimmon.view import blocks
-from persimmon.view.util import Notification, SmartBubble
+from persimmon.view.util import Notification
 from persimmon import backend
 from persimmon.backend import IR  # For type checking only
 # Kivy classes for inheritance
@@ -119,7 +119,7 @@ class BlackBoard(ScatterLayout):
     def on_touch_down(self, touch) -> bool:
         if self.collide_point(*touch.pos):  # There is a current bubble
             if not super().on_touch_down(touch) and touch.button == 'right':
-                self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
+                self.add_widget(blocks.SmartBubble(pos=touch.pos, backdrop=self))
                 return True
             else:
                 return False
@@ -165,7 +165,7 @@ class BlackBoard(ScatterLayout):
                 edge = connection.start
             else:
                 edge = connection.end
-            self.add_widget(SmartBubble(pos=touch.pos, backdrop=self, pin=edge))
+            self.add_widget(blocks.SmartBubble(pos=touch.pos, backdrop=self, pin=edge))
             return True
 
         # stop propagating if its within our bounds

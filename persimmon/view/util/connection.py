@@ -12,8 +12,7 @@ from kivy.core.window import Window
 from kivy.input.motionevent import MotionEvent
 from typing import Tuple, TYPE_CHECKING
 if TYPE_CHECKING:
-    pass
-    #from persimmon.view.pins import Pin
+    from persimmon.view.pins.pin import Pin  # MYPY HACK
 import numpy as np
 # Others
 from math import pi

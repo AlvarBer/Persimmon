@@ -1,6 +1,6 @@
 from persimmon.view.pins import InputPin
 from persimmon.view.util import FileDialog
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder

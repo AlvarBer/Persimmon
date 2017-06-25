@@ -1,18 +1,17 @@
+from persimmon.view import blocks
+from persimmon.view.pins import InputPin, OutputPin
 from kivy.uix.bubble import Bubble
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.recycleview import RecycleView
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
-from persimmon.view import blocks
-from persimmon.view.pins import InputPin, OutputPin
 import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
 
 
-Builder.load_file('persimmon/view/util/smart_bubble.kv')
+Builder.load_file('persimmon/view/blocks/smart_bubble.kv')
 logger = logging.getLogger(__name__)
 
 class SmartBubble(Bubble):
@@ -35,8 +34,10 @@ class SmartBubble(Bubble):
         if pin:  # Context sensitive if we are connecting
             if issubclass(pin.__class__, InputPin):
                 conn = pin.origin
-            else:
+            elif issubclass(pin.__class__, OutputPin):
                 conn = pin.destinations[-1]
+            else:
+                raise AttributeError('Pin class where InPin or OutPin goes')
             conn.remove_info()
             instances = filter(self._is_suitable, instances)
 
@@ -47,7 +48,7 @@ class SmartBubble(Bubble):
         self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
         Clock.schedule_once(self.refocus, 0.3)
 
-    def refocus(self, dt):
+    def refocus(self, _):
         self.ti.focus = True
 
     def on_touch_down(self, touch) -> bool:

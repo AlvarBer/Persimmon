@@ -1,4 +1,4 @@
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block
 from persimmon.view.pins import OutputPin
 
 from kivy.properties import ObjectProperty, StringProperty
@@ -19,7 +19,7 @@ class DictBlock(Block):
                             .format(self.title))
 
     # TODO: Perform this check at unfocus time
-    @Block.tainted.getter
+    @Block.tainted.getter  # type: ignore  # Soon guido, soon
     def tainted(self):
         try:
             string = eval(self.tinput.text)

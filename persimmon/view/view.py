@@ -1,5 +1,5 @@
 # Persimmon imports
-from persimmon.view import BlackBoard, Blocks
+from persimmon.view.blackboard import BlackBoard, Blocks  # MYPY HACK
 from persimmon.view.util import PlayButton, Notification
 # Kivy imports
 from kivy.app import App
@@ -16,7 +16,7 @@ import sys
 
 
 logger = logging.getLogger(__name__)
-Config.read('config.ini')
+Config.read('persimmon/config.ini')
 
 class ViewApp(App):
     background = ObjectProperty()
@@ -46,5 +46,3 @@ class Backdrop(FloatLayout):
         self.add_widget(self.hint, index=len(self.children))
 
 
-if __name__ == '__main__':
-    ViewApp().run()
