@@ -4,7 +4,7 @@ from kivy.properties import ObjectProperty, ListProperty
 from kivy.lang import Builder
 from kivy.graphics import Ellipse, Color
 
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 
 import logging
 
@@ -20,7 +20,7 @@ class OutputPin(Pin):
 
     def on_touch_down(self, touch: MotionEvent) -> bool:
         if (self.collide_point(*touch.pos) and touch.button == 'left' and
-            not self.destinations):
+                not self.destinations):
             logger.info('Creating connection')
             touch.ud['cur_line'] = Connection(end=self,
                                               color=self.color)

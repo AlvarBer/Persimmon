@@ -8,11 +8,12 @@ from kivy.uix.widget import Widget
 from kivy.uix.scatterlayout import ScatterLayout
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+# Just for type hinting
+from kivy.input import MotionEvent
 from functools import reduce
 from itertools import chain
 import logging
 from typing import Optional
-import types
 
 
 Builder.load_file('persimmon/view/blackboard.kv')
@@ -116,7 +117,7 @@ class BlackBoard(ScatterLayout):
         self.parent.on_graph_executed()
 
     # Touch events override
-    def on_touch_down(self, touch) -> bool:
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         if self.collide_point(*touch.pos):  # There is a current bubble
             if not super().on_touch_down(touch) and touch.button == 'right':
                 self.add_widget(blocks.SmartBubble(pos=touch.pos, backdrop=self))
@@ -126,7 +127,7 @@ class BlackBoard(ScatterLayout):
         else:
             return False
 
-    def on_touch_move(self, touch) -> bool:
+    def on_touch_move(self, touch: MotionEvent) -> bool:
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
             touch.ud['cur_line'].follow_cursor(touch.pos, self)
@@ -134,7 +135,7 @@ class BlackBoard(ScatterLayout):
         else:
             return super().on_touch_move(touch)
 
-    def on_touch_up(self, touch) -> bool:
+    def on_touch_up(self, touch: MotionEvent) -> bool:
         """ Inherited from
         https://github.com/kivy/kivy/blob/master/kivy/uix/scatter.py#L590. """
         if self.disabled:

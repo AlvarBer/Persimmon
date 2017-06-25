@@ -4,19 +4,24 @@ from persimmon.view.pins import Pin, InputPin, OutputPin
 # kivy stuff
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import DragBehavior, FocusBehavior
-from kivy.properties import ListProperty, StringProperty, ObjectProperty
+from kivy.properties import (ListProperty, StringProperty,
+                             ObjectProperty, ObservableList)
 from kivy.lang import Builder
-from kivy.graphics import BorderImage, Color, RoundedRectangle
+from kivy.graphics import BorderImage, Color
 from kivy.uix.image import Image
+import logging
 # Types are fun
-from typing import Optional
+from kivy.input import MotionEvent
+from kivy.core.window import Window
+from typing import Optional, Tuple
 from abc import abstractmethod
-from functools import partial
 
 
+logger = logging.getLogger()
 Builder.load_file('persimmon/view/blocks/block.kv')
 
-class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
+class Block(DragBehavior, FocusBehavior,
+            FloatLayout, metaclass=AbstractWidget):
     block_color = ListProperty([1, 1, 1])
     title = StringProperty()
     label = ObjectProperty()
@@ -51,7 +56,7 @@ class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
         self.height = (max(len(self.output_pins), len(self.input_pins), 3) *
                        self.gap + self.label.height)
         # Position pins nicely
-        y_origin = self.y + (self.height - self.label.height)
+        #y_origin = self.y + (self.height - self.label.height)
         for i, in_pin in enumerate(list(self.input_pins[::-1]), 1):
             self._bind_pin(self, (in_pin.x, in_pin.y), in_pin, i, False)
             self.fbind('pos', self._bind_pin, pin=in_pin, i=i, output=False)
@@ -92,14 +97,14 @@ class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
         raise NotImplementedError
 
     # Kivy touch events override
-    def on_touch_down(self, touch) -> bool:
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         pin = self.in_pin(*touch.pos)
         if pin:  # if touch is on pin let them handle
             return pin.on_touch_down(touch)
         else:  # else default behavior (drag if collide)
             return super().on_touch_down(touch)
 
-    def on_touch_up(self, touch) -> bool:
+    def on_touch_up(self, touch: MotionEvent) -> bool:
         pin = self.in_pin(*touch.pos)
         if pin:
             result = pin.on_touch_up(touch)
@@ -127,11 +132,12 @@ class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
             logger.warning('Called unkindle on a block not kindled')
 
     # Auxiliary functions
-    def _bind_border(self, block, new_pos):
+    def _bind_border(self, block: 'Block', new_pos: Tuple[float, float]):
         """ Bind border to position. """
         self.kindled.pos = new_pos[0] - 2, new_pos[1] - 2
 
-    def _bind_pin(self, block, new_pos, pin, i, output):
+    def _bind_pin(self, block: 'Block', new_pos: Tuple[float, float],
+                  pin: Pin, i: int, output: bool):
         """ Keep pins on their respective places. """
         pin.y = (block.y + (block.height - block.label.height) - i * self.gap +
                  pin.height / 2)
@@ -140,12 +146,13 @@ class Block(DragBehavior, FocusBehavior, FloatLayout, metaclass=AbstractWidget):
         else:
             pin.x = block.x + 5
 
-    def on_focus(self, instance, focus):
+    def on_focus(self, instance: 'Block', focus: bool):
         if focus:
             self.kindle()
         else:
             self.unkindle()
 
-    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+    def keyboard_on_key_down(self, window: Window, keycode: Tuple[int, str],
+                             text: str, modifiers: ObservableList):
         if keycode == (127, 'delete'):
             self.parent.remove_widget(self)

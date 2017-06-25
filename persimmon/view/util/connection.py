@@ -9,7 +9,7 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.core.window import Window
 # For type hinting
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 from typing import Tuple, TYPE_CHECKING
 if TYPE_CHECKING:
     from persimmon.view.pins.pin import Pin  # MYPY HACK

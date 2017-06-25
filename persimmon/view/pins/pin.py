@@ -3,9 +3,8 @@ from persimmon.view.util import Type, AbstractWidget, Connection
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.graphics import Color, Ellipse, Line
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 from abc import abstractmethod
-
 
 Builder.load_file('persimmon/view/pins/pin.kv')
 
@@ -40,8 +39,7 @@ class Pin(CircularButton, metaclass=AbstractWidget):
             return self.type_ == other.type_
 
     # Hack
-    def on_type_(self, instance, value):
+    def on_type_(self, instance: 'Pin', value: Type):
         """ If the kv lang was a bit smarted this would not be needed
         """
         self.color = value.value
-

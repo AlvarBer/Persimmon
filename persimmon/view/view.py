@@ -12,7 +12,6 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 # Others
 import logging
-import sys
 
 
 logger = logging.getLogger(__name__)

@@ -3,7 +3,7 @@ from persimmon.view.util import Connection
 from kivy.lang import Builder
 from kivy.graphics import Ellipse, Color
 from kivy.properties import ObjectProperty
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 import logging
 
 

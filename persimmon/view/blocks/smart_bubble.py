@@ -1,5 +1,5 @@
 from persimmon.view import blocks
-from persimmon.view.pins import InputPin, OutputPin
+from persimmon.view.pins import Pin, InputPin, OutputPin
 from kivy.uix.bubble import Bubble
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
@@ -9,6 +9,8 @@ import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
+from typing import List, Optional
+from kivy.input import MotionEvent
 
 
 Builder.load_file('persimmon/view/blocks/smart_bubble.kv')
@@ -19,9 +21,9 @@ class SmartBubble(Bubble):
     ti = ObjectProperty()
 
     # TODO: cache instancing
-    def __init__(self, backdrop, *, pin=None, **kwargs):
+    def __init__(self, backdrop, pin: Optional[Pin] = Pin, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.y -= self.width
+        self.y -= self.width  # type: ignore
         self.pin = pin
         self.backdrop = backdrop
         # Let's do some introspection, removing strings we do not care about
@@ -51,7 +53,7 @@ class SmartBubble(Bubble):
     def refocus(self, _):
         self.ti.focus = True
 
-    def on_touch_down(self, touch) -> bool:
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         if not self.collide_point(*touch.pos):
             if self.pin:  # If there is a connection going on
                 if issubclass(self.pin.__class__, InputPin):
@@ -71,7 +73,7 @@ class SmartBubble(Bubble):
     def dismiss(self):
         self.parent.remove_widget(self)
 
-    def search(self, string):
+    def search(self, string: str):
         if string:
             results = process.extract(string, self.cache,
                                       limit=len(self.cache))
@@ -85,7 +87,7 @@ class SmartBubble(Bubble):
                              'block_pos': self.pos}
                             for class_, name in self.cache.items()]
 
-    def _is_suitable(self, block) -> bool:
+    def _is_suitable(self, block: blocks.Block) -> bool:
         return any(filter(lambda p: p.typesafe(self.pin),
                           block.output_pins + block.input_pins))
 
@@ -111,6 +113,6 @@ class Row(BoxLayout):
             other_pin.connect_pin(conn)
         self.bub.dismiss()
 
-    def _suitable_pin(self, pins):
+    def _suitable_pin(self, pins: List[Pin]) -> Pin:
         return reduce(lambda p1, p2: p1 if p1.type_ == self.pin.type_ else p2,
                       pins)
