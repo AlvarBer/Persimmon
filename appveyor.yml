@@ -32,6 +32,9 @@ artifacts:
 
 deploy:
     provider: GitHub
+    artifact: /.\*.exe
+    draft: true
+    prerelease: true
     on:
         branch:
             - master
