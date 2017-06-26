@@ -14,6 +14,8 @@ png_files = glob('**/*.png', recursive=True)
 
 non_py_files = [(file, str(pathlib.Path(*pathlib.Path(dirname(dile)).parts[1:]))) for file in kv_files + png_files]
 
+print(non_py_files)
+
 block_cipher = None
 
 a = Analysis(['persimmon\\__main__.py'],
