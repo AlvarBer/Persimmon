@@ -1,0 +1,4 @@
+schedule: "every month"
+
+requirements:
+    - requirements.txt
