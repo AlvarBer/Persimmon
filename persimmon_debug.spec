@@ -1,6 +1,6 @@
 # -*- mode: python -*-
 
-from kivy.deps import sdl2, glew
+from kivy.deps import sdl2, angle#, glew
 from PyInstaller.utils.hooks import collect_submodules
 
 from glob import glob
@@ -12,7 +12,7 @@ kv_files = glob('**/*.kv', recursive=True)
 png_files = glob('**/*.png', recursive=True)
 
 
-non_py_files = [(file, str(pathlib.Path(*pathlib.Path(dirname(file)).parts[1:]))) for file in kv_files + png_files]
+non_py_files = [(file, dirname(file)) for file in kv_files + png_files]
 
 print(non_py_files)
 
@@ -45,7 +45,7 @@ coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
                a.datas,
-	       *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
+	           *[Tree(p) for p in (sdl2.dep_bins + angle.dep_bins)], #+ glew.dep_bins)],
                strip=False,
                upx=True,
                name='persimmon_debug')

@@ -20,12 +20,14 @@ install:
     #- activate test-environment
     - conda install --yes numpy scipy pandas scikit-learn
     - pip install --requirement requirements.txt
-    - pip install PyInstaller kivy.deps.sdl2 kivy.deps.glew
+    - pip install PyInstaller kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
 
 build: false
 
 after_test:
     - python -m PyInstaller persimmon_debug.spec
+    - cd dist
+    - dir
 
 artifacts:
     - path: dist/*
@@ -38,4 +40,5 @@ deploy:
     on:
         branch:
             - master
+            - dev
 

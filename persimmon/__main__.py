@@ -10,6 +10,9 @@ if len(sys.argv) > 1 and sys.argv[1] in {'-d', '--debug'}:
 if hasattr(sys, '_MEIPASS'):
     import os
     os.chdir(sys._MEIPASS)  # type: ignore
+if sys.platform == 'win32':
+    import os
+    os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
 from persimmon.view import ViewApp
 
 
