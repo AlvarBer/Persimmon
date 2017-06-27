@@ -25,9 +25,9 @@ install:
 build: false
 
 after_test:
-    - python -m PyInstaller persimmon_debug.spec
+    - python -m PyInstaller persimmon.spec
     - mkdir deploy
-    - 7z a deploy\\persimmon.7z dist\\persimmon_debug
+    - 7z a deploy/persimmon.7z dist/persimmon.exe
     - dir
 
 artifacts:
