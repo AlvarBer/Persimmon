@@ -17,7 +17,6 @@ for file in kv_files + png_files:
 	       str(pathlib.Path(*pathlib.Path(dirname(file)).parts[1:]))))
 block_cipher = None
 
-#non_python_files.append(('persimmon/connections.png', '.'))
 
 a = Analysis(['persimmon\\__main__.py'],
              pathex=['persimmon'],
