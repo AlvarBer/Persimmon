@@ -14,10 +14,6 @@ init:
     - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
 
 install:
-
-    #- "conda create -q -n test-environment python=%PYTHON_VERSION%"
-    #- conda config --add channels conda-forge
-    #- activate test-environment
     - conda install --yes numpy scipy pandas scikit-learn
     - pip install --requirement requirements.txt
     - pip install PyInstaller kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
@@ -26,13 +22,14 @@ build: false
 
 after_test:
     - python -m PyInstaller persimmon_debug.spec
+    - 7z a persimmon.7z dist\persimmon_debug
 
 artifacts:
-    - path: dist\persimmon_debug
+    - path: persimmon.7z
 
 deploy:
     provider: GitHub
-    artifact: dist\persimmon_debug
+    artifact: persimmon.7z
     draft: true
     prerelease: true
     description: test

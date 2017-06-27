@@ -22,7 +22,7 @@ class ViewApp(App):
 
     def build(self):
         self.title = 'Persimmon'
-        self.background = Image(source='background.png').texture
+        self.background = Image(source='persimmon/background.png').texture
 
 class Backdrop(FloatLayout):
     """ Class on top of blackboard where the main control panel and buttons are
