@@ -11,18 +11,12 @@ import pathlib
 non_py_files = chain.from_iterable(
 	(iglob('**/*.{}'.format(ext), recursive=True) for ext in ['kv', 'png']))
 
-"""
-kv_files = glob('**/*.kv', recursive=True) 
-png_files = glob('**/*.png', recursive=True)
-non_py_files = [(file, dirname(file)) for file in kv_files + png_files]
-"""
 
 non_py_files = [(file, dirname(file)) for file in non_py_files]
-print(non_py_files)
 
 block_cipher = None
 
-a = Analysis(['.\\persimmon\\__main__.py'],
+a = Analysis(['persimmon\\__main__.py'],
              pathex=['.\\persimmon'],
              binaries=None,
              datas=non_py_files,
@@ -41,7 +35,7 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-	 	  *[Tree(p) for p in (sdl2.dep_bins + angle.dep_bins)],#+ glew.dep_bins)],
+          *[Tree(p) for p in (sdl2.dep_bins + angle.dep_bins)],#+ glew.dep_bins)],
           name='persimmon',
           debug=False,
           strip=False,

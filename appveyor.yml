@@ -25,14 +25,14 @@ install:
 build: false
 
 after_test:
-    - python -m PyInstaller persimmon.spec
+    - python -m PyInstaller persimmon_debug.spec
 
 artifacts:
-    - path: dist\persimmon.exe
+    - path: dist\persimmon_debug
 
 deploy:
     provider: GitHub
-    artifact: dist\persimmon.exe
+    artifact: dist\persimmon_debug
     draft: true
     prerelease: true
     description: test

@@ -3,18 +3,17 @@
 from kivy.deps import sdl2, angle#, glew
 from PyInstaller.utils.hooks import collect_submodules
 
-from glob import glob
+from glob import iglob
+from itertools import chain
 from os.path import dirname
 import pathlib
 
 
-kv_files = glob('**/*.kv', recursive=True) 
-png_files = glob('**/*.png', recursive=True)
+non_py_files = chain.from_iterable(
+	(iglob('**/*.{}'.format(ext), recursive=True) for ext in ['kv', 'png']))
 
+non_py_files = [(file, dirname(file)) for file in non_py_files]
 
-non_py_files = [(file, dirname(file)) for file in kv_files + png_files]
-
-print(non_py_files)
 
 block_cipher = None
 
@@ -22,7 +21,7 @@ a = Analysis(['persimmon\\__main__.py'],
              pathex=['.\\persimmon'],
              binaries=None,
              datas=non_py_files,
-	         hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['win32timezone'],
+	     hiddenimports=collect_submodules('scipy') + collect_submodules('sklearn') + ['win32timezone'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -45,7 +44,7 @@ coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
                a.datas,
-	           *[Tree(p) for p in (sdl2.dep_bins + angle.dep_bins)], #+ glew.dep_bins)],
+               *[Tree(p) for p in (sdl2.dep_bins + angle.dep_bins)], #+ glew.dep_bins)],
                strip=False,
                upx=True,
                name='persimmon_debug')
