@@ -26,19 +26,19 @@ build: false
 
 after_test:
     - python -m PyInstaller persimmon.spec
-    - mkdir deploy
-    - 7z a deploy/persimmon.7z dist/persimmon.exe
-    - dir
 
 artifacts:
-    - path: deploy\\*
+    - path: dist\persimmon.exe
 
 deploy:
     provider: GitHub
-    artifact: /.\*.exe
+    artifact: dist\persimmon.exe
     draft: true
     prerelease: true
+    description: test
+    auth_token: "%GITHUB_AUTH%"
     on:
         branch:
+            - dev
             - master
 
