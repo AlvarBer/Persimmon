@@ -11,10 +11,16 @@ from functools import reduce
 from fuzzywuzzy import process
 from typing import List, Optional
 from kivy.input import MotionEvent
+from kivy.uix.recycleview import RecycleView
 
 
 Builder.load_file('persimmon/view/blocks/smart_bubble.kv')
 logger = logging.getLogger(__name__)
+
+class ReTest(RecycleView):
+    """ Because pyinstaller bug. """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 class SmartBubble(Bubble):
     rv = ObjectProperty()

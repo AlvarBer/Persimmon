@@ -13,6 +13,8 @@ from kivy.uix.floatlayout import FloatLayout
 # Others
 import logging
 
+from kivy.lang import Builder
+
 
 logger = logging.getLogger(__name__)
 Config.read('persimmon/config.ini')
@@ -21,6 +23,7 @@ class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
+        print('Building main view')
         self.title = 'Persimmon'
         self.background = Image(source='persimmon/background.png').texture
 

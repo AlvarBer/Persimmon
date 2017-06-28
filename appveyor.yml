@@ -22,7 +22,7 @@ install:
 build: false
 
 after_test:
-    - PyInstaller persimmon_debug.spec
+    - PyInstaller persimmon.spec
     #- 7z a persimmon.7z dist\persimmon_debug
 
 artifacts:
