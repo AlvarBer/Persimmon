@@ -17,20 +17,20 @@ install:
     - conda install --yes numpy scipy pandas scikit-learn pip
     - pip install --requirement requirements.txt
     - pip install kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
-    - pip install git+https://github.com/pyinstaller/pyinstaller.git
+    - pip install PyInstaller
 
 build: false
 
 after_test:
     - PyInstaller persimmon_debug.spec
-    - 7z a persimmon.7z dist\persimmon_debug
+    #- 7z a persimmon.7z dist\persimmon_debug
 
 artifacts:
-    - path: persimmon.7z
+    - path: dist/persimmon.exe
 
 deploy:
     provider: GitHub
-    artifact: persimmon.7z
+    artifact: dist/persimmon.exe
     draft: true
     prerelease: true
     description: test
