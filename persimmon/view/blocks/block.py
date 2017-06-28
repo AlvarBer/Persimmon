@@ -155,4 +155,10 @@ class Block(DragBehavior, FocusBehavior,
     def keyboard_on_key_down(self, window: Window, keycode: Tuple[int, str],
                              text: str, modifiers: ObservableList):
         if keycode == (127, 'delete'):
+            for pin in self.input_pins:
+                if pin.origin:
+                    pin.origin.delete_connection()
+            for pin in self.output_pins:
+                for con in pin.destinations:
+                    con.delete_connection()
             self.parent.remove_widget(self)

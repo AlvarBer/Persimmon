@@ -27,7 +27,7 @@ class SmartBubble(Bubble):
     ti = ObjectProperty()
 
     # TODO: cache instancing
-    def __init__(self, backdrop, pin: Optional[Pin] = Pin, **kwargs) -> None:
+    def __init__(self, backdrop, pin: Optional[Pin] = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.y -= self.width  # type: ignore
         self.pin = pin
