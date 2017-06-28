@@ -11,17 +11,18 @@ environment:
         - PYTHON: "C:\\Python35-x64"
 
 init:
-    - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+    - "SET PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
 install:
-    - conda install --yes numpy scipy pandas scikit-learn
+    - conda install --yes numpy scipy pandas scikit-learn pip
     - pip install --requirement requirements.txt
-    - pip install PyInstaller kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
+    - pip install kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
+    - pip install git+https://github.com/pyinstaller/pyinstaller.git
 
 build: false
 
 after_test:
-    - python -m PyInstaller persimmon_debug.spec
+    - PyInstaller persimmon_debug.spec
     - 7z a persimmon.7z dist\persimmon_debug
 
 artifacts:
