@@ -9,8 +9,8 @@ from os.path import dirname
 import pathlib
 
 
-non_py_files = chain.from_iterable(
-	(iglob('**/*.{}'.format(ext), recursive=True) for ext in ['kv', 'png']))
+non_py_files = chain.from_iterable((iglob('persimmon/**/*.{}'.format(ext), recursive=True)
+                                    for ext in ['kv', 'png', 'ini']))
 
 non_py_files = [(file, dirname(file)) for file in non_py_files]
 
