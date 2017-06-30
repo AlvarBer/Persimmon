@@ -1,4 +1,4 @@
-Persimmon ![travis](https://travis-ci.org/AlvarBer/Persimmon.svg?branch=master) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/AlvarBer/Persimmon/master/LICENSE.txt)
+Persimmon [![Travis](https://img.shields.io/travis/AlvarBer/Persimmon.svg)](https://travis-ci.org/AlvarBer/Persimmon) [![AppVeyor](https://img.shields.io/appveyor/ci/AlvarBer/Persimmon.svg)](https://ci.appveyor.com/project/AlvarBer/persimmon) [![PyPI](https://img.shields.io/pypi/v/Persimmon.svg)](https://pypi.python.org/pypi/persimmon) [![GitHub (pre-)release](https://img.shields.io/github/release/AlvarBer/Persimmon/all.svg)](https://github.com/AlvarBer/Persimmon/releases)
 ===================
 
 ![Final aspect](docs/images/final_aspect.png)
