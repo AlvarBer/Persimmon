@@ -6,12 +6,11 @@ branches:
 environment:
     global:
         MINICONDA: "C:\\Miniconda35-x64"
-        PYTHON_PIP: "C:\\Python35-x64\\Scripts\\pip"
     matrix:
         - PYTHON: "C:\\Python35-x64"
 
 init:
-    - "SET PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+    - "SET PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
 
 install:
     - conda install --yes numpy scipy pandas scikit-learn pip
@@ -22,12 +21,11 @@ install:
 build: false
 
 before_test:
-    - "%PYTHON_PIP% install mypy"
-    - "%PYTHON%\\Scripts\\mypy --version"
-    - mypy --version
-    - "%PYTHON%\\Scripts\\mypy --package persimmon --config-file mypy.ini"
+    # Conda mypy is too old
+    - "%PYTHON%\\Scripts\\pip install mypy"
+    - "%PYTHON%\\Scripts\\mypy --package persimmon"
 
-before_deploy:
+after_test:
     - PyInstaller persimmon.spec
     #- 7z a persimmon.7z dist\persimmon_debug
 
