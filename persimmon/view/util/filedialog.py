@@ -4,7 +4,7 @@ from kivy.lang import Builder
 import kivy.uix.filechooser
 
 
-Builder.load_file('view/util/filedialog.kv')
+Builder.load_file('persimmon/view/util/filedialog.kv')
 
 # TODO: firx for write csv
 class FileDialog(Popup):
@@ -31,7 +31,7 @@ class FileDialog(Popup):
             self.load_button.disabled = False
         else:
             self.load_button.disabled = True
-    
+
     def changed_dir(self, file_chooser, entry, _):
         #self.file_chosen = file_chooser.path
         self.tinput.text = file_chooser.path

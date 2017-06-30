@@ -1,15 +1,15 @@
-from persimmon.view.pins import Pin
+from persimmon.view.pins.pin import Pin  # MYPY HACK
 from persimmon.view.util import Connection
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.lang import Builder
 from kivy.graphics import Ellipse, Color
 
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 
 import logging
 
 
-Builder.load_file('view/pins/outpin.kv')
+Builder.load_file('persimmon/view/pins/outpin.kv')
 logger = logging.getLogger(__name__)
 
 class OutputPin(Pin):
@@ -20,7 +20,7 @@ class OutputPin(Pin):
 
     def on_touch_down(self, touch: MotionEvent) -> bool:
         if (self.collide_point(*touch.pos) and touch.button == 'left' and
-            not self.destinations):
+                not self.destinations):
             logger.info('Creating connection')
             touch.ud['cur_line'] = Connection(end=self,
                                               color=self.color)

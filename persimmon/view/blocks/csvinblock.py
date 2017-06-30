@@ -1,6 +1,6 @@
 from persimmon.view.pins import OutputPin
 from persimmon.view.util import FileDialog
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block  # MYPY HACK
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
@@ -8,7 +8,7 @@ from kivy.lang import Builder
 import pandas as pd
 
 
-Builder.load_file('view/blocks/csvinblock.kv')
+Builder.load_file('persimmon/view/blocks/csvinblock.kv')
 
 class CSVInBlock(Block):
     out_1 = ObjectProperty()

@@ -4,9 +4,12 @@ sudo: required  # Necesary for installing LaTeX packages
 language: python
 python: "3.5"
 
-install: sudo apt-get update -qq  # No dependencies?
+install:
+    - sudo apt-get update -qq  # No dependencies?
+    - pip install mypy
 
-script: true  # No Testing
+script:
+    - mypy --package persimmon
 
 
 after_success:  # Build binaries and documentation

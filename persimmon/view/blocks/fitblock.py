@@ -1,11 +1,11 @@
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block  # MYPY HACK
 from persimmon.view.pins import InputPin, OutputPin
 
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 
-Builder.load_file('view/blocks/fitblock.kv')
+Builder.load_file('persimmon/view/blocks/fitblock.kv')
 
 class FitBlock(Block):
     data_in = ObjectProperty()

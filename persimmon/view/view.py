@@ -1,5 +1,5 @@
 # Persimmon imports
-from persimmon.view import BlackBoard, Blocks
+from persimmon.view.blackboard import BlackBoard, Blocks  # MYPY HACK
 from persimmon.view.util import PlayButton, Notification
 # Kivy imports
 from kivy.app import App
@@ -12,18 +12,20 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 # Others
 import logging
-import sys
+
+from kivy.lang import Builder
 
 
 logger = logging.getLogger(__name__)
-Config.read('config.ini')
+Config.read('persimmon/config.ini')
 
 class ViewApp(App):
     background = ObjectProperty()
 
     def build(self):
+        print('Building main view')
         self.title = 'Persimmon'
-        self.background = Image(source='background.png').texture
+        self.background = Image(source='persimmon/background.png').texture
 
 class Backdrop(FloatLayout):
     """ Class on top of blackboard where the main control panel and buttons are
@@ -46,5 +48,3 @@ class Backdrop(FloatLayout):
         self.add_widget(self.hint, index=len(self.children))
 
 
-if __name__ == '__main__':
-    ViewApp().run()

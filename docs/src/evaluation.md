@@ -16,15 +16,17 @@ amended by the **HEALTH SCIENCES ENGINEERING & TECHNOLOGY ECDA** at date
 Method
 ------
 The method for conducting the evaluation is based on conducting a series
-of closed tasks and giving feedback on each of them, as well as some free forms
-questions at the end of the form. The complete form can be seen at appendix C.
+of increasingly difficult closed tasks that consist of creating workflows and
+giving feedback on each of them, as well as some free forms
+questions at the end of the form.
+The complete form can be seen at appendix C.
 
 The questionnaire selected is the Single Ease Question as explained in
 @sauro201210.
 It based on of asking how difficult a task was on a seven point scale after it
 has been performed.
 Research shows that it provides equal or greater accuracy than more difficult
-measures of task-difficulty @sauro2009comparison.
+measures of task-difficulty [@sauro2009comparison].
 
 Along this questions, the participant knowledge and familiarity with Data
 Mining and Machine Learning is saved, as well as any additional feedback about
@@ -61,6 +63,8 @@ themselves as quite familiar in the fields of Machine Learning, Data mining and
 Visual Machine Learning/Data Mining tools (76%, 71.4% and 57.14% average score
 respectively).
 
+![Participants familiarity](images/familiarity.png)
+
 The scores for the tasks were quited good, averaging 85.71%, 90.47% and
 85.71%, compared to the average score SEQ questions tends to have (which is
 71.42%, or a 5 in a 7 point scale).
@@ -70,6 +74,8 @@ performed the tasks on schedule (30' or less).
 The tasks standard deviation were quite uniform, with $\sigma$ equal to 1, 1.15
 and 0 for tasks one, two and three respectively.
 This indicates that the population largely agrees, with no visible outliers.
+
+![Task score per task per participant](images/score.png)
 
 While these are good indicators that the interface of the system succeeded on
 its intentions, the most important data from the evaluation is perhaps the free

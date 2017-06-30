@@ -1,0 +1,6 @@
+branch: "dev"
+
+schedule: "every month"
+
+requirements:
+    - requirements.txt

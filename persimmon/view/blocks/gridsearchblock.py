@@ -1,4 +1,4 @@
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block  # MYPY HACK
 from persimmon.view.pins import InputPin, OutputPin
 
 from kivy.properties import ObjectProperty
@@ -6,7 +6,7 @@ from kivy.lang import Builder
 from sklearn.model_selection import GridSearchCV
 
 
-Builder.load_file('view/blocks/gridsearchblock.kv')
+Builder.load_file('persimmon/view/blocks/gridsearchblock.kv')
 
 class GridSearchBlock(Block):
     data_in = ObjectProperty()

@@ -6,9 +6,14 @@ if len(sys.argv) > 1 and sys.argv[1] in {'-d', '--debug'}:
     #coloredlogs.install(level='DEBUG')
     import logging
     logging.basicConfig(level=logging.DEBUG)
+# If running as executable this is necessary for finding resources
 if hasattr(sys, '_MEIPASS'):
     import os
-    os.chdir(sys._MEIPASS)
+    os.chdir(sys._MEIPASS)  # type: ignore
+if sys.platform == 'win32':
+    import os
+    os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
 from persimmon.view import ViewApp
+
 
 ViewApp().run()

@@ -27,20 +27,16 @@ Testing:
 -->
 
 Feasibility:
-:   Using evaluation it can be concluded that it is possible to create a
-    machine learning visual interface that is as flexible as a language,
-    including a type system and errors in compilation time, and yet remains
-    simple to use, even for newcomers.
+:   Evaluation seems to show that it is possible to create a machine learning
+    visual interface that is both flexible and relatively easy to use, even
+    for learners, including a type system and errors in compilation time.
 
 Design and Usability:
 :   The final implementation closely followed the initial sketches, proving the
     initial design had solid fundamentals.
-    The good evaluation scores, and final remarks given by participants
-    demonstrates that the interface has accomplished its objectives of
+    The good evaluation scores, and final remarks given by participants, seem to
+    demonstrate that the interface has accomplished its objectives of
     producing a powerful yet simple to use interface.
-    Features like the smart bubble that use instrospection to suggest suitable
-    blocks to connect leverage the type system to help the user create the
-    pipelines faster and easier.
 
 Evaluation:
 :   Despite having a low number of participants the evaluation
@@ -48,20 +44,18 @@ Evaluation:
     providing very useful feedback for future improvements.
 
 Learning Tool:
-:   Because most of the milestones were achieved the final system has
-    proved to be useful enough for its use as a learning tool, it was even
+:   Because most of the milestones were achieved the final system has reached a
+    state where it is useful enough for its use as a learning tool thanks to
+    supporting the simplest (and most common) workflows, it was even
     remarked by two participants how easy it was to use, and how easy it was to do
     complex actions (such as hyper-parameter tuning) compared to other
     frameworks/libraries.
 
 Faster Exploratory Work:
-:   I personally used the software for performing
-    ml analysis, finding it worked pretty well for early exploratory work, when
-    limited by the lack of a block it was pretty easy and fast adding a block
-    that solved the problem (in around ~20 lines of code).
-    During this use I realized another possible improvement, caching operations,
-    with this the results of pipelines are not recalculated unless something
-    changes upstream, this provides the closest thing to a visual REPL[^REPL].
+:   Like last objective thanks to the current state of the system it is pretty
+    fast to perform early ml analysis, when limited by the lack of a block it
+    was pretty easy and fast adding a block that solved the problem (in around
+    ~20 lines of code).
 
 Implementation:
 :   At the end of the project the non-functional requirements have been met,
@@ -72,7 +66,7 @@ Implementation:
 
 Retrospective
 -------------
-With over 7k lines of code 10 releases, and more than 200 commits, Persimmon
+With over 7k lines of code, 10 [releases], and more than 200 commits, Persimmon
 stands as a medium size codebase, since its inception it has gathered
 attention, with over 3000 visits, and more than 90 stars on [Github].
 
@@ -81,27 +75,51 @@ attention, with over 3000 visits, and more than 90 stars on [Github].
 -->
 
 It has been featured on [multiple], [websites], and even won [best project] at
-the compshow 2017 at the University of Hertfordshire.
+the 2017 compshow at University of Hertfordshire.
 
 ![Chinese machine learning forum](images/china.png)
 
+
 Conclusion
 ----------
-In conclusion Persimmon has achieved all proposed objectives, proving
-there is room for improvement on the field of visual languages for machine
-learning, and that small improvements make a significant impact on the user
-experience.
-In fact a system should not only make it hard or impossible to construct
-incorrect graphs, but should make it easier and faster to create correct graph.
+In conclusion the system has managed to reach a testable state in which
+participants have remarked its usability, flexibility and potential.
+This seems to indicate that is is possible for small improvements on visual
+machine learning tools do make an impact on the user experience
+Features like the smart bubble that use introspection to suggest suitable
+blocks to connect leverage the type system to help the user create the
+pipelines faster and easier.
 
-Giving more power to the user does not mean making the interface more
-complicated, in fact it can be the opposite.
+This corresponds with the hypothesis of the project, as well as the objective
+that the system should not only make it hard or impossible to construct
+incorrect graphs, but should make it easier and faster to create correct graphs.
 
+Giving more power to the user does not mean convoluting the interface,
+in fact it can be the opposite.
+
+
+Future Work
+-----------
+* Surface of optional parameters.
+* Visual Polish.
+    - Smart Bubble breakdown by category.
+    - More indicators when dragging/dropping.
+* Graph Serialization.
+* Support move and zoom in background.
+* Automatic block generation from Python function.
+* Undo functionality (Command pattern).
+* Area drag select.
+* Skeletons of common workflows.
+* Unit/Integration/End to end testing.
+* Automatic windows deployment.
+* Continuous integration.
+* Cache results similar to a REPL[^REPL].
 
 Bibliography
 ============
 
 [Github]: htttps://github.com/AlvarBer/Persimmon
+[releases]: htttps://github.com/AlvarBer/Persimmon/releases
 [multiple]: http://mailchi.mp/pythonweekly/python-weekly-issue-295
 [websites]: http://forum.ai100.com.cn/blog/thread/ml-2017-05-10/
 [best project]: https://twitter.com/HertfordshireCS/status/857266574356598785

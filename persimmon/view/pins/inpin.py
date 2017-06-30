@@ -1,13 +1,13 @@
-from persimmon.view.pins import Pin
+from persimmon.view.pins.pin import Pin  # MYPY HACK
 from persimmon.view.util import Connection
 from kivy.lang import Builder
 from kivy.graphics import Ellipse, Color
 from kivy.properties import ObjectProperty
-from kivy.input.motionevent import MotionEvent
+from kivy.input import MotionEvent
 import logging
 
 
-Builder.load_file('view/pins/inpin.kv')
+Builder.load_file('persimmon/view/pins/inpin.kv')
 logger = logging.getLogger(__name__)
 
 class InputPin(Pin):

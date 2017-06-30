@@ -9,8 +9,10 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.core.window import Window
 # For type hinting
-from kivy.input.motionevent import MotionEvent
-# Numpy for sin
+from kivy.input import MotionEvent
+from typing import Tuple, TYPE_CHECKING
+if TYPE_CHECKING:
+    from persimmon.view.pins.pin import Pin  # MYPY HACK
 import numpy as np
 # Others
 from math import pi
@@ -185,7 +187,7 @@ class Connection(Widget):
         pin.fbind('pos', self._line_bind)
         self._line_bind(pin, pin.pos)
 
-    def _line_bind(self, pin: 'Pin', new_pos: (float, float)):
+    def _line_bind(self, pin: 'Pin', new_pos: Tuple[float, float]):
         if pin == self.start:
             self.bez_start = pin.center
             self._rebezier()

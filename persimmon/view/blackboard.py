@@ -1,19 +1,22 @@
 # We need blocks to make a few checks
 from persimmon.view import blocks
-from persimmon.view.util import Notification, SmartBubble
+from persimmon.view.util import Notification
 from persimmon import backend
+from persimmon.backend import IR  # For type checking only
 # Kivy classes for inheritance
 from kivy.uix.widget import Widget
 from kivy.uix.scatterlayout import ScatterLayout
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+# Just for type hinting
+from kivy.input import MotionEvent
 from functools import reduce
 from itertools import chain
 import logging
 from typing import Optional
 
 
-Builder.load_file('view/blackboard.kv')
+Builder.load_file('persimmon/view/blackboard.kv')
 logger = logging.getLogger(__name__)
 
 class BlackBoard(ScatterLayout):
@@ -21,6 +24,12 @@ class BlackBoard(ScatterLayout):
     (sometime on the future). """
     block_div = ObjectProperty()  # Block child reference
     connections = ObjectProperty()  # Connection child reference
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.backend = backend.Backend()
+        self.backend.on('block_executed', self.on_block_executed)
+        self.backend.on('graph_executed', self.on_graph_executed)
 
     def execute_graph(self):
         """ Tries to execute the graph, if some block is tainted it prevents
@@ -40,7 +49,7 @@ class BlackBoard(ScatterLayout):
             for block in self.block_div.children:
                 if block.kindled:
                     block.unkindle()
-            backend.execute_graph(self.to_ir(), self)
+            self.backend.exec_graph(self.to_ir())
 
     def get_relations(self) -> str:
         """ Gets the relations between pins as a string. """
@@ -55,7 +64,7 @@ class BlackBoard(ScatterLayout):
 
         return ''.join(chain(ins, outs))
 
-    def to_ir(self) -> backend.IR:
+    def to_ir(self) -> IR:
         """ Transforms the relations between blocks into an intermediate
             representation in O(n), n being the number of pins. """
         ir_blocks = {}
@@ -88,7 +97,7 @@ class BlackBoard(ScatterLayout):
         self.block_hashes = ir_blocks
         return backend.IR(blocks=ir_blocks, inputs=ir_inputs, outputs=ir_outputs)
 
-    # @mainthread ?
+    #@mainthread
     def on_block_executed(self, block_hash: int):
         """ Callback that kindles a block, pulses future connections and
         stops the pulse of past connections. """
@@ -108,17 +117,17 @@ class BlackBoard(ScatterLayout):
         self.parent.on_graph_executed()
 
     # Touch events override
-    def on_touch_down(self, touch) -> bool:
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         if self.collide_point(*touch.pos):  # There is a current bubble
             if not super().on_touch_down(touch) and touch.button == 'right':
-                self.add_widget(SmartBubble(pos=touch.pos, backdrop=self))
+                self.add_widget(blocks.SmartBubble(pos=touch.pos, backdrop=self))
                 return True
             else:
                 return False
         else:
             return False
 
-    def on_touch_move(self, touch) -> bool:
+    def on_touch_move(self, touch: MotionEvent) -> bool:
         if touch.button == 'left' and 'cur_line' in touch.ud.keys():
             #print(self.get_root_window().mouse_pos)
             touch.ud['cur_line'].follow_cursor(touch.pos, self)
@@ -126,11 +135,11 @@ class BlackBoard(ScatterLayout):
         else:
             return super().on_touch_move(touch)
 
-    def on_touch_up(self, touch) -> bool:
+    def on_touch_up(self, touch: MotionEvent) -> bool:
         """ Inherited from
         https://github.com/kivy/kivy/blob/master/kivy/uix/scatter.py#L590. """
         if self.disabled:
-            return
+            return False
 
         x, y = touch.x, touch.y
         # if the touch isnt on the widget we do nothing, just try children
@@ -157,12 +166,13 @@ class BlackBoard(ScatterLayout):
                 edge = connection.start
             else:
                 edge = connection.end
-            self.add_widget(SmartBubble(pos=touch.pos, backdrop=self, pin=edge))
+            self.add_widget(blocks.SmartBubble(pos=touch.pos, backdrop=self, pin=edge))
             return True
 
         # stop propagating if its within our bounds
         if self.collide_point(x, y):
             return True
+        return False
 
     def in_block(self, x: float, y: float) -> Optional[blocks.Block]:
         """ Check if a position hits a block. """

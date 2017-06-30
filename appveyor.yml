@@ -1,0 +1,45 @@
+branches:
+    only:
+        - dev
+        - master
+
+environment:
+    global:
+        MINICONDA: "C:\\Miniconda35-x64"
+    matrix:
+        - PYTHON: "C:\\Python35-x64"
+
+init:
+    - "SET PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+
+install:
+    - conda install --yes numpy scipy pandas scikit-learn pip
+    - pip install --requirement requirements.txt
+    - pip install kivy.deps.sdl2 kivy.deps.angle
+    - pip install PyInstaller
+
+build: false
+
+before_test:
+    # Conda mypy is too old
+    - "%PYTHON%\\Scripts\\pip install mypy"
+    - "%PYTHON%\\Scripts\\mypy --package persimmon"
+
+after_test:
+    - PyInstaller persimmon.spec
+    #- 7z a persimmon.7z dist\persimmon_debug
+
+artifacts:
+    - path: dist/persimmon.exe
+
+deploy:
+    provider: GitHub
+    artifact: dist/persimmon.exe
+    draft: true
+    prerelease: true
+    description: Windows Executable
+    auth_token: "%GITHUB_AUTH%"
+    on:
+        branch:
+            - master
+

@@ -1,5 +1,5 @@
 from persimmon.view.pins import InputPin, OutputPin
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block  # MYPY HACK
 
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
@@ -7,7 +7,7 @@ from kivy.lang import Builder
 from sklearn.model_selection import cross_val_score
 
 
-Builder.load_file('view/blocks/crossvalidationblock.kv')
+Builder.load_file('persimmon/view/blocks/crossvalidationblock.kv')
 
 class CrossValidationBlock(Block):
     data_input = ObjectProperty()

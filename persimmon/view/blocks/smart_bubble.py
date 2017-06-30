@@ -1,28 +1,35 @@
+from persimmon.view import blocks
+from persimmon.view.pins import Pin, InputPin, OutputPin
 from kivy.uix.bubble import Bubble
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.recycleview import RecycleView
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
-from persimmon.view import blocks
-from persimmon.view.pins import InputPin, OutputPin
 import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
+from typing import List, Optional
+from kivy.input import MotionEvent
+from kivy.uix.recycleview import RecycleView
 
 
-Builder.load_file('view/util/smart_bubble.kv')
+Builder.load_file('persimmon/view/blocks/smart_bubble.kv')
 logger = logging.getLogger(__name__)
+
+class ReTest(RecycleView):
+    """ Because pyinstaller bug. """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 class SmartBubble(Bubble):
     rv = ObjectProperty()
     ti = ObjectProperty()
 
     # TODO: cache instancing
-    def __init__(self, backdrop, *, pin=None, **kwargs):
+    def __init__(self, backdrop, pin: Optional[Pin] = None, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.y -= self.width
+        self.y -= self.width  # type: ignore
         self.pin = pin
         self.backdrop = backdrop
         # Let's do some introspection, removing strings we do not care about
@@ -35,8 +42,10 @@ class SmartBubble(Bubble):
         if pin:  # Context sensitive if we are connecting
             if issubclass(pin.__class__, InputPin):
                 conn = pin.origin
-            else:
+            elif issubclass(pin.__class__, OutputPin):
                 conn = pin.destinations[-1]
+            else:
+                raise AttributeError('Pin class where InPin or OutPin goes')
             conn.remove_info()
             instances = filter(self._is_suitable, instances)
 
@@ -47,10 +56,10 @@ class SmartBubble(Bubble):
         self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
         Clock.schedule_once(self.refocus, 0.3)
 
-    def refocus(self, dt):
+    def refocus(self, _):
         self.ti.focus = True
 
-    def on_touch_down(self, touch) -> bool:
+    def on_touch_down(self, touch: MotionEvent) -> bool:
         if not self.collide_point(*touch.pos):
             if self.pin:  # If there is a connection going on
                 if issubclass(self.pin.__class__, InputPin):
@@ -65,13 +74,12 @@ class SmartBubble(Bubble):
                 self.x = touch.x
                 self.y = touch.y - self.height
                 return True
-        else:
-            return super().on_touch_down(touch)
+        return super().on_touch_down(touch)
 
     def dismiss(self):
         self.parent.remove_widget(self)
 
-    def search(self, string):
+    def search(self, string: str):
         if string:
             results = process.extract(string, self.cache,
                                       limit=len(self.cache))
@@ -85,7 +93,7 @@ class SmartBubble(Bubble):
                              'block_pos': self.pos}
                             for class_, name in self.cache.items()]
 
-    def _is_suitable(self, block) -> bool:
+    def _is_suitable(self, block: blocks.Block) -> bool:
         return any(filter(lambda p: p.typesafe(self.pin),
                           block.output_pins + block.input_pins))
 
@@ -111,6 +119,6 @@ class Row(BoxLayout):
             other_pin.connect_pin(conn)
         self.bub.dismiss()
 
-    def _suitable_pin(self, pins):
-        return reduce(lambda p1, p2: p1 if p1._type == self.pin._type else p2,
+    def _suitable_pin(self, pins: List[Pin]) -> Pin:
+        return reduce(lambda p1, p2: p1 if p1.type_ == self.pin.type_ else p2,
                       pins)

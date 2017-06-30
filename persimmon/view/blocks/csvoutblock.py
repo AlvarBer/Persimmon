@@ -1,6 +1,6 @@
 from persimmon.view.pins import InputPin
 from persimmon.view.util import FileDialog
-from persimmon.view.blocks import Block
+from persimmon.view.blocks.block import Block
 
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.lang import Builder
@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 
-Builder.load_file('view/blocks/csvoutblock.kv')
+Builder.load_file('persimmon/view/blocks/csvoutblock.kv')
 
 class CSVOutBlock(Block):
     in_1 = ObjectProperty()
