@@ -1,4 +1,3 @@
-
 branches:
     only:
         - dev
@@ -7,6 +6,7 @@ branches:
 environment:
     global:
         MINICONDA: "C:\\Miniconda35-x64"
+        PYTHON_PIP: "C:\\Python35-x64\\Scripts\\pip"
     matrix:
         - PYTHON: "C:\\Python35-x64"
 
@@ -18,12 +18,14 @@ install:
     - pip install --requirement requirements.txt
     - pip install kivy.deps.sdl2 kivy.deps.angle
     - pip install PyInstaller
-    - pip install --upgrade mypy
 
 build: false
 
 before_test:
-    - mypy --package persimmon --config-file mypy.ini
+    - "%PYTHON_PIP% install mypy"
+    - "%PYTHON%\\Scripts\\mypy --version"
+    - mypy --version
+    - "%PYTHON%\\Scripts\\mypy --package persimmon --config-file mypy.ini"
 
 before_deploy:
     - PyInstaller persimmon.spec
@@ -37,7 +39,7 @@ deploy:
     artifact: dist/persimmon.exe
     draft: true
     prerelease: true
-    description: test
+    description: Windows Executable
     auth_token: "%GITHUB_AUTH%"
     on:
         branch:
