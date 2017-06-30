@@ -16,12 +16,16 @@ init:
 install:
     - conda install --yes numpy scipy pandas scikit-learn pip
     - pip install --requirement requirements.txt
-    - pip install kivy.deps.sdl2 kivy.deps.angle #kivy.deps.glew
+    - pip install kivy.deps.sdl2 kivy.deps.angle
     - pip install PyInstaller
+    - pip install --upgrade mypy
 
 build: false
 
-after_test:
+before_test:
+    - mypy --package persimmon --config-file mypy.ini
+
+before_deploy:
     - PyInstaller persimmon.spec
     #- 7z a persimmon.7z dist\persimmon_debug
 
@@ -37,6 +41,5 @@ deploy:
     auth_token: "%GITHUB_AUTH%"
     on:
         branch:
-            - dev
             - master
 
