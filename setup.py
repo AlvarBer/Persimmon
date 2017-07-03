@@ -10,6 +10,10 @@ setup(name='persimmon',
       download_url='https://github.com/AlvarBer/Persimmon/archive/v0.9.1.tar.gz',
       license='MIT',
       packages=find_packages(),
+      package_data = {
+        # If any package contains *.txt or *.rst files, include them:
+        '': ['*.kv', '*.png', '*.ini'],
+      },
       include_package_data=True,
       python_requires='>=3.5',
       setup_requires=['Cython'],
@@ -20,4 +24,9 @@ setup(name='persimmon',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: MIT License',
           'Programming Language :: Python :: 3.5',
-          'Programming Language :: Python :: 3.6'])
+          'Programming Language :: Python :: 3.6'],
+      entry_points={
+          'console_scripts': [
+              'persimmon = persimmon.__main__:main'
+          ]
+      })
