@@ -1,7 +1,8 @@
 Conclusiones
 ============
 
-Tras la evaluación es una oportunidad para observar lo que el sistema ha conseguido.
+Tras la evaluación es una oportunidad para evaluar los resultados que el
+sistema ha obtenido.
 
 
 Revisión de Objetivos
@@ -9,11 +10,11 @@ Revisión de Objetivos
 Estudio de Viabilidad:
 :   La evaluación parece demostrar que es posible crear una interfaz de
     aprendizaje automático visual que es flexible a la vez que relativamente
-    fácil de usar, incluso para estudiantes, incluyendo un sistema de tipos y
-    notificación de errores en tiempo de escritura.
+    fácil de usar, incluso para estudiantes que comienzan su aprendizaje en el
+    campo de Data Science.
 
 Diseño y Usabilidad:
-:   La implementación final sigue los bosquejos iniciales, demostrando que el
+:   La implementación final sigue los bocetos iniciales, demostrando que el
     diseño inicial tenía fundamentos sólidos.
     Los buenos resultados de la evaluación, incluyendo los comentarios finales
     de los participantes, parecen indicar que la interfaz satisface los
@@ -21,32 +22,32 @@ Diseño y Usabilidad:
 
 Evaluación:
 :   A pesar del bajo número de participantes la evaluación resultó en
-    resultados mayormente positivos, incluyendo feedback que influyó la fase
-    final de desarrollo.
+    resultados mayormente positivos, incluyendo feedback final que influyó
+    la fase final de desarrollo, con multitud de características incluidas
+    directamente en base a estas sugerencias.
 
 Herramienta de Aprendizaje:
-:   Con la mayor parte de los objetivos cumplidos el sistema ha alcanzado un
+:   Con la mayor parte de los objetivos cumplidos, el sistema ha alcanzado un
     estado en el cual tiene suficiente funcionalidad como para ser usado
     como herramienta de aprendizaje, especialmente gracias al soporte de los
-    workflows más simples y usados. Incluso dos participantes reseñaron la
-    facilidad de uso y la capacidad de realizar acciones complejas (como
-    ajuste de hyper-parametros) de manera sencilla comparado con otros
-    frameworks y librerías.
+    procesos más usados por los Data Scientists.
+    Incluso dos participantes reseñaron la facilidad de uso y la capacidad de
+    realizar acciones complejas (como ajuste de hiperparámetros) de manera
+    sencilla comparado con otros frameworks y librerías.
 
-Acelerar análisis exploratorio:
+Acelerar el análisis exploratorio:
 :   Al igual que en el último objetivo, el sistema ha alcanzado un nivel de
     funcionalidad suficiente en el que realizar análisis de datos e iterar
     sobre distintos métodos es relativamente rápido (simplemente desenganchar
     y enganchar las conexiones a otro bloque).
-    Cuando un bloque necesario no estaba implementando la implementación
-    era relativamente sencilla (la mayoría de bloques son menos de 20 lineas
-    de código).
+    La implementación de nuevos bloques es sencilla (la mayoría de bloques
+    ocupan menos de 20 lineas de código).
 
 Implementación:
-:   Al final del proyecto los requerimientos no-funcionales han sido cumplidos,
+:   Al final del proyecto los requerimientos no funcionales han sido cumplidos,
     culminando en un ejecutable sin dependencias que los participantes han
     usado para la evaluación.
-    Este proceso de fácil instalación ha sido comentado por varios
+    Este proceso de fácil instalación ha sido comentado positivamente por varios
     participantes, así como el rendimiento del sistema, manteniendo la
     interfaz sensible al input mientras se renderizan múltiples bloques y
     el proceso se ejecuta simultáneamente (multihilo).
@@ -54,49 +55,50 @@ Implementación:
 Retrospectiva
 -------------
 Con más de 7000 líneas de código, 10 [releases], y más de 200 commits,
-Persimmon se ha convertido en un proyecto de tamaño medio, desde su concepción
+Persimmon se ha convertido en un proyecto de tamaño medio, que
 ha llamado la atención, con más de 3000 visitas y 100 estrellas en [Github].
 
-Ha aparecido en [múltiples], [páginas] web, e incluso ha ganado el premio al
-[mejor proyecto] en el compshow 2017 en la universidad de Hertfordshire.
+Ha aparecido en [múltiples] [páginas] web, e incluso ha ganado el premio al
+[mejor proyecto] en el Compshow 2017 en la universidad de Hertfordshire.
 
 ![Persimmon en el extranjero](images/china.png)
 
 
 Conclusión
 ----------
-En conclusión el sistema ha conseguido alcanzar un estado testeable en el
+En conclusión, el sistema ha conseguido alcanzar un estado robusto en el
 cual los participantes han evaluado la usabilidad, flexibilidad y potencial,
 valorándolo positivamente.
-Esto parece indicar que es posible mejorar la situación de herramientas
-visuales de aprendizaje automático con pequeñas mejoras que impactan la
+Esto parece indicar que es posible mejorar la usabilidad de herramientas
+visuales de aprendizaje automático con mejoras que impactan la
 experiencia de usuario.
-Características como el menú de búsqueda inteligente usa la introspección
-para sugerir bloques adecuados, usando el sistema de tipos para ayudar al
-usuario a crear procesos más rápida y fácilmente.
+Características como el menú de búsqueda inteligente, que usa la introspección
+para sugerir bloques adecuados, o el sistema de tipos, que previene al usuario
+de unir bloques que no son correctos, ayudan al usuario a crear procesos de
+manera mas rápida y fácil.
 
 Esto se corresponde con la hipótesis del proyecto, así como con el objetivo
 de que el sistema no debería solo hacer difícil o imposible crear procesos
-incorrectos, sino hacer más fácil y rápido crear grafos correctos.
+incorrectos, sino también hacer más fácil y rápido crear grafos correctos.
 
-Dar más poder al usuario no significar complicar la interfaz, de hecho puede
-ser lo contrario.
+Dar más poder al usuario no significa complicar la interfaz, sino todo lo
+contrario.
 
 Trabajo Futuro
 --------------
 * Exponer parámetros opcionales.
 * Pulir aspectos visuales.
     - Categorías en el menú de búsqueda.
-    - Más indicadores durante acciones de arrastre.
+    - Más indicadores durante las acciones de arrastre.
 * Serialización de los grafos.
 * Soporte de movimiento y zoom sobre el grafo.
 * Generación automática de bloques desde funciones en Python.
-* Capacidad de deshacer (Command pattern).
-* Selección en área.
+* Capacidad de deshacer acciones (Command pattern).
+* Selección de área.
 * Creación de worflows comunes mediante plantillas.
-* Unit/Integración/End to end testing.
+* Añadir tests unitarios/test end to end.
 * Deployment automático en Windows
-* Integración contigua.
+* Integración continua.
 * Cacheado de resultados similares a un REPL[^REPLE].
 
 [múltiples]: http://mailchi.mp/pythonweekly/python-weekly-issue-295
