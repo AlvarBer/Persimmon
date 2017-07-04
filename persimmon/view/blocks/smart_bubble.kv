@@ -36,13 +36,15 @@
 	bub: None
 	backdrop: None
 	touch_pos: [0, 0]
+	block_color: (0.5, 0.5, 0.5)
     canvas.before:
         Color:
-            rgba: 0.5, 0.5, 0.5
+            rgb: root.block_color if root.block_color is not None else (0.5, 0.5, 0.5)
         Rectangle:
-            size: self.size
-            pos: self.pos
+            size: root.width, root.height / 10 + 5
+            pos: root.x, root.y + root.height * (9/10)
 	Button:
+		size_hint: 1, 0.9
         text: root.cls_name
 		on_release: root.spawn_block()
 

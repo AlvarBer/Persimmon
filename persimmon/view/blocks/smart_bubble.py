@@ -50,10 +50,8 @@ class SmartBubble(Bubble):
             instances = filter(self._is_suitable, instances)
 
         # This is how we pass information to each shown row
-        self.rv.data = [{'cls_name': block.title, 'cls_': block.__class__,
-                         'bub': self, 'backdrop': backdrop, 'pin': self.pin,
-                         'block_pos': self.pos} for block in instances]
-        self.cache = {data['cls_']: data['cls_name'] for data in self.rv.data}
+        self.cache = {block.title: (block.__class__, block.block_color)
+                      for block in instances}
         Clock.schedule_once(self.refocus, 0.3)
 
     def refocus(self, _):
@@ -81,17 +79,20 @@ class SmartBubble(Bubble):
 
     def search(self, string: str):
         if string:
-            results = process.extract(string, self.cache,
+            results = process.extract(string, self.cache.keys(),
                                       limit=len(self.cache))
-            self.rv.data = [{'cls_name': block[0], 'cls_': block[2],
-                             'bub': self, 'backdrop': self.backdrop,
-                             'pin': self.pin, 'block_pos': self.pos}
-                            for block in results if block[1] > 50]
+            # First we filter results with more than 50 score and remove score
+            blocks = [block_name for block_name, score in results if score > 50]
+            available_blocks = [(name, (class_, color))
+                                for name, (class_, color) in self.cache.items()
+                                if name in blocks]
         else:
-            self.rv.data = [{'cls_name': name, 'cls_': class_, 'bub': self,
-                             'backdrop': self.backdrop, 'pin': self.pin,
-                             'block_pos': self.pos}
-                            for class_, name in self.cache.items()]
+            # If there is no search we show all blocks
+            available_blocks = self.cache.items()
+        self.rv.data = [{'cls_name': name, 'cls_': class_, 'bub': self,
+                         'backdrop': self.backdrop, 'pin': self.pin,
+                         'block_pos': self.pos, 'block_color': color}
+                        for name, (class_, color) in available_blocks]
 
     def _is_suitable(self, block: blocks.Block) -> bool:
         return any(filter(lambda p: p.typesafe(self.pin),
@@ -104,6 +105,7 @@ class Row(BoxLayout):
     backdrop = ObjectProperty()
     block_pos = ListProperty()
     pin = ObjectProperty(allownone=True)
+    block_color = ObjectProperty()
 
     def spawn_block(self):
         block = self.cls_(pos=self.block_pos)
