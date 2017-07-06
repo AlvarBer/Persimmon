@@ -1,6 +1,6 @@
 from threading import Thread
 from pymitter import EventEmitter
-from typing import List, Dict, Any, Tuple, NamedTuple, Callable, TYPE_CHECKING
+from typing import List, Dict, Any, Tuple, NamedTuple, Callable, TYPE_CHECKING, Iterable
 from persimmon.view.pins import Pin  # For typing only
 import logging
 
@@ -8,13 +8,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 # backend types
+# TODO: When moving project to 3.6 use new syntax
 InputEntry = NamedTuple('InputEntry', [('origin', int),
                                        ('pin', 'Pin'),
                                        ('block', int)])
-BlockEntry = NamedTuple('BlockEntry', [('inputs', List[int]),
+BlockEntry = NamedTuple('BlockEntry', [('inputs', Iterable[int]),
                                        ('function', Callable[..., None]),
-                                       ('outputs', List[int])])
-OutputEntry = NamedTuple('OutputEntry', [('destinations', List[int]),
+                                       ('outputs', Iterable[int])])
+OutputEntry = NamedTuple('OutputEntry', [('destinations', Iterable[int]),
                                          ('pin', 'Pin'),
                                          ('block', int)])
 IR = NamedTuple('IR', [('blocks', Dict[int, BlockEntry]),

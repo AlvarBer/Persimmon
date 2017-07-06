@@ -36,7 +36,7 @@ class BlackBoard(ScatterLayout):
         the execution, if not it starts running the backend. """
         logger.debug('Checking taint')
         # Check if any block is tainted
-        if any(map(lambda block: block.tainted, self.block_div.children)):
+        if any(block.tainted for block in self.block_div.children):
             # Get tainted block
             tainted_block = reduce(lambda l, r: l if l.tainted else r,
                                    self.block_div.children)
@@ -87,7 +87,7 @@ class BlackBoard(ScatterLayout):
             for out_pin in block.output_pins:
                 pin_hash = id(out_pin)
                 block_outputs.append(pin_hash)
-                dest = list(map(id, out_pin.destinations))
+                dest = map(id, out_pin.destinations)
                 ir_outputs[pin_hash] = backend.OutputEntry(destinations=dest,
                                                            pin=out_pin,
                                                            block=block_hash)

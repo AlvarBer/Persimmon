@@ -1,4 +1,6 @@
+#from persimmon.view import blocks
 from persimmon.view import blocks
+from persimmon.view.blocks.block import Block  # TODO: remove this?
 from persimmon.view.pins import Pin, InputPin, OutputPin
 from kivy.uix.bubble import Bubble
 from kivy.uix.boxlayout import BoxLayout
@@ -9,13 +11,25 @@ import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
-from typing import List, Optional, Iterable, Any, Sequence, cast, Tuple
+from typing import List, Optional, Iterable, Any, Tuple, cast
 from kivy.input import MotionEvent
 from kivy.uix.recycleview import RecycleView
 
 
 Builder.load_file('persimmon/view/blocks/smart_bubble.kv')
 logger = logging.getLogger(__name__)
+
+# Block cache at module level
+block_classes = inspect.getmembers(blocks, inspect.isclass)
+# Let's do some introspection, removing strings we do not care about
+# Kivy properties are not really static, so we need to instance blocks
+# subclasses
+block_instances = [member() for name, member in block_classes
+                   if issubclass(member, blocks.Block) and
+                       member != blocks.Block]
+# Type stuff
+Color = Tuple[float, float, float]
+
 
 class SmartBubble(Bubble):
     rv = ObjectProperty()
@@ -34,7 +48,8 @@ class SmartBubble(Bubble):
             else:
                 raise AttributeError('Pin class where InPin or OutPin goes')
             connection.remove_info()
-            suitable_blocks = list(filter(self._is_suitable, block_instances))
+            suitable_blocks = filter(self._is_suitable,
+                                     block_instances)  # type: Iterable[blocks.Block]
         else:
             suitable_blocks = block_instances
         # This is how we pass information to each shown row
@@ -67,13 +82,13 @@ class SmartBubble(Bubble):
             results = process.extract(string, self.cache.keys(),
                                       limit=len(self.cache))
             # First we filter results with more than 50 score and remove score
-            blocks = [block_name for block_name, score in results if score > 50]
+            blocks = (block_name for block_name, score in results if score > 50)
             available_blocks = [(name, (class_, color))
                                 for name, (class_, color) in self.cache.items()
                                 if name in blocks]
         else:
             # If there is no search we show all blocks
-            available_blocks = cast(List[Tuple[Any, Tuple[Any, Any]]],
+            available_blocks = cast(List[Tuple[str, Tuple[Block, Color]]],
                                     self.cache.items())
         self.rv.data = [{'cls_name': name, 'cls_': class_, 'bub': self,
                          'backdrop': self.backdrop, 'pin': self.pin,
@@ -110,7 +125,7 @@ class Row(BoxLayout):
             other_pin.connect_pin(connection)
         self.bub.dismiss()
 
-    def _suitable_pin(self, pins: List[Pin]) -> Pin:
+    def _suitable_pin(self, pins: Iterable[Pin]) -> Pin:
         return reduce(lambda p1, p2: p1 if p1.type_ == self.pin.type_ else p2,
                       pins)
 
@@ -119,11 +134,3 @@ class ReTest(RecycleView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-# Block cache at module level
-block_classes = inspect.getmembers(blocks, inspect.isclass)
-# Let's do some introspection, removing strings we do not care about
-# Kivy properties are not really static, so we need to instance blocks
-# subclasses
-block_instances = [member() for name, member in block_classes
-                   if issubclass(member, blocks.Block) and
-                       member != blocks.Block]
