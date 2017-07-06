@@ -9,7 +9,7 @@ import inspect
 import logging
 from functools import reduce
 from fuzzywuzzy import process
-from typing import List, Optional
+from typing import List, Optional, Iterable, Any, Sequence, cast, Tuple
 from kivy.input import MotionEvent
 from kivy.uix.recycleview import RecycleView
 
@@ -21,11 +21,10 @@ class SmartBubble(Bubble):
     rv = ObjectProperty()
     ti = ObjectProperty()
 
-    # TODO: cache instancing
     def __init__(self, backdrop, pin: Optional[Pin] = None, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.y -= self.width  # type: ignore
         self.pin = pin
+        self.y -= self.width
         self.backdrop = backdrop
         if pin:  # Context sensitive if we are connecting
             if issubclass(pin.__class__, InputPin):
@@ -35,7 +34,7 @@ class SmartBubble(Bubble):
             else:
                 raise AttributeError('Pin class where InPin or OutPin goes')
             connection.remove_info()
-            suitable_blocks = filter(self._is_suitable, block_instances)
+            suitable_blocks = list(filter(self._is_suitable, block_instances))
         else:
             suitable_blocks = block_instances
         # This is how we pass information to each shown row
@@ -74,7 +73,8 @@ class SmartBubble(Bubble):
                                 if name in blocks]
         else:
             # If there is no search we show all blocks
-            available_blocks = self.cache.items()
+            available_blocks = cast(List[Tuple[Any, Tuple[Any, Any]]],
+                                    self.cache.items())
         self.rv.data = [{'cls_name': name, 'cls_': class_, 'bub': self,
                          'backdrop': self.backdrop, 'pin': self.pin,
                          'block_pos': self.pos, 'block_color': color}
