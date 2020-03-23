@@ -13,7 +13,7 @@ setup(name='persimmon',
       include_package_data=True,
       python_requires='>=3.5',
       setup_requires=['Cython'],
-      install_requires=['Cython', 'Kivy', 'scikit-learn', 'pandas', 'fuzzywuzzy', 'pymitter'],
+      install_requires=['Cython', 'Kivy', 'scikit-learn', 'pandas', 'rapidfuzz', 'pymitter'],
       zip_safe=False,
       classifiers=[
           'Development Status :: 3 - Alpha',

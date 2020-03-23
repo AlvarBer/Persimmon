@@ -8,7 +8,7 @@ from kivy.properties import ObjectProperty, StringProperty, ListProperty
 import inspect
 import logging
 from functools import reduce
-from fuzzywuzzy import process
+from rapidfuzz import process
 from typing import List, Optional
 from kivy.input import MotionEvent
 from kivy.uix.recycleview import RecycleView

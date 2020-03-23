@@ -5,7 +5,6 @@ colorama==0.3.9
 crayons==0.1.2
 cycler==0.10.0
 docutils==0.13.1
-fuzzywuzzy==0.15.0
 humanfriendly==3.2
 Jinja2==2.9.6
 Kivy==1.10.0
@@ -23,6 +22,7 @@ pyparsing==2.2.0
 pytest==3.1.2
 python-dateutil==2.6.0
 pytz==2017.2
+rapidfuzz==0.2.1
 requests==2.14.2
 six==1.10.0
 typed-ast==1.0.4
