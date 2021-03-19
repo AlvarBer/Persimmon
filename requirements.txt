@@ -7,7 +7,7 @@ cycler==0.10.0
 docutils==0.13.1
 fuzzywuzzy==0.15.0
 humanfriendly==3.2
-Jinja2==2.9.6
+Jinja2==2.11.3
 Kivy==1.10.0
 Kivy-examples==1.10.0
 Kivy-Garden==0.1.4
