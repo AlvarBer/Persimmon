@@ -17,7 +17,7 @@ mypy==0.511
 mypy-lang==0.4.6
 packaging==16.8
 py==1.4.34
-Pygments==2.2.0
+Pygments==2.7.4
 pymitter==0.2.3
 pyparsing==2.2.0
 pytest==3.1.2
